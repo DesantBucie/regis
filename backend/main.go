@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
-	"os"
 )
 
 type TextBox struct {
@@ -41,7 +40,7 @@ func main() {
 	router.Use(static.Serve("/", static.LocalFile("./backend/web/dist", true)))
 
 	router.StaticFS("/resources", gin.Dir("resources", false))
-	api := router.Group("/api/v1")
+	/*api := router.Group("/api/v1")
 	{
 		api.POST("/presentation-file", func(c *gin.Context) {
 			//PresFile := c.Query("body")
@@ -61,7 +60,7 @@ func main() {
 		api.POST("/image", func(c *gin.Context) {
 
 		})
-	}
+	}*/
 	//router.POST("/file", print2)
 	router.Run(":3000")
 

@@ -1,8 +1,6 @@
 <script xmlns="http://www.w3.org/1999/html">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
-  import Editor from "./views/Editor.svelte";
+
+  import Editor from "./views/EditorSVG.svelte";
   import Circles from "./views/Circles.svelte";
 
 </script>
