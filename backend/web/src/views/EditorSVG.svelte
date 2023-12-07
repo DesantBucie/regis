@@ -1,33 +1,37 @@
 <script>
-    import {onMount, } from "svelte";
-    import {SVG, extend, Element, Rect, Text} from '@svgdotjs/svg.js'
-    import {PresShape, PresObj, PresText} from "../lib/editor.js";
-    //import {sketch} from    "../lib/sketch.js";
+    import {onMount} from "svelte";
+    import {SVG} from '@svgdotjs/svg.js'
+    import {PresText} from "../lib/models/Text.js";
+    import {PresCircle, PresRect, PresEllipse} from "../lib/models/Shapes.js";
+
+
     let files, container, accepted, ctx;
     let w, h, ratio;
 
     let objects = [
-        new PresShape(100, 100, 100, 100),
-        new PresText(300, 200, 0, 0, "Dupa")
+        new PresRect(100, 100, 100, 100),
+        new PresText(300, 200, 0, 0, "Text"),
+        new PresCircle(500, 500, 50),
+        new PresEllipse(700, 100, 100, 100)
     ]
 
     const draw = () => {
+        objects[0].changeFill("#ddaa78", ctx)
         for(let i = 0; i < objects.length; i++){
             objects[i].draw(ctx, ratio)
         }
-        requestAnimationFrame(draw);
     }
 
     onMount(() => {
         w = container.clientWidth
         ctx = SVG().addTo(container).size(w, w * 9 / 16)
         ratio = w / 1920;
-
         addEventListener('resize', () => {
             w = container.clientWidth;
             h = w * 9 / 16
             ratio = w / 1920;
             ctx.size(w, h)
+            draw();
         });
         draw();
     })
@@ -39,14 +43,11 @@
     <input type="file" bind:files accept={accepted}>
 </label>
 
-<div id="container" class="container" bind:this={container}>
+<div id="container" class="container" contenteditable="true" bind:this={container}>
 
 </div>
 
 <style>
-    .editor {
-        border: 2px solid red;
-    }
     .container{
         width:100%;
         margin:1em;

@@ -1,4 +1,3 @@
-import {presObj} from "./editor.js";
 
 export const sketch = (p) => {
 
@@ -12,11 +11,12 @@ export const sketch = (p) => {
     }
     p.draw = () => {
         p.textSize(24)
+        p.strokeWeight(0);
         p.stroke(0,0,0)
-        p.text("dupa", 50, 50)
+        p.text("Siema Siema", 50, 50)
         let w = p.textWidth("dupa");
-        let obj = new presObj(200, 200, 200, 50);
-        obj.drawOutline(p)
+        //let obj = new presObj(200, 200, 200, 50);
+        //obj.drawOutline(p)
     }
     p.windowResized = () => {
         let w = document.getElementById("defaultCanvas0").parentElement.clientWidth
