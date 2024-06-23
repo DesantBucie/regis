@@ -20,6 +20,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@svgdotjs/svg.js": "^3.2.0",
     "p5": "^1.8.0",
-    "paper": "^0.12.17"
+    "paper": "^0.12.17",
+    "sortablejs": "^1.15.2",
+    "svelte-routing": "^2.13.0"
   }
 }

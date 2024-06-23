@@ -1,4 +1,4 @@
-import {G, Rect, Ellipse} from "@svgdotjs/svg.js";
+import {SVG, G, Rect} from "@svgdotjs/svg.js";
 
 import {faRotate} from "@fortawesome/free-solid-svg-icons"
 import {icon} from "@fortawesome/fontawesome-svg-core"
@@ -25,6 +25,7 @@ export class Outline {
         this.w = w;
         this.h = h
         this.isMouseDown = false;
+        this.rotation = 0
 
         for(let i = 0; i < 4; i++) {
             this.objects.push(new Rect())
@@ -44,37 +45,55 @@ export class Outline {
     }
 
     /**
+     * @param {number} rotation
+     */
+    rotate(rotation = undefined){
+        if(rotation !== undefined){
+            this.rotation = rotation
+        }
+        else {
+            rotation = 0
+        }
+        for(let i = 0; i < 5; i++) {
+            this.objects[i].node.setAttribute('transform',
+                `rotate(${rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
+        }
+    }
+    /**
      * Update squares to follow object
      * @param {number} x
      * @param {number} y
-     * @param {number} ratio
      */
-    updateRects(x, y, ratio) {
+    updateRects(x, y) {
         this.x = x
         this.y = y
-        this.objects[0].move((x - this.rectShift) * ratio , (y - this.rectShift) * ratio)
-        this.objects[1].move((x - this.rectShift) * ratio, (y + this.h - this.rectShift) * ratio)
-        this.objects[2].move((x + this.w - this.rectShift) * ratio, (y + this.h - this.rectShift) * ratio)
-        this.objects[3].move((x + this.w - this.rectShift) * ratio, (y - this.rectShift) * ratio)
-        this.objects[4].move((x + (this.w / 2) - this.rectShift) * ratio,(y - 30) * ratio)
-    }
-    updPosition({x, y, w, h, ratio}){
+        x -= this.rectShift
+        y -= this.rectShift
+        let xyTab = [[x, y], [x, y + this.h], [x + this.w, y + this.h], [x + this.w, y]]
+        for(let i = 0; i < 4; i++){
+            this.rotate(undefined)
+            this.objects[i]
+                .move(xyTab[i][0], xyTab[i][1])
+            this.rotate(this.rotation)
 
+        }
+        this.objects[4].move(x + (this.w / 2) + this.rectShift - this.rectShift, y - 30)
     }
     /**
      * Function that handles drawing of the group
      * @param {SVG} ctx
-     * @param {number} ratio
      */
-    draw(ctx, ratio) {
-        this.updateRects(this.x, this.y, ratio)
+    draw(ctx) {
+
+        this.updateRects(this.x, this.y)
+
         for(let i = 0; i < 4; i++){
             this.objects[i]
-                .size(15 * ratio, 15 * ratio)
+                .size(15 , 15)
                 .fill({color: "#0085dedd"})
         }
         this.objects[4]
-            .size(15 * ratio, 15 * ratio)
+            .size(15, 15)
             .fill({color: "#EEEE00dd"});
         this.group.addTo(ctx)
     }

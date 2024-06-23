@@ -2,11 +2,17 @@
 
   import Editor from "./views/EditorSVG.svelte";
   import Circles from "./views/Circles.svelte";
+  import StartScreen from "./views/StartScreen.svelte";
+  import {Router, Link, Route} from "svelte-routing";
 
 </script>
 
 <main>
-    <Editor/>
+    <Router url={''}>
+        <Route path="/" component={StartScreen} />
+        <Route path="/circles" component="{Circles}"/>
+        <Route path="/editor" component="{Editor}"/>
+    </Router>
 </main>
 
 <style>
