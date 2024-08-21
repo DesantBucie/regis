@@ -41,16 +41,20 @@
 </div>
 
 <style>
+    .menubar {
+        position: relative;
+    }
     .shapes {
         color:black;
         display: none;
         position: absolute;
         background: white;
+        left:calc(50% - 155px);
         width: 300px;
         height: 300px;
-        left:550px;
         border: 1px solid black;
         z-index: 1;
+        overflow: clip;
     }
     .shapes svg {
         font-size:22pt;

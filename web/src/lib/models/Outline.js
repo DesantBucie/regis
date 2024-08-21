@@ -20,8 +20,6 @@ export class Outline {
     constructor(x, y, w, h) {
         this.group = new G()
         this.objects = []
-        this.x = x;
-        this.y = y;
         this.w = w;
         this.h = h
         this.isMouseDown = false;
@@ -55,8 +53,8 @@ export class Outline {
             rotation = 0
         }
         for(let i = 0; i < 5; i++) {
-            this.objects[i].node.setAttribute('transform',
-                `rotate(${rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
+            //this.objects[i].node.setAttribute('transform',
+                //`rotate(${rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
         }
     }
     /**
@@ -65,8 +63,6 @@ export class Outline {
      * @param {number} y
      */
     updateRects(x, y) {
-        this.x = x
-        this.y = y
         x -= this.rectShift
         y -= this.rectShift
         let xyTab = [[x, y], [x, y + this.h], [x + this.w, y + this.h], [x + this.w, y]]
@@ -77,24 +73,26 @@ export class Outline {
             this.rotate(this.rotation)
 
         }
-        this.objects[4].move(x + (this.w / 2) + this.rectShift - this.rectShift, y - 30)
+        this.objects[4].move(x + (this.w / 2), y - 30)
     }
     /**
      * Function that handles drawing of the group
      * @param {SVG} ctx
+     * @param {number} x
+     * @param {number} y
      */
-    draw(ctx) {
+    draw(ctx, x, y) {
 
-        this.updateRects(this.x, this.y)
+        this.updateRects(x, y)
 
         for(let i = 0; i < 4; i++){
             this.objects[i]
                 .size(15 , 15)
                 .fill({color: "#0085dedd"})
         }
-        this.objects[4]
-            .size(15, 15)
-            .fill({color: "#EEEE00dd"});
+        //this.objects[4]
+        //    .size(15, 15)
+        //    .fill({color: "#EEEE00dd"});
         this.group.addTo(ctx)
     }
 

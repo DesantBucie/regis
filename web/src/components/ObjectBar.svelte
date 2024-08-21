@@ -6,7 +6,6 @@
     let objectBar
     export let objects;
     onMount(() => {
-        console.log(objects[0].constructor.name)
 
         Sortable.create(objectBar, {
             animation: 150,

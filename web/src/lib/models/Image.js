@@ -18,6 +18,6 @@ export class PresImage extends PresObj {
     constructor(x, y, w, h) {
         super(x, y, w, h);
         this.object = new Image()
-            .load("https://klasycznebuty.pl/userdata/public/gfx/7715/skora-licowa%2C-skora-groszkowa%2C-goodyear-welted.jpg")
+            .load("https://www.pngall.com/wp-content/uploads/8/Sample-Transparent.png")
     }
 }

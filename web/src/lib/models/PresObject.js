@@ -26,6 +26,8 @@ export class PresObj {
         this.object = null
         this.selected = false
         this.mouseDown = false
+
+        this.timing = {};
     }
 
     /**
@@ -38,17 +40,26 @@ export class PresObj {
     }
 
     /**
+     * Toggle an outline
+     */
+    drawOutline(){
+
+    }
+    /**
      * Function to draw an object
      * @param {SVG} ctx
      */
-    draw(ctx ) {
+    draw(ctx) {
         this.object.node.setAttribute('transform', '');
         this.object
             .move(this.x, this.y)
             .css('cursor', 'pointer')
             .size(this.w, this.h)
-            .on('click', () => {
-                this.onClick(ctx)
+            .on('click', (e) => {
+                e.preventDefault();
+                if(this.timing.end < 200) {
+                    this.onClick(ctx)
+                }
             })
             .on('mousedown', this.onMouseDown)
             .on('mouseup', this.onMouseUp)
@@ -61,8 +72,11 @@ export class PresObj {
         let handler
 
         this.object
-            .on('mousedown', () => {
-                ctx.on('mousemove', handler = (e) => { return this.onMousemove(e, ctx)})
+            .on('mousedown', (r) => {
+                let CTM = ctx.node.getScreenCTM();
+                const offsetX = this.object.x() - ((r.clientX - CTM.e) / CTM.a);
+                const offsetY = this.object.y() - ((r.clientY - CTM.f) / CTM.d);
+                ctx.on('mousemove', handler = (e) => { return this.onMousemove(e, ctx, offsetX, offsetY )})
             })
             .on('mouseup', () => {
                 ctx.off('mousemove', handler);
@@ -73,6 +87,9 @@ export class PresObj {
                 .on('mousedown', () => {
                     ctx
                         .on('mousemove' , handler = (e) => { return this.resize(e, ctx, i)})
+                        .on('mouseup', () => {
+                            ctx.off('mousemove', handler);
+                        })
                 })
                 //very interesting results if we remove that 4 lines.
                 .on('mouseup', () => {
@@ -95,12 +112,19 @@ export class PresObj {
      *
      * @param {PointerEvent} e
      * @param {SVG} ctx
+     * @param {number} offsetX
+     * @param {number} offsetY
      */
-    onMousemove(e, ctx) {
+    onMousemove(e, ctx, offsetX, offsetY) {
         if(this.mouseDown && this.selected) {
             let CTM = ctx.node.getScreenCTM()
-            this.object.x(((e.clientX - CTM.e) / CTM.a) - (this.w / 2));
-            this.object.y(((e.clientY - CTM.f) / CTM.d) - (this.h / 2));
+            // Offset is calculated on mousedown effect. If it was
+            // calculated here it would zero out.
+            this.object.x(((e.clientX - CTM.e) / CTM.a) + offsetX);
+            this.object.y(((e.clientY - CTM.f) / CTM.d) + offsetY);
+
+            this.x = this.object.x()
+            this.y = this.object.y()
 
             this.object.rotate(-this.rotation);
 
@@ -123,7 +147,7 @@ export class PresObj {
      */
     onClick (ctx){
         if(!this.selected){
-            this.outline.draw(ctx)
+            this.outline.draw(ctx, this.x, this.y)
             this.object.css('cursor', 'move')
         }
         else {
@@ -133,9 +157,11 @@ export class PresObj {
         this.selected = !this.selected;
     }
     onMouseDown = () => {
+        this.timing.start = performance.now()
         this.mouseDown = true;
     }
     onMouseUp = () => {
+        this.timing.end = performance.now() - this.timing.start
         this.mouseDown = false;
     }
     getCTMPosition(e, ctx){
@@ -165,20 +191,24 @@ export class PresObj {
             let oldY = this.y;
             let oldW = this.w;
             let oldH = this.h;
+            //left up
             if(index === 0){
                 [this.x, this.y] = this.getCTMPosition(e, ctx)
                 this.w += oldX - this.x;
                 this.h += oldY - this.y;
             }
+            // right up
             if(index === 3) {
                 [this.w, this.y] = this.getCTMPosition(e, ctx)
                 this.w -= this.x
                 this.h += oldY - this.y;
             }
+
             if(index === 2){
                 [this.w, this.h] = this.getCTMPosition(e, ctx);
                 this.w -= this.x
                 this.h -= this.y
+
             }
             if(index === 1) {
                 [this.x, this.h] = this.getCTMPosition(e, ctx);

@@ -9,48 +9,55 @@
     import SlideBar from "../components/SlideBar.svelte";
     import ObjectBar from "../components/ObjectBar.svelte";
 
-    import {_presentation} from "../store/data.js";
-
-    let presentation;
-    _presentation.subscribe((p) =>{
-        presentation = p
-    })
-
-
-    let files, container, accepted, ctx;
-    let w, h;
-
+    import {_presentation, _activeSlide} from "../store/data.js";
 
     /**
      * @type {PresObj[]}
      */
     let objects = [
         new PresRect(100, 100, 100, 100),
-        new PresText(300, 200, "Text"),
+        new PresText(300, 200, "Slide 1"),
         new PresCircle(500, 500, 50),
         new PresEllipse(700, 100, 100, 100),
         new PresImage(700, 700, 200, 200)
     ]
 
+    let presentation, activeSlide;
+
+    _presentation.subscribe((p) =>{
+        presentation = p
+    })
+    _activeSlide.subscribe((a) =>{
+        activeSlide = a;
+    })
+
+    let files, container, accepted, ctx;
+    let w, h;
+
+    $: activeSlide, draw();
+
     const draw = () => {
-        objects[0].changeFill("#ddaa78")
-        for(let i = 0; i < objects.length; i++){
-            objects[i].draw(ctx)
+        let o = presentation.slides[activeSlide - 1].objects;
+        console.log(o)
+        for(let i = 0; i < o.length; i++){
+            o[i].draw(ctx)
         }
     }
 
     const addTextBox = () => {
-        objects.push(new PresText(900, 500, "Text"))
-        objects[objects.length - 1].draw(ctx)
+        presentation.slides[activeSlide - 1].objects
+            .push(new PresText(900, 500, "Text"))
+        //objects[objects.length - 1].draw(ctx)
     }
     onMount(() => {
+        presentation.slides[0].objects = objects
         w = container.clientWidth
         ctx = SVG()
             .addTo(container)
             .size(w, w * 9 / 16)
             .viewbox(0, 0, 1920, 1080)
             .attr('tabindex', '0')
-            //.attr('xmlns', 'http://www.w3.org/1999/xhtml');
+            .attr('class', 'svg')
         addEventListener('resize', () => {
             w = container.clientWidth;
             h = w * 9 / 16
@@ -72,17 +79,15 @@
 <style>
     .editor {
         display: flex;
+        width: 100%;
     }
     .container{
-        width:100%;
+        width: 100%;
         margin:1em;
         background: white;
-    }
-    .container {
         border: 1px solid black;
-    }
-    .container svg {
-        width: 100%;
+        overflow: hidden;
+        aspect-ratio: 16/9;
     }
     .editor__imgbutton {
         font-size:11pt;
