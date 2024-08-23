@@ -90,12 +90,17 @@ export class PresObj {
                         .on('mouseup', () => {
                             ctx.off('mousemove', handler);
                         })
+                        .on('mouseleave', () => {
+                            ctx
+                                .off('mousemove', handler);
+                        })
                 })
                 //very interesting results if we remove that 4 lines.
                 .on('mouseup', () => {
                     ctx
                         .off('mousemove', handler);
                 })
+
         }
         this.outline.objects[4]
             .on('mousedown', () => {

@@ -14,10 +14,11 @@ export class PresImage extends PresObj {
      * @param {number} y
      * @param {number} w
      * @param {number} h
+     * @param {string} blob
      */
-    constructor(x, y, w, h) {
+    constructor(x, y, w, h, blob) {
         super(x, y, w, h);
         this.object = new Image()
-            .load("https://www.pngall.com/wp-content/uploads/8/Sample-Transparent.png")
+            .load(blob)
     }
 }

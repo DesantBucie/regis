@@ -1,5 +1,6 @@
 import {PresObj} from "./PresObject.js";
 import {SVG, Text, Rect, ForeignObject} from "@svgdotjs/svg.js";
+import {guidGenerator} from "../browser-uid.js";
 
 export class PresText extends PresObj {
     /**
@@ -10,14 +11,16 @@ export class PresText extends PresObj {
      */
     constructor(x, y, text) {
 
-        super(x, y, 300, 150);
+        super(x, y, 200, 150);
+
+        this.guid = guidGenerator();
+        const string = `<body xmlns="http://www.w3.org/1999/xhtml" ><div id="` + this.guid + `" contenteditable="true" style="color:black;">Text</div></body>`;
 
         this.object = new ForeignObject()
             .move(this.x, this.y)
-            .size(this.w , this.h)
-            .add(SVG(`<body xmlns="http://www.w3.org/1999/xhtml" ><div contenteditable="true" style="color:black;">Text</div></body>`, true))
+            .size(100 , 100)
+            .add(SVG(string, true))
         //.add(`<div xmlns="http://www.w3.org/1999/xhtml" contenteditable="true" style="color:black;">Text</div>`)
-
         this.lines = 1;
     }
 
@@ -37,13 +40,17 @@ export class PresText extends PresObj {
             .attr('tabindex','0')
             .addTo(ctx)
 
-        this.w = this.object.node.getBBox().width;
-        this.h = this.object.node.getBBox().height;
+        console.log(this.object.node.width)
+        this.w = this.object.node.children[0].clientWidth;
+        this.h = this.object.node.children[0].clientHeight;
 
         this.outline.w = this.w
         this.outline.h = this.h
         this.outline.updateRects(this.x, this.y)
         super.draw(ctx)
+    }
+    onClick(ctx) {
+        super.onClick(ctx);
     }
 
     onKeyDown(e){

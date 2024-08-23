@@ -19,10 +19,12 @@
         new PresText(300, 200, "Slide 1"),
         new PresCircle(500, 500, 50),
         new PresEllipse(700, 100, 100, 100),
-        new PresImage(700, 700, 200, 200)
+        new PresImage(700, 700, 200, 200, "https://www.pngall.com/wp-content/uploads/8/Sample-Transparent.png")
     ]
 
     let presentation, activeSlide;
+
+    let timing = {};
 
     _presentation.subscribe((p) =>{
         presentation = p
@@ -35,6 +37,8 @@
     let w, h;
 
     $: activeSlide, draw();
+
+
 
     const draw = () => {
         let o = presentation.slides[activeSlide - 1].objects;
@@ -58,6 +62,20 @@
             .viewbox(0, 0, 1920, 1080)
             .attr('tabindex', '0')
             .attr('class', 'svg')
+        ctx.on('mousedown', (e) => {
+            timing.start = performance.now();
+        })
+        ctx.on('mouseup', () => {
+            timing.stop = performance.now() - timing.start;
+
+            /*if(timing.stop < 200){
+                for(let i = 0; i < presentation.slides[activeSlide-1].objects.length; i++) {
+                    if(presentation.slides[activeSlide-1].objects[i].selected) {
+                        presentation.slides[activeSlide-1].objects[i].onClick();
+                    }
+                }
+            }*/
+        })
         addEventListener('resize', () => {
             w = container.clientWidth;
             h = w * 9 / 16
