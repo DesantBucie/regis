@@ -4,7 +4,8 @@
     import Sortable from 'sortablejs';
 
     let objectBar
-    export let objects;
+    //export let objects;
+    let objects
     onMount(() => {
 
         Sortable.create(objectBar, {

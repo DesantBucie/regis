@@ -5,9 +5,10 @@
 
     import {_activeSlide, _presentation} from "../store/data.js";
 
-    let presentation
-    let slideBar
-    let activeSlide
+    export let clear, draw;
+    let presentation;
+    let slideBar;
+    let activeSlide;
 
     _presentation.subscribe((p) => {
         presentation = p;
@@ -41,29 +42,33 @@
     }
 
     const changeActiveSlide = (e) => {
+        clear()
         _activeSlide.set(parseInt(e.target.value))
+        draw()
+
+    }
+    const removeSlide = (e) => {
+        presentation.slides.splice(parseInt(e.target.value))
+        presentation.no_Slides--;
+        _presentation.set(presentation);
     }
 </script>
 <div class="slidebar">
     <div bind:this={slideBar}>
         {#each presentation.slides as slide, i}
-            {#if i + 1 !== activeSlide}
-                <button data-id={"slide" + (i + 1)} class="slidebar__slide" value={i + 1} on:click={changeActiveSlide}>
-                    {#if slide.name === "" }
-                        Slide {i + 1}
-                    {:else}
+            <div class="slidebar__wrapper">
+                <button class="slidebar__remove-button" value={i} on:click={removeSlide}>x</button>
+                {#if i !== activeSlide}
+                    <button data-id={"slide" + (i)} class="slidebar__slide" value={i} on:click={changeActiveSlide}>
                         {slide.name}
-                    {/if}
-                </button>
-            {:else}
-                <button data-id={"slide" + (i + 1)} class="slidebar__slide slidebar__slide--active" value={i + 1} on:click={changeActiveSlide}>
-                    {#if slide.name === "" }
-                        Slide {i + 1}
-                    {:else}
+                    </button>
+                {:else}
+                    <button data-id={"slide" + (i)} class="slidebar__slide slidebar__slide--active" value={i} >
                         {slide.name}
-                    {/if}
-                </button>
+                    </button>
                 {/if}
+            </div>
+
         {/each}
 
     </div>
@@ -77,6 +82,9 @@
         background: #eee;
         border: 1px #666 solid;
         padding:1em;
+    }
+    .slidebar__wrapper {
+        margin-top: -20px;
     }
     .slidebar__slide {
         display: flex;
@@ -96,5 +104,15 @@
     .slidebar__slide--addNew {
         background: #ccc;
         cursor: pointer;
+    }
+    .slidebar__remove-button {
+        position: relative;
+        padding:0;
+        top:30px;
+        left:70px;
+        width:25px;
+        height:25px;
+        background:red;
+        border-radius: 180px;
     }
 </style>

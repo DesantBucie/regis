@@ -11,16 +11,6 @@
 
     import {_presentation, _activeSlide} from "../store/data.js";
 
-    /**
-     * @type {PresObj[]}
-     */
-    let objects = [
-        new PresRect(100, 100, 100, 100),
-        new PresText(300, 200, "Slide 1"),
-        new PresCircle(500, 500, 50),
-        new PresEllipse(700, 100, 100, 100),
-        new PresImage(700, 700, 200, 200, "https://www.pngall.com/wp-content/uploads/8/Sample-Transparent.png")
-    ]
 
     let presentation, activeSlide;
 
@@ -41,20 +31,21 @@
 
 
     const draw = () => {
-        let o = presentation.slides[activeSlide - 1].objects;
-        console.log(o)
+        let o = presentation.slides[activeSlide].objects;
         for(let i = 0; i < o.length; i++){
             o[i].draw(ctx)
         }
     }
-
-    const addTextBox = () => {
-        presentation.slides[activeSlide - 1].objects
-            .push(new PresText(900, 500, "Text"))
-        //objects[objects.length - 1].draw(ctx)
+    const clear = () => {
+        let o = presentation.slides[activeSlide].objects;
+        for(let i = 0; i < o.length; i++){
+            if(o[i].selected){
+                o[i].onClick(ctx);
+            }
+            o[i].object.remove();
+        }
     }
     onMount(() => {
-        presentation.slides[0].objects = objects
         w = container.clientWidth
         ctx = SVG()
             .addTo(container)
@@ -86,14 +77,20 @@
 
 </script>
 
-<MenuBar objects={objects} ctx={ctx}/>
+{#if window.outerWidth > 1024}
+    <MenuBar  ctx={ctx} clear={clear} draw={draw}/>
+
 <div class="editor">
-    <SlideBar/>
+    <SlideBar clear={clear} draw={draw}/>
     <div id="container" class="container" bind:this={container}>
     </div>
-    <ObjectBar objects={objects} />
+    <!--ObjectBar objects={presentation.slides[activeSlide].objects} /-->
 </div>
-
+{:else}
+    <div>
+        <h1>Przepraszamy ale twój ekran jest zbyt wąski, aby aplikacja poprawnie działała</h1>
+    </div>
+{/if}
 <style>
     .editor {
         display: flex;

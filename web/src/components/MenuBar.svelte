@@ -2,16 +2,40 @@
 
     import {faT, faShapes, faImage, faCircle, faSquare, faFolderOpen} from '@fortawesome/free-solid-svg-icons';
     import {icon} from "@fortawesome/fontawesome-svg-core";
-    export let objects;
-    export let ctx;
+    import {_presentation, _activeSlide} from "../store/data.js";
 
+    export let ctx, draw, clear;
 
+    let presentation, activeSlide;
+    _presentation.subscribe((p) => {
+        presentation = p;
+    })
+
+    _activeSlide.subscribe((a) =>{
+        activeSlide = a;
+    })
     let shapes;
     let input;
+    let currentPos = new Map();
+    currentPos.set("x", 100);
+    currentPos.set("y", 100);
+    currentPos.set('signX', 1)
+    currentPos.set("signY", 1)
+
     import {PresText} from "../lib/models/Text.js";
     import {PresCircle, PresRect, PresEllipse} from "../lib/models/Shapes.js";
     import {PresImage} from "../lib/models/Image.js";
 
+    const changePosition = () => {
+        // sign is 1 or -1.
+        currentPos.set("x", (currentPos.get("x") + 30 * currentPos.get("signX")));
+        currentPos.set("y", (currentPos.get("y") + 30 * currentPos.get("signY")));
+        // setting the sign
+        if(currentPos.get("x") > 1800) { currentPos.set("signX", -1); }
+        if(currentPos.get("x") < 100) { currentPos.set("signX", 1); }
+        if(currentPos.get("y") < 100) { currentPos.set("signY", 1); }
+        if(currentPos.get("y") > 900) { currentPos.set("signY", -1); }
+    }
     const toggleShapes = () => {
         if(shapes.style.display !== 'block') {
             shapes.style.display = 'block';
@@ -22,8 +46,10 @@
     }
 
     const addTextBox = () => {
-        objects.push(new PresText(900, 500, "Text"))
-        objects[objects.length - 1].draw(ctx)
+        presentation.slides[activeSlide].objects.push(new PresText(currentPos.get('x'), currentPos.get('y'), "Text"));
+        clear()
+        draw()
+        changePosition()
     }
 
     const addImage =() => {
@@ -32,21 +58,24 @@
             reader.readAsDataURL(input.files[0]);
         }
         reader.onloadend = () => {
-            const img = new PresImage(100, 100, 200, 200, reader.result.toString());
-            objects.push(img);
-            objects[objects.length - 1].draw(ctx);
+            const img = new PresImage(currentPos.get('x'), currentPos.get('y'), 200, 200, reader.result.toString());
+            presentation.slides[activeSlide].objects.push(img);
+            presentation.slides[activeSlide].objects[presentation.slides[activeSlide].objects.length-1].draw(ctx);
+
+            changePosition()
         }
     }
     const addShape = (shape) => {
         let s;
         if(shape === "circle") {
-            s = new PresCircle(150, 150, 50);
+            s = new PresCircle(currentPos.get('x'), currentPos.get('y'), 50);
         }
         else if(shape === "square"){
-            s = new PresRect(150, 150, 100, 100);
+            s = new PresRect(currentPos.get('x'), currentPos.get('y'), 100, 100);
         }
-        objects.push(s);
-        objects[objects.length - 1].draw(ctx);
+        presentation.slides[activeSlide].objects.push(s);
+        presentation.slides[activeSlide].objects[presentation.slides[activeSlide].objects.length-1].draw(ctx);
+        changePosition()
     }
 
 </script>
