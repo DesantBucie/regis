@@ -1,6 +1,16 @@
 import {Slide} from "./Slide.js";
 
 export class Presentation {
+    toJSON(){
+        return {
+            title: this.title,
+            author: this.author,
+            no_Slides: this.no_Slides,
+            aspect: this.aspect,
+            slides: this.slides.map(o => o.toJSON()),
+        }
+    }
+
     constructor() {
         this.title = ''
         this.author = ''

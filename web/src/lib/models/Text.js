@@ -1,6 +1,5 @@
 import {PresObj} from "./PresObject.js";
-import {SVG, Text, Rect, ForeignObject} from "@svgdotjs/svg.js";
-import {guidGenerator} from "../browser-uid.js";
+import {Text} from "@svgdotjs/svg.js";
 
 export class PresText extends PresObj {
     /**
@@ -11,16 +10,18 @@ export class PresText extends PresObj {
      */
     constructor(x, y, text) {
 
-        super(x, y, 200, 150);
+        super(x, y, 100, 50);
+        //this.guid = guidGenerator();
+        //const string = `<body xmlns="http://www.w3.org/1999/xhtml" ><div contenteditable="true" style="color:black;">Text</div></body>`;
 
-        this.guid = guidGenerator();
-        const string = `<body xmlns="http://www.w3.org/1999/xhtml" ><div id="` + this.guid + `" contenteditable="true" style="color:black;">Text</div></body>`;
-
-        this.object = new ForeignObject()
-            .move(this.x, this.y)
-            .size(100 , 100)
-            .add(SVG(string, true))
+        //this.object = new ForeignObject()
+        //    .move(this.x, this.y)
+        //    .size(100 , 100)
+        //    .add(SVG(string, true))
         //.add(`<div xmlns="http://www.w3.org/1999/xhtml" contenteditable="true" style="color:black;">Text</div>`)
+        this.object = new Text()
+            .text("Text")
+            .font({size:20})
         this.lines = 1;
     }
 
@@ -29,45 +30,86 @@ export class PresText extends PresObj {
      * @param {SVG} ctx - context of svg canvas
      */
     draw(ctx) {
-        //first draw the object...
-        this.object
-            //.css('user-select', 'none')
-            .move(this.x, this.y)
-            .size(this.w, this.h)
-            .css('display', 'block')
-            //.css('text-align', 'left')
-            .font({family: 'Helvetica', size: 40})
-            .attr('tabindex','0')
-            .addTo(ctx)
+        super.draw(ctx);
+        const bbox = this.object.node.getBBox();
+        console.log(bbox)
+        this.w = bbox.width;
+        this.h = bbox.height;
+        this.updateObject()
 
-        console.log(this.object.node.width)
-        this.w = this.object.node.children[0].clientWidth;
-        this.h = this.object.node.children[0].clientHeight;
 
-        this.outline.w = this.w
-        this.outline.h = this.h
-        this.outline.updateRects(this.x, this.y)
-        super.draw(ctx)
     }
     onClick(ctx) {
         super.onClick(ctx);
+        if(this.selected) {
+            this.object.text(this.object.text() + '|')
+            ctx.on('keydown', (e) => {
+                this.onKeyDown(e)
+            })
+        }
+        else {
+            this.object.text(this.object.text().slice(0, -1))
+            ctx.off('keydown', null)
+        }
+    }
+
+    changeTextSize(size) {
+        this.object.font({size: size});
+    }
+
+    /**
+     * Change text alignment
+     * @param align {string}
+     */
+    changeTextAlign(align) {
+        this.object.font({anchor: align});
     }
 
     onKeyDown(e){
-
+        let ignoreKeys = [
+            'Enter',
+            'Return',
+            'Alt',
+            'Meta',
+            'Control',
+            'Ctrl',
+            'Shift',
+            'Escape',
+            'Backspace',
+            'ArrowLeft',
+            'ArrowRight',
+            'ArrowDown',
+            'ArrowUp',
+        ]
         if(e.keyCode === 8){
-            this.object.text(this.object.text().slice(0, -1))
+            this.object.text(this.object.text().slice(0, -2) + '|')
         }
         if(e.keyCode === 13){
-            this.object.add.tspan()
+            this.object.text(this.object.text().slice(0,-1) + '\n' + '|')
         }
-        if(e.keyCode !== 8 && e.keyCode !== 16  && e.keyCode !== 91 && e.keyCode !== 13 ) {
+        if(!ignoreKeys.includes(e.key)) {
+            e.preventDefault()
             console.log(e)
-            this.object.text(this.object.text() + e.key);
+            this.object.text(this.object.text().slice(0, -1) + e.key + '|');
         }
-        this.w = this.object.node.getBBox().width;
+        /*this.w = this.object.node.getBBox().width;
         this.h = this.object.node.getBBox().height;
         this.object
-            .size(this.w, this.h)
+            .size(this.w, this.h)*/
+    }
+    toJSON() {
+        return {
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h,
+            object: this.constructor.name,
+            attributes: {
+                fill: this.object.attr('fill'),
+                strokeWidth: this.object.attr('stroke-width'),
+                stroke: this.object.attr('stroke'),
+                fontSize: this.object.attr('font-size')
+            }
+        }
     }
 }

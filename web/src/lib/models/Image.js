@@ -21,4 +21,16 @@ export class PresImage extends PresObj {
         this.object = new Image()
             .load(blob)
     }
+
+    toJSON() {
+        console.log(this.object.node.href.baseVal)
+        return {
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h,
+            object: this.constructor.name,
+            imageBase64: this.object.node.href.baseVal
+        }
+    }
 }

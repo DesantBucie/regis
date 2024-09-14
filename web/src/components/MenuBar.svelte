@@ -1,18 +1,22 @@
 <script>
 
-    import {faT, faShapes, faImage, faCircle, faSquare, faFolderOpen} from '@fortawesome/free-solid-svg-icons';
+    import {faT, faShapes, faImage, faCircle, faSquare, faFolderOpen, faTriangleExclamation} from '@fortawesome/free-solid-svg-icons';
     import {icon} from "@fortawesome/fontawesome-svg-core";
-    import {_presentation, _activeSlide} from "../store/data.js";
+    import {_presentation, _activeSlide, _selectedObject} from "../store/data.js";
+
 
     export let ctx, draw, clear;
 
-    let presentation, activeSlide;
+    let presentation, activeSlide, selectedObject;
     _presentation.subscribe((p) => {
         presentation = p;
     })
 
     _activeSlide.subscribe((a) =>{
         activeSlide = a;
+    })
+    _selectedObject.subscribe((o) =>{
+        selectedObject = o;
     })
     let shapes;
     let input;
@@ -23,7 +27,7 @@
     currentPos.set("signY", 1)
 
     import {PresText} from "../lib/models/Text.js";
-    import {PresCircle, PresRect, PresEllipse} from "../lib/models/Shapes.js";
+    import {PresCircle, PresRect, PresEllipse, PresTriangle} from "../lib/models/Shapes.js";
     import {PresImage} from "../lib/models/Image.js";
 
     const changePosition = () => {
@@ -47,8 +51,7 @@
 
     const addTextBox = () => {
         presentation.slides[activeSlide].objects.push(new PresText(currentPos.get('x'), currentPos.get('y'), "Text"));
-        clear()
-        draw()
+        presentation.slides[activeSlide].objects[presentation.slides[activeSlide].objects.length-1].draw(ctx);
         changePosition()
     }
 
@@ -61,7 +64,7 @@
             const img = new PresImage(currentPos.get('x'), currentPos.get('y'), 200, 200, reader.result.toString());
             presentation.slides[activeSlide].objects.push(img);
             presentation.slides[activeSlide].objects[presentation.slides[activeSlide].objects.length-1].draw(ctx);
-
+            _presentation.set(presentation);
             changePosition()
         }
     }
@@ -73,24 +76,96 @@
         else if(shape === "square"){
             s = new PresRect(currentPos.get('x'), currentPos.get('y'), 100, 100);
         }
+        else if(shape === 'triangle'){
+            s = new PresTriangle(currentPos.get('x'), currentPos.get('y'), 100, 100);
+        }
+        else if(shape === 'ellipse'){
+            s= new PresEllipse(currentPos.get('x'), currentPos.get('y'), 100, 80);
+        }
         presentation.slides[activeSlide].objects.push(s);
         presentation.slides[activeSlide].objects[presentation.slides[activeSlide].objects.length-1].draw(ctx);
+        _presentation.set(presentation);
         changePosition()
+    }
+    const getCircularReplacer = () => {
+        const ancestors = [];
+        return function (key, value) {
+            if (typeof value !== "object" || value === null) {
+                return value;
+            }
+            // `this` is the object that value is contained in,
+            // i.e., its direct parent.
+            while (ancestors.length > 0 && ancestors.at(-1) !== this) {
+                ancestors.pop();
+            }
+            if (ancestors.includes(value)) {
+                return "[Circular]";
+            }
+            ancestors.push(value);
+            return value;
+        };
+    }
+    const savePresentation = () => {
+        const saved =  JSON.stringify(Object.create(presentation));
+        console.log(saved);
+        localStorage.setItem("presentation", saved);
+    }
+    const deleteObject = () => {
+        for(let i = 0; i < presentation.slides[activeSlide].objects.length; i++) {
+            if(selectedObject.id === presentation.slides[activeSlide].objects[i].id){
+                selectedObject.onClick()
+                presentation.slides[activeSlide].objects[i].object.remove();
+                presentation.slides[activeSlide].objects.splice(i, 1);
+                console.log(presentation.slides[activeSlide].objects)
+            }
+        }
     }
 
 </script>
 
 <div class="menubar">
+    <button on:click={savePresentation}>Save Presentation</button>
     <button title="Textbox" on:click={addTextBox}>{@html icon(faT).html}</button>
     <button title="Shapes" on:click={toggleShapes}>{@html icon(faShapes).html}</button>
     <div bind:this={shapes} class="shapes">
         <button on:click={() => {return addShape("circle")}}>{@html icon(faCircle).html}</button>
         <button on:click={() => {return addShape("square")}}>{@html icon(faSquare).html}</button>
+        <button on:click={() => {return addShape("ellipse")}}>Eli</button>
+        <button on:click={() => {return addShape("triangle")}}>{@html icon(faTriangleExclamation).html}</button>
     </div>
     <button><label class="startScreen_button">
-        {@html icon(faFolderOpen).html}
+        {@html icon(faImage).html}
         <input type="file" on:change={addImage} bind:this={input}>
     </label></button>
+
+    {#if selectedObject !== null}
+        <div style="display: flex; align-items: center; justify-content: center;">
+            {#if selectedObject instanceof PresText}
+                <div><input type="number" on:change={(e) => {return selectedObject.changeTextSize(e.target.value)}}
+                            value={selectedObject.object.attr("font-size")}><br/>Font Size</div>
+                <div>
+                    <button class="text-align" on:click={(e) => {return selectedObject.changeTextAlign("start")}}>Left</button>
+                    <button class="text-align" on:click={(e) => {return selectedObject.changeTextAlign("middle")}}>Center</button>
+                    <button class="text-align" on:click={(e) => {return selectedObject.changeTextAlign("end")}}>Right</button>
+                </div>
+            {/if}
+        <div><input type="color"
+                    on:change={(e) => { return selectedObject.changeFill(e.target.value)}}
+                    value={selectedObject.object.fill()}><br/>Fill
+        </div>
+            <div><select on:click={(e) => {return selectedObject.changeStrokeWidth(e.target.value)}}>
+                <option value="0">None</option>
+                <option value="4">Level 1</option>
+                <option value="10">Level 2</option>
+                <option value="15">Level 3</option>
+                <option value="20">Level 4</option>
+            </select>
+        <br/>Stroke Size</div>
+        <div><input type="color" on:change={(e) => {return selectedObject.changeStrokeColor(e.target.value)}}
+        value={selectedObject.object.attr('stroke')}><br/>Stroke Color</div>
+        <button on:click={deleteObject}>Delete</button>
+        </div>
+    {/if}
 </div>
 
 <style>

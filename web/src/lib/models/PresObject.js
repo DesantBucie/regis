@@ -1,13 +1,17 @@
 import {Outline} from './Outline.js'
 import {SVG} from "@svgdotjs/svg.js";
+import {_selectedObject} from "../../store/data.js";
+
+
 
 /**
- * The class defining an basic object on canvas.
+ * The class defining an basic object on canvas except text(for some stupid reason).
  * It should be used as abstract class.
  *
  * @class PresObj
  */
 export class PresObj {
+    static counter = 0;
     /**
      * @constructor
      * @param {number} x - x position on canvas
@@ -28,6 +32,7 @@ export class PresObj {
         this.mouseDown = false
 
         this.timing = {};
+        this.id = PresObj.counter++;
     }
 
     /**
@@ -38,21 +43,30 @@ export class PresObj {
         this.object
             .fill(color)
     }
-
     /**
-     * Toggle an outline
+     * Change stroke color of the object
+     * @param {string} color - Either in hex or rgba
      */
-    drawOutline(){
-
+    changeStrokeColor(color ){
+        this.object.stroke({color: color})
     }
+    /**
+     * Change stroke width of the object
+     * @param {number} width - non-negative number
+     */
+    changeStrokeWidth(width)  {
+        this.object.stroke({width: width})
+    }
+
     /**
      * Function to draw an object
      * @param {SVG} ctx
      */
     draw(ctx) {
-        this.object.node.setAttribute('transform', '');
+        //this.object.node.setAttribute('transform', '');
         this.object
             .move(this.x, this.y)
+            .stroke({color: '#13d782', width:0})
             .css('cursor', 'pointer')
             .size(this.w, this.h)
             .on('click', (e) => {
@@ -112,7 +126,12 @@ export class PresObj {
             })
 
     }
-
+    eventclean() {
+        this.object.on('click', null)
+            .on('mousemove', null)
+            .on('mouseup', null)
+            .on('mousedown', null)
+    }
     /**
      *
      * @param {PointerEvent} e
@@ -154,10 +173,12 @@ export class PresObj {
         if(!this.selected){
             this.outline.draw(ctx, this.x, this.y)
             this.object.css('cursor', 'move')
+            _selectedObject.set(this);
         }
         else {
             this.outline.remove()
             this.object.css('cursor', 'pointer')
+            _selectedObject.set(null);
         }
         this.selected = !this.selected;
     }
@@ -241,7 +262,7 @@ export class PresObj {
      * @param {PointerEvent} e - event
      * @param {SVG} ctx - SVG context
      */
-    rotate(e, ctx){
+    /*rotate(e, ctx){
         if(this.outline.isMouseDown) {
 
             const [mouseX, mouseY] = this.getCTMPosition(e, ctx)
@@ -260,6 +281,21 @@ export class PresObj {
             this.object.rotate(angle * (180/Math.PI) - this.rotation, this.x + (this.w / 2), this.y + (this.h / 2))
             this.rotation = angle * (180/Math.PI)
             this.outline.rotate(this.rotation)
+        }
+    }*/
+
+    toJSON() {
+        return {
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h,
+            object: this.constructor.name,
+            attributes: {
+                fill: this.object.attr('fill'),
+                strokeWidth: this.object.attr('stroke-width'),
+                stroke: this.object.attr('stroke')
+            }
         }
     }
 }

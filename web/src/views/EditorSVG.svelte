@@ -1,9 +1,7 @@
 <script>
     import {onMount} from "svelte";
     import {SVG} from '@svgdotjs/svg.js'
-    import {PresText} from "../lib/models/Text.js";
-    import {PresCircle, PresRect, PresEllipse} from "../lib/models/Shapes.js";
-    import {PresImage} from "../lib/models/Image.js";
+    import { _selectedObject } from "../store/data.js";
 
     import MenuBar from "../components/MenuBar.svelte";
     import SlideBar from "../components/SlideBar.svelte";
@@ -26,9 +24,7 @@
     let files, container, accepted, ctx;
     let w, h;
 
-    $: activeSlide, draw();
-
-
+    //$: activeSlide, draw();
 
     const draw = () => {
         let o = presentation.slides[activeSlide].objects;
@@ -42,6 +38,7 @@
             if(o[i].selected){
                 o[i].onClick(ctx);
             }
+            //o[i].eventclean()
             o[i].object.remove();
         }
     }
@@ -55,6 +52,9 @@
             .attr('class', 'svg')
         ctx.on('mousedown', (e) => {
             timing.start = performance.now();
+            _selectedObject.subscribe((p) => {
+                console.log(p);
+            })
         })
         ctx.on('mouseup', () => {
             timing.stop = performance.now() - timing.start;
@@ -72,6 +72,12 @@
             h = w * 9 / 16
             ctx.size(w, h)
         });
+        /*if(localStorage.getItem("presentation")){
+            presentation = JSON.parse(localStorage.getItem("presentation"));
+            console.log(presentation);
+            //_presentation.set(presentation);
+        }*/
+        //console.log(JSON.parse(localStorage.getItem('presentation')));
         draw();
     })
 

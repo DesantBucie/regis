@@ -22,4 +22,13 @@ export class Slide {
     changeBackground(color) {
         this.background = color;
     }
+
+    toJSON() {
+        return {
+            internalName: this.internalName,
+            name: this.name,
+            background: this.background,
+            objects: this.objects.map(o => o.toJSON()),
+        }
+    }
 }

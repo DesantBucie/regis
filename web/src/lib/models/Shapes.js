@@ -1,4 +1,4 @@
-import {Rect, Circle, Ellipse, SVG} from "@svgdotjs/svg.js";
+import {Rect, Circle, Ellipse, SVG, Polygon} from "@svgdotjs/svg.js";
 import {PresObj} from "./PresObject.js";
 
 /**
@@ -9,7 +9,6 @@ import {PresObj} from "./PresObject.js";
  */
 class PresShape extends PresObj {
     /**
-     *
      * @param {number} x - x position on canvas
      * @param {number} y - y position on canvas
      * @param {number} w - width of the object
@@ -25,6 +24,37 @@ class PresShape extends PresObj {
      */
     draw(ctx) {
         super.draw(ctx)
+    }
+
+    static fromJSON(data) {
+        const LUT = new Map([
+            ['PresRect', PresRect],
+            ['PresCircle', PresCircle],
+            ['PresEllipse', PresEllipse],
+            ['PresTriangle', PresTriangle]
+        ]);
+    }
+}
+class PresPolygon extends PresObj {
+
+}
+
+export class PresTriangle extends PresPolygon {
+    /**
+     * @param {number} x - x position on canvas
+     * @param {number} y - y position on canvas
+     * @param {number} w - width of the object
+     * @param {number} h - height of the object
+     */
+    constructor(x, y, w, h) {
+        super(x,y,w,h);
+        this.object = new Polygon();
+    }
+    draw(ctx){
+
+        super.draw(ctx);
+        console.log()
+        this.object.plot([[this.x, this.y], [this.x+this.w/2, this.y+this.h],[this.x+this.w, this.y]]);
     }
 }
 
