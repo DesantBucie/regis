@@ -7,6 +7,7 @@
     import SlideBar from "../components/SlideBar.svelte";
     import ObjectBar from "../components/ObjectBar.svelte";
 
+    import {Presentation} from "../lib/models/Presentation.js";
     import {_presentation, _activeSlide} from "../store/data.js";
 
 
@@ -72,11 +73,11 @@
             h = w * 9 / 16
             ctx.size(w, h)
         });
-        /*if(localStorage.getItem("presentation")){
-            presentation = JSON.parse(localStorage.getItem("presentation"));
+        if(localStorage.getItem("presentation")){
+            presentation = Presentation.fromJSON(JSON.parse(localStorage.getItem("presentation")));
             console.log(presentation);
-            //_presentation.set(presentation);
-        }*/
+            _presentation.set(presentation);
+        }
         //console.log(JSON.parse(localStorage.getItem('presentation')));
         draw();
     })

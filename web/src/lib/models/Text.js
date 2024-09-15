@@ -21,7 +21,7 @@ export class PresText extends PresObj {
         //.add(`<div xmlns="http://www.w3.org/1999/xhtml" contenteditable="true" style="color:black;">Text</div>`)
         this.object = new Text()
             .text("Text")
-            .font({size:20})
+            .font({size:20, anchor:'start'})
         this.lines = 1;
     }
 
@@ -65,6 +65,14 @@ export class PresText extends PresObj {
         this.object.font({anchor: align});
     }
 
+    /**
+     * Change text font
+     * @param font {string}
+     */
+    changeFont(font){
+        this.object.font({family:font});
+    }
+
     onKeyDown(e){
         let ignoreKeys = [
             'Enter',
@@ -104,12 +112,28 @@ export class PresText extends PresObj {
             w: this.w,
             h: this.h,
             object: this.constructor.name,
+            text: this.object.text(),
             attributes: {
+                anchor: this.object.attr('anchor'),
                 fill: this.object.attr('fill'),
                 strokeWidth: this.object.attr('stroke-width'),
                 stroke: this.object.attr('stroke'),
                 fontSize: this.object.attr('font-size')
             }
         }
+    }
+    static fromJSON(json) {
+        //const text = Object.create(PresText.prototype);
+        const text = new PresText(json.x, json.y, json.text)
+        text.object
+            .stroke({
+            color: json.attributes.stroke,
+            width: json.attributes.strokeWidth
+            })
+            .fill(json.attributes.fill)
+            .font({size:json.attributes.size,
+                anchor:json.attributes.anchor
+            });
+        return text;
     }
 }

@@ -1,5 +1,7 @@
 import {Rect, Circle, Ellipse, SVG, Polygon} from "@svgdotjs/svg.js";
 import {PresObj} from "./PresObject.js";
+import {PresText} from "./Text.js";
+import {PresImage} from "./Image.js";
 
 /**
  * The class defining a Shape on canvas
@@ -26,14 +28,6 @@ class PresShape extends PresObj {
         super.draw(ctx)
     }
 
-    static fromJSON(data) {
-        const LUT = new Map([
-            ['PresRect', PresRect],
-            ['PresCircle', PresCircle],
-            ['PresEllipse', PresEllipse],
-            ['PresTriangle', PresTriangle]
-        ]);
-    }
 }
 class PresPolygon extends PresObj {
 
@@ -56,6 +50,15 @@ export class PresTriangle extends PresPolygon {
         console.log()
         this.object.plot([[this.x, this.y], [this.x+this.w/2, this.y+this.h],[this.x+this.w, this.y]]);
     }
+    static fromJSON(json) {
+        const t = new PresTriangle(json.x, json.y, json.w, json.h);
+        t.object.stroke({
+            color: json.attributes.stroke,
+            width: json.attributes.strokeWidth
+        })
+            .fill(json.attributes.fill)
+        return t;
+    }
 }
 
 export class PresRect extends PresShape {
@@ -70,7 +73,17 @@ export class PresRect extends PresShape {
         super(x, y, w, h);
         this.object = new Rect()
     }
+    static fromJSON(json) {
+        console.log(json.attributes.strokeWidth);
+        const t = new PresRect(json.x, json.y, json.w, json.h);
+        t.object.stroke({
+            width: json.attributes.strokeWidth,
+            color: json.attributes.stroke,
+        })
+            .fill(json.attributes.fill)
 
+        return t;
+    }
 }
 export class PresCircle extends PresShape {
     /**
@@ -144,7 +157,15 @@ export class PresCircle extends PresShape {
             this.updateObject()
         }
     }
-
+    static fromJSON(json) {
+        const t = new PresCircle(json.x, json.y, json.w/2);
+        t.object.stroke({
+            color: json.attributes.stroke,
+            width: json.attributes.strokeWidth
+        })
+            .fill(json.attributes.fill)
+        return t;
+    }
 }
 
 export class PresEllipse extends PresShape {
@@ -168,5 +189,14 @@ export class PresEllipse extends PresShape {
         this.object
             .move(this.x, this.y)
             .addTo(ctx)
+    }
+    static fromJSON(json) {
+        const t = new PresEllipse(json.x, json.y, json.w, json.h);
+        t.object.stroke({
+            color: json.attributes.stroke,
+            width: json.attributes.strokeWidth
+        })
+            .fill(json.attributes.fill)
+        return t;
     }
 }

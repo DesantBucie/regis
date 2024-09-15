@@ -69,16 +69,26 @@
     })
 </script>
 
-<div bind:this={canvasContainer}>
+<div class="canvas-container" bind:this={canvasContainer}>
     <canvas class="viewer" bind:this={canvas}>
 
     </canvas>
 </div>
-<button class="viewer__button">{@html icon(faArrowLeft).html}</button>
-<button class="viewer__button">{@html icon(faArrowRight).html}</button>
 
 
 <style>
+    .canvas-container {
+        position: relative;
+    }
+    .canvas-buttons {
+        position: absolute;
+        display: flex;
+        top:0;
+        left:0;
+        width: 100%;
+        align-items: center;
+        margin:auto;
+    }
     .viewer {
         background: white;
     }

@@ -66,7 +66,6 @@ export class PresObj {
         //this.object.node.setAttribute('transform', '');
         this.object
             .move(this.x, this.y)
-            .stroke({color: '#13d782', width:0})
             .css('cursor', 'pointer')
             .size(this.w, this.h)
             .on('click', (e) => {
@@ -75,7 +74,7 @@ export class PresObj {
                     this.onClick(ctx)
                 }
             })
-            .on('mousedown', this.onMouseDown)
+            .on('mousedown',this.onMouseDown)
             .on('mouseup', this.onMouseUp)
             //.on('mousemove', (e) => { return this.onMousemove(e, ctx)})
             .addTo(ctx);
@@ -297,5 +296,8 @@ export class PresObj {
                 stroke: this.object.attr('stroke')
             }
         }
+    }
+    static fromJSON(json){
+
     }
 }

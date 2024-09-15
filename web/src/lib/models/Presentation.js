@@ -18,4 +18,16 @@ export class Presentation {
         this.aspect = '16x9'
         this.slides = [ new Slide("slide1") ]
     }
+
+    static fromJSON(json) {
+        const presentation = Object.create(Presentation.prototype);
+
+        return Object.assign(presentation, {
+            title: json.title,
+            author: json.author,
+            no_Slides: json.no_Slides,
+            aspect: json.aspect,
+            slides: json.slides.map(o => Slide.fromJSON(o)),
+        })
+    }
 }

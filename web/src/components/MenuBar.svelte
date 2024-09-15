@@ -87,24 +87,7 @@
         _presentation.set(presentation);
         changePosition()
     }
-    const getCircularReplacer = () => {
-        const ancestors = [];
-        return function (key, value) {
-            if (typeof value !== "object" || value === null) {
-                return value;
-            }
-            // `this` is the object that value is contained in,
-            // i.e., its direct parent.
-            while (ancestors.length > 0 && ancestors.at(-1) !== this) {
-                ancestors.pop();
-            }
-            if (ancestors.includes(value)) {
-                return "[Circular]";
-            }
-            ancestors.push(value);
-            return value;
-        };
-    }
+
     const savePresentation = () => {
         const saved =  JSON.stringify(Object.create(presentation));
         console.log(saved);
@@ -113,14 +96,28 @@
     const deleteObject = () => {
         for(let i = 0; i < presentation.slides[activeSlide].objects.length; i++) {
             if(selectedObject.id === presentation.slides[activeSlide].objects[i].id){
-                selectedObject.onClick()
+                selectedObject.onClick(ctx)
                 presentation.slides[activeSlide].objects[i].object.remove();
                 presentation.slides[activeSlide].objects.splice(i, 1);
                 console.log(presentation.slides[activeSlide].objects)
             }
         }
     }
-
+    const fonts = [
+        'Arial',
+        'Arial Black',
+        'Comic Sans MS',
+        'Courier New',
+        'Georgia',
+        'Impact',
+        'Lucida',
+        'Microsoft Sans Serif',
+        'Palatino Linotype',
+        'Tahoma',
+        'Times New Roman',
+        'Trebuchet MS',
+        'Verdana',
+    ]
 </script>
 
 <div class="menubar">
@@ -138,22 +135,31 @@
         <input type="file" on:change={addImage} bind:this={input}>
     </label></button>
 
-    {#if selectedObject !== null}
-        <div style="display: flex; align-items: center; justify-content: center;">
+
+        <div class="editbar">
+            {#if selectedObject !== null}
             {#if selectedObject instanceof PresText}
                 <div><input type="number" on:change={(e) => {return selectedObject.changeTextSize(e.target.value)}}
                             value={selectedObject.object.attr("font-size")}><br/>Font Size</div>
+                <div>
+                    <select on:input={(e) => {return selectedObject.changeFont(e.target.value)}}>
+                        {#each fonts as font}
+                            <option value={font}>{font}</option>
+                        {/each}
+                    </select>
+                </div>
                 <div>
                     <button class="text-align" on:click={(e) => {return selectedObject.changeTextAlign("start")}}>Left</button>
                     <button class="text-align" on:click={(e) => {return selectedObject.changeTextAlign("middle")}}>Center</button>
                     <button class="text-align" on:click={(e) => {return selectedObject.changeTextAlign("end")}}>Right</button>
                 </div>
+
             {/if}
         <div><input type="color"
-                    on:change={(e) => { return selectedObject.changeFill(e.target.value)}}
+                    on:input={(e) => { return selectedObject.changeFill(e.target.value)}}
                     value={selectedObject.object.fill()}><br/>Fill
         </div>
-            <div><select on:click={(e) => {return selectedObject.changeStrokeWidth(e.target.value)}}>
+            <div><select on:input={(e) => {return selectedObject.changeStrokeWidth(e.target.value)}}>
                 <option value="0">None</option>
                 <option value="4">Level 1</option>
                 <option value="10">Level 2</option>
@@ -161,16 +167,22 @@
                 <option value="20">Level 4</option>
             </select>
         <br/>Stroke Size</div>
-        <div><input type="color" on:change={(e) => {return selectedObject.changeStrokeColor(e.target.value)}}
+        <div><input type="color" on:input={(e) => {return selectedObject.changeStrokeColor(e.target.value)}}
         value={selectedObject.object.attr('stroke')}><br/>Stroke Color</div>
         <button on:click={deleteObject}>Delete</button>
+            {/if}
         </div>
-    {/if}
 </div>
 
 <style>
     .menubar {
         position: relative;
+    }
+    .editbar {
+        min-height:6vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .shapes {
         color:black;

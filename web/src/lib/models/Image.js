@@ -23,7 +23,6 @@ export class PresImage extends PresObj {
     }
 
     toJSON() {
-        console.log(this.object.node.href.baseVal)
         return {
             x: this.x,
             y: this.y,
@@ -32,5 +31,8 @@ export class PresImage extends PresObj {
             object: this.constructor.name,
             imageBase64: this.object.node.href.baseVal
         }
+    }
+    static fromJSON(json) {
+        return new PresImage(json.x, json.y, json.w, json.h, json.imageBase64);
     }
 }
