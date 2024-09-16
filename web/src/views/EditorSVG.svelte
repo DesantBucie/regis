@@ -105,7 +105,6 @@
     }
     .container{
         width: 100%;
-        margin:1em;
         background: white;
         border: 1px solid black;
         overflow: hidden;
@@ -116,7 +115,7 @@
         display: inline;
         padding:1em;
         margin:1em;
-        border:1px solid #333;
+        //border:1px solid #333;
         border-radius: 20px;
         background: #222;
         transition: 500ms;

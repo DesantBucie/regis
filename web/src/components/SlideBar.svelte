@@ -80,7 +80,6 @@
 <style>
     .slidebar{
         background: #eee;
-        border: 1px #666 solid;
         padding:1em;
     }
     .slidebar__wrapper {

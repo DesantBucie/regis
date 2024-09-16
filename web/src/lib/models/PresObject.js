@@ -125,6 +125,17 @@ export class PresObj {
             })
 
     }
+
+    /**
+     * Used for drawing on viewer
+     * @param ctx
+     */
+    drawNoEvent(ctx) {
+        this.object
+            .move(this.x, this.y)
+            .size(this.w, this.h)
+            .addTo(ctx);
+    }
     eventclean() {
         this.object.on('click', null)
             .on('mousemove', null)

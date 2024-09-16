@@ -118,7 +118,8 @@ export class PresText extends PresObj {
                 fill: this.object.attr('fill'),
                 strokeWidth: this.object.attr('stroke-width'),
                 stroke: this.object.attr('stroke'),
-                fontSize: this.object.attr('font-size')
+                fontSize: this.object.attr('font-size'),
+                fontFamily: this.object.attr('font-family'),
             }
         }
     }
@@ -126,13 +127,16 @@ export class PresText extends PresObj {
         //const text = Object.create(PresText.prototype);
         const text = new PresText(json.x, json.y, json.text)
         text.object
+            .text(json.text)
             .stroke({
             color: json.attributes.stroke,
             width: json.attributes.strokeWidth
             })
             .fill(json.attributes.fill)
-            .font({size:json.attributes.size,
-                anchor:json.attributes.anchor
+            .font({
+                size:json.attributes.size,
+                anchor:json.attributes.anchor,
+                family:json.attributes.fontFamily,
             });
         return text;
     }

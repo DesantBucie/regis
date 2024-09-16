@@ -4,6 +4,7 @@
   import Circles from "./views/Circles.svelte";
   import StartScreen from "./views/StartScreen.svelte";
   import {Router, Link, Route} from "svelte-routing";
+  import Viewer from "./views/Viewer.svelte";
 
 </script>
 
@@ -12,6 +13,7 @@
         <Route path="/" component={StartScreen} />
         <Route path="/circles" component="{Circles}"/>
         <Route path="/editor" component="{Editor}"/>
+        <Route path="/viewer" component="{Viewer}"/>
     </Router>
 </main>
 
