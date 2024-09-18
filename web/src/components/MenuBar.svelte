@@ -12,7 +12,7 @@
         faAlignLeft,
         faAlignCenter,
         faAlignRight,
-        faDownload
+        faDownload,
     } from "@fortawesome/free-solid-svg-icons";
     import { icon } from "@fortawesome/fontawesome-svg-core";
     import {
@@ -140,27 +140,31 @@
         _presentation.set(presentation);
         changePosition();
     };
-
-    const savePresentation = () => {
-        const saved = JSON.stringify(Object.create(presentation));
-        console.log(saved);
-        localStorage.setItem("presentation", saved);
-    };
     const downloadPresentation = () => {
-        const blob = new Blob([JSON.stringify(presentation)], { type: "text/json" });
-        link.download = 'presentation.json.lac';
-        link.href = window.URL.createObjectURL(blob);
-        link.dataset.downloadurl = ['text/json', link.download, link.href].join(':');
+        console.log(presentation);
+        const fileName = prompt("Enter a file name");
+        if (fileName !== null) {
+            const blob = new Blob([JSON.stringify(presentation)], {
+                type: "text/json",
+            });
+            link.download = fileName + ".lac";
+            link.href = window.URL.createObjectURL(blob);
+            link.dataset.downloadurl = [
+                "text/json",
+                link.download,
+                link.href,
+            ].join(":");
 
-        const evt = new MouseEvent("click", {
-            view: window,
-            bubbles: true,
-            cancelable: true,
-        });
+            const evt = new MouseEvent("click", {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+            });
 
-        link.dispatchEvent(evt);
-        link.remove()
-    }
+            link.dispatchEvent(evt);
+            link.remove();
+        }
+    };
     const deleteObject = () => {
         for (
             let i = 0;
@@ -176,13 +180,14 @@
                 presentation.slides[activeSlide].objects.splice(i, 1);
                 console.log(presentation.slides[activeSlide].objects);
             }
+            _presentation.set(presentation);
         }
     };
 
     const moveFront = () => {
         const currentIndex =
             presentation.slides[activeSlide].objects.indexOf(selectedObject);
-        console.log(currentIndex);
+       
         if (
             currentIndex <
             presentation.slides[activeSlide].objects.length - 1
@@ -198,7 +203,7 @@
     const moveBack = () => {
         const currentIndex =
             presentation.slides[activeSlide].objects.indexOf(selectedObject);
-        console.log(currentIndex);
+        
         if (currentIndex > 0) {
             const temp =
                 presentation.slides[activeSlide].objects[currentIndex - 1];
@@ -227,43 +232,48 @@
 </script>
 
 <div class="menubar">
-    <button on:click={downloadPresentation}>{@html icon(faDownload).html}</button>
-    <button on:click={savePresentation}>Save online</button>
-    <button title="Textbox" on:click={addTextBox}>{@html icon(faT).html}</button
-    >
-    <button title="Shapes" on:click={toggleShapes}
-        >{@html icon(faShapes).html}</button
-    >
-    <div bind:this={shapes} class="shapes">
-        <button
-            on:click={() => {
-                return addShape("circle");
-            }}>{@html icon(faCircle).html}</button
+    <div>
+        <!--span>Auto Saved</span-->
+        <button title="Download file" on:click={downloadPresentation}
+            >{@html icon(faDownload).html}</button
         >
-        <button
-            on:click={() => {
-                return addShape("square");
-            }}>{@html icon(faSquare).html}</button
+        <!--button on:click={savePresentation}>Save online</button-->
+        <button title="Textbox" on:click={addTextBox}
+            >{@html icon(faT).html}</button
         >
-        <button
-            on:click={() => {
-                return addShape("ellipse");
-            }}>Eli</button
+        <button title="Shapes" on:click={toggleShapes}
+            >{@html icon(faShapes).html}</button
         >
+        <div bind:this={shapes} class="shapes">
+            <button
+                on:click={() => {
+                    return addShape("circle");
+                }}>{@html icon(faCircle).html}</button
+            >
+            <button
+                on:click={() => {
+                    return addShape("square");
+                }}>{@html icon(faSquare).html}</button
+            >
+            <button
+                on:click={() => {
+                    return addShape("ellipse");
+                }}>Eli</button
+            >
+            <button
+                on:click={() => {
+                    return addShape("triangle");
+                }}>{@html icon(faTriangleExclamation).html}</button
+            >
+        </div>
         <button
-            on:click={() => {
-                return addShape("triangle");
-            }}>{@html icon(faTriangleExclamation).html}</button
+            ><label class="startScreen_button">
+                {@html icon(faImage).html}
+                <input type="file" on:change={addImage} bind:this={input} />
+            </label></button
         >
+        <a href="/viewer"><button>{@html icon(faEye).html}</button></a>
     </div>
-    <button
-        ><label class="startScreen_button">
-            {@html icon(faImage).html}
-            <input type="file" on:change={addImage} bind:this={input} />
-        </label></button
-    >
-    <a href="/viewer"><button>{@html icon(faEye).html}</button></a>
-
     <div class="editbar">
         {#if selectedObject !== null}
             {#if selectedObject instanceof PresText}
@@ -379,9 +389,11 @@
         display: none;
         position: absolute;
         background: white;
-        left: calc(50% - 155px);
-        width: 300px;
-        height: 300px;
+        left: calc(50% - 140px);
+        top: calc(45px);
+        width: 250px;
+        padding:1em;
+        height: 40px;
         border: 1px solid black;
         z-index: 1;
         overflow: clip;

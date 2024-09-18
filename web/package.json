@@ -23,6 +23,7 @@
     "p5": "^1.8.0",
     "paper": "^0.12.17",
     "sortablejs": "^1.15.2",
-    "svelte-routing": "^2.13.0"
+    "svelte-routing": "^2.13.0",
+    "svg-text-wrap": "^0.0.1"
   }
 }

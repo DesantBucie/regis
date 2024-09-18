@@ -1,25 +1,40 @@
 <script>
-    import {faFolderOpen, faFile} from "@fortawesome/free-solid-svg-icons"
+    import {faFolderOpen, faFile, faCloud} from "@fortawesome/free-solid-svg-icons"
     import {icon} from "@fortawesome/fontawesome-svg-core"
 
-    let accepted = '.json'
+    import { Presentation } from "../lib/models/Presentation";
+    import {_presentation} from '../store/data';
+
+    let accepted = '.lac'
     let files;
 
+
+    const readFile = async (file) => {
+        const text = await file.text();
+        localStorage.setItem('filePresentation', text);
+        window.location.replace("/editor")
+    }
+    const newPresentation = () => {
+        localStorage.clear()
+        window.location.replace('/editor')
+    }
+    const resume = () =>{
+        window.location.replace('/editor')
+    }
     $: if (files) {
-        fetch('/presentation-file', {
-            method: 'POST',
-            body: files[0]
-        }).then(resp => resp.json()
-        ).then(success => console.log(success)
-        ).catch(err => console.log(err)
-        );
+        readFile(files[0])
     }
 </script>
 
 <div class="startScreen">
-    <a href="/editor"><div class="startScreen_button">
+   <button on:click={newPresentation} class="startScreen_button">
         {@html icon(faFile).html} New Presentation
-    </div></a>
+   </button>
+   {#if localStorage.getItem('presentation')}
+   <button on:click={resume} class="startScreen_button">
+        {@html icon(faCloud).html} Resume last
+   </button>
+   {/if}
     <label class="startScreen_button startScreen_button--label">
         {@html icon(faFolderOpen).html} Open File
         <input type="file" bind:files accept={accepted}>

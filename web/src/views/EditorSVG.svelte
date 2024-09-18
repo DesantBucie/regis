@@ -9,6 +9,7 @@
 
     import {Presentation} from "../lib/models/Presentation.js";
     import {_presentation, _activeSlide} from "../store/data.js";
+    import { localStorageSize } from "../lib/localStorageSize.js";
 
 
     let presentation, activeSlide;
@@ -24,8 +25,6 @@
 
     let files, container, accepted, ctx;
     let w, h;
-
-    //$: activeSlide, draw();
 
     const draw = () => {
         let o = presentation.slides[activeSlide].objects;
@@ -44,6 +43,19 @@
         }
     }
     onMount(() => {
+
+
+        const savePresentation = async () => {
+            const save = JSON.stringify(Object.create(presentation));
+            const saved = localStorage.getItem('presentation');
+            console.log(saved == save);
+            localStorage.setItem("presentation", save);
+
+    
+        };
+
+        //setInterval(savePresentation, 1000);
+        //setInterval(localStorageSize, 1000);
         w = container.clientWidth
         ctx = SVG()
             .addTo(container)
@@ -53,9 +65,6 @@
             .attr('class', 'svg')
         ctx.on('mousedown', (e) => {
             timing.start = performance.now();
-            _selectedObject.subscribe((p) => {
-                console.log(p);
-            })
         })
         ctx.on('mouseup', () => {
             timing.stop = performance.now() - timing.start;
@@ -73,12 +82,16 @@
             h = w * 9 / 16
             ctx.size(w, h)
         });
-        if(localStorage.getItem("presentation")){
+        if(localStorage.getItem('filePresentation')){
+            presentation = Presentation.fromJSON(JSON.parse(localStorage.getItem('filePresentation')))
+            _presentation.set(presentation);
+        }
+        else if(localStorage.getItem("presentation")){
             presentation = Presentation.fromJSON(JSON.parse(localStorage.getItem("presentation")));
             console.log(presentation);
             _presentation.set(presentation);
         }
-        //console.log(JSON.parse(localStorage.getItem('presentation')));
+        
         draw();
     })
 

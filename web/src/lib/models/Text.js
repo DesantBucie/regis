@@ -1,6 +1,8 @@
 import {PresObj} from "./PresObject.js";
 import {Text} from "@svgdotjs/svg.js";
 
+import textWrap from 'svg-text-wrap'
+
 export class PresText extends PresObj {
     /**
      *
@@ -25,17 +27,42 @@ export class PresText extends PresObj {
         this.lines = 1;
     }
 
+    getTextWidth(text, font) {
+        // re-use canvas object for better performance
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        context.font = font;
+        const metrics = context.measureText(text);
+        return metrics.width;
+      }
+
+    wrapText(){
+        let text = this.object.text();
+        const textArray = textWrap(text, this.w - 10, {'font-size': this.object.attr('font-size')});
+        text = textArray.join('\n')
+
+        this.object.text(text);
+        const bbox = this.object.node.getBBox();
+        this.h = bbox.height;
+        this.outline.h = bbox.height;
+        this.updateObject()
+    }
     /**
      *
      * @param {SVG} ctx - context of svg canvas
      */
     draw(ctx) {
+        /*this.w = this.getTextWidth(this.object.text(), 'normal 20pt Arial')
+        this.outline.w = this.w
+        this.h = Number(this.object.attr('font-size')) * 1.33;
+        this.outline.h = this.h*/
         super.draw(ctx);
         const bbox = this.object.node.getBBox();
         console.log(bbox)
         this.w = bbox.width;
+        this.outline.w = bbox.width;
         this.h = bbox.height;
-        this.updateObject()
+        this.outline.h = bbox.height;
 
 
     }
@@ -100,6 +127,7 @@ export class PresText extends PresObj {
             console.log(e)
             this.object.text(this.object.text().slice(0, -1) + e.key + '|');
         }
+        this.wrapText()
         /*this.w = this.object.node.getBBox().width;
         this.h = this.object.node.getBBox().height;
         this.object
