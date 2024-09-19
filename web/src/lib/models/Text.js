@@ -58,11 +58,13 @@ export class PresText extends PresObj {
         this.outline.h = this.h*/
         super.draw(ctx);
         const bbox = this.object.node.getBBox();
-        console.log(bbox)
+        //console.log(bbox)
         this.w = bbox.width;
         this.outline.w = bbox.width;
         this.h = bbox.height;
         this.outline.h = bbox.height;
+        //i know it's stupid, but it fixes text not wrapping.
+        this.object.text(this.object.text())
 
 
     }

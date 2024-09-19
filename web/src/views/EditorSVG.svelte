@@ -11,7 +11,7 @@
     import { localStorageSize } from "../lib/localStorageSize.js";
 
 
-    let presentation, activeSlide;
+    let presentation, activeSlide, selectedObject;
 
     let timing = {};
 
@@ -20,6 +20,9 @@
     })
     _activeSlide.subscribe((a) =>{
         activeSlide = a;
+    })
+    _selectedObject.subscribe(s => {
+        selectedObject = s;
     })
 
     let files, container, accepted, ctx;
@@ -30,6 +33,7 @@
         for(let i = 0; i < o.length; i++){
             o[i].draw(ctx)
         }
+        
     }
     const clear = () => {
         let o = presentation.slides[activeSlide].objects;
@@ -51,7 +55,6 @@
 
         await writable.write(save);
         await writable.close();   
-        console.log("Saved");
         
     };
 
@@ -69,6 +72,7 @@
             if(err.name === "NotFoundError")
                 console.log("No save");
         } 
+        draw();
     }
     onMount(async () => {
         
@@ -80,25 +84,30 @@
             .size(w, w * 9 / 16)
             .viewbox(0, 0, 1920, 1080)
             .attr('tabindex', '0')
-            .attr('class', 'svg')
-        /*ctx.on('mousedown', (e) => {
+            .attr('class', 'svg');
+
+        ctx.on('mousedown', (e) => {
             timing.start = performance.now();
         })
         ctx.on('mouseup', () => {
             timing.stop = performance.now() - timing.start;
 
             if(timing.stop < 200){
-                
+                for(let i = 0; i < presentation.slides[activeSlide].objects.length; i++) {
+                    if(presentation.slides[activeSlide].objects[i].selected 
+                    && presentation.slides[activeSlide].objects[i] == selectedObject) {
+                        presentation.slides[activeSlide].objects[i].onClick(ctx);
+                    }
+                }
             }
-        })*/
+        })
         addEventListener('resize', () => {
             w = container.clientWidth;
             h = w * 9 / 16
             ctx.size(w, h)
         });
         await openPresentation();
-        
-        draw();
+    
     })
 
 </script>
