@@ -5,13 +5,23 @@
     import { Presentation } from "../lib/models/Presentation";
     import {_presentation} from '../store/data';
 
-    let accepted = '.lac'
+    let accepted = '.regis'
     let files;
 
 
     const readFile = async (file) => {
         const text = await file.text();
-        localStorage.setItem('filePresentation', text);
+
+        const root = await navigator.storage.getDirectory();
+        
+        const fileHandle = await root.getFileHandle("regis.json", {create:true});
+        const writable = await fileHandle.createWritable();
+        
+
+        await writable.write(text);
+        await writable.close();   
+        console.log("Saved");
+        
         window.location.replace("/editor")
     }
     const newPresentation = () => {
@@ -28,13 +38,8 @@
 
 <div class="startScreen">
    <button on:click={newPresentation} class="startScreen_button">
-        {@html icon(faFile).html} New Presentation
+        {@html icon(faFile).html} New Presentation/Resume
    </button>
-   {#if localStorage.getItem('presentation')}
-   <button on:click={resume} class="startScreen_button">
-        {@html icon(faCloud).html} Resume last
-   </button>
-   {/if}
     <label class="startScreen_button startScreen_button--label">
         {@html icon(faFolderOpen).html} Open File
         <input type="file" bind:files accept={accepted}>

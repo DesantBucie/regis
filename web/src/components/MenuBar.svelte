@@ -1,7 +1,5 @@
 <script>
     import {
-        faArrowDown,
-        faArrowUp,
         faCircle,
         faEye,
         faImage,
@@ -9,9 +7,6 @@
         faSquare,
         faT,
         faTriangleExclamation,
-        faAlignLeft,
-        faAlignCenter,
-        faAlignRight,
         faDownload,
     } from "@fortawesome/free-solid-svg-icons";
     import { icon } from "@fortawesome/fontawesome-svg-core";
@@ -28,6 +23,8 @@
         PresTriangle,
     } from "../lib/models/Shapes.js";
     import { PresImage } from "../lib/models/Image.js";
+    import EditBar from "./EditBar.svelte";
+    import { Presentation } from "../lib/models/Presentation.js";
 
     export let ctx, draw, clear;
 
@@ -141,13 +138,12 @@
         changePosition();
     };
     const downloadPresentation = () => {
-        console.log(presentation);
         const fileName = prompt("Enter a file name");
         if (fileName !== null) {
             const blob = new Blob([JSON.stringify(presentation)], {
                 type: "text/json",
             });
-            link.download = fileName + ".lac";
+            link.download = fileName + ".regis";
             link.href = window.URL.createObjectURL(blob);
             link.dataset.downloadurl = [
                 "text/json",
@@ -165,85 +161,25 @@
             link.remove();
         }
     };
-    const deleteObject = () => {
-        for (
-            let i = 0;
-            i < presentation.slides[activeSlide].objects.length;
-            i++
-        ) {
-            if (
-                selectedObject.id ===
-                presentation.slides[activeSlide].objects[i].id
-            ) {
-                selectedObject.onClick(ctx);
-                presentation.slides[activeSlide].objects[i].object.remove();
-                presentation.slides[activeSlide].objects.splice(i, 1);
-                console.log(presentation.slides[activeSlide].objects);
-            }
-            _presentation.set(presentation);
-        }
-    };
 
-    const moveFront = () => {
-        const currentIndex =
-            presentation.slides[activeSlide].objects.indexOf(selectedObject);
-       
-        if (
-            currentIndex <
-            presentation.slides[activeSlide].objects.length - 1
-        ) {
-            const temp =
-                presentation.slides[activeSlide].objects[currentIndex + 1];
-            presentation.slides[activeSlide].objects[currentIndex + 1] =
-                presentation.slides[activeSlide].objects[currentIndex];
-            presentation.slides[activeSlide].objects[currentIndex] = temp;
-        }
-        draw(ctx);
-    };
-    const moveBack = () => {
-        const currentIndex =
-            presentation.slides[activeSlide].objects.indexOf(selectedObject);
-        
-        if (currentIndex > 0) {
-            const temp =
-                presentation.slides[activeSlide].objects[currentIndex - 1];
-            presentation.slides[activeSlide].objects[currentIndex - 1] =
-                presentation.slides[activeSlide].objects[currentIndex];
-            presentation.slides[activeSlide].objects[currentIndex] = temp;
-        }
-        draw(ctx);
-    };
-    const fonts = [
-        "Arial",
-        "Arial Black",
-        "Comic Sans MS",
-        "Courier New",
-        "Georgia",
-        "Impact",
-        "Lucida",
-        "Microsoft Sans Serif",
-        "Palatino Linotype",
-        "Tahoma",
-        "Times New Roman",
-        "Trebuchet MS",
-        "Verdana",
-    ];
-    const strokelevels = ["0", "5", "10", "15", "20"];
 </script>
 
 <div class="menubar">
-    <div>
+    <div class="presbar">
         <!--span>Auto Saved</span-->
-        <button title="Download file" on:click={downloadPresentation}
-            >{@html icon(faDownload).html}</button
-        >
         <!--button on:click={savePresentation}>Save online</button-->
-        <button title="Textbox" on:click={addTextBox}
-            >{@html icon(faT).html}</button
-        >
-        <button title="Shapes" on:click={toggleShapes}
-            >{@html icon(faShapes).html}</button
-        >
+        <span>
+            <button title="Textbox" on:click={addTextBox}
+                >{@html icon(faT).html}</button
+            >
+            <div class="presbar__title">Textbox</div>
+        </span>
+        <span>
+            <button title="Shapes" on:click={toggleShapes}
+                >{@html icon(faShapes).html}</button
+            >
+            <div class="presbar__title">Shapes</div>
+        </span>
         <div bind:this={shapes} class="shapes">
             <button
                 on:click={() => {
@@ -266,111 +202,28 @@
                 }}>{@html icon(faTriangleExclamation).html}</button
             >
         </div>
-        <button
-            ><label class="startScreen_button">
-                {@html icon(faImage).html}
-                <input type="file" on:change={addImage} bind:this={input} />
-            </label></button
-        >
-        <a href="/viewer"><button>{@html icon(faEye).html}</button></a>
+        <span>
+            <button
+                ><label class="startScreen_button">
+                    {@html icon(faImage).html}
+                    <input type="file" on:change={addImage} bind:this={input} />
+                </label></button
+            >
+            <div class="presbar__title">Image</div>
+        </span>
+        <span class="presbar__spacer">
+            <button title="Download file" on:click={downloadPresentation}
+                >{@html icon(faDownload).html}</button
+            >
+            <div class="presbar__title">Download</div>
+        </span>
+        <span>
+            <a href="/viewer"><button>{@html icon(faEye).html}</button></a>
+            <div class="presbar__title">Viewer</div>
+        </span>
     </div>
-    <div class="editbar">
-        {#if selectedObject !== null}
-            {#if selectedObject instanceof PresText}
-                <div>
-                    <div>
-                        <input
-                            type="number"
-                            on:change={(e) => {
-                                return selectedObject.changeTextSize(
-                                    e.target.value,
-                                );
-                            }}
-                            value={selectedObject.object.attr("font-size")}
-                        />
-                    </div>
-                    Fill
-                </div>
-                <div>
-                    <div>
-                        <select
-                            on:input={(e) => {
-                                return selectedObject.changeFont(
-                                    e.target.value,
-                                );
-                            }}
-                        >
-                            {#each fonts as font}
-                                {#if selectedObject.object.attr("font-family") === font}
-                                    <option value={font} selected>{font}</option
-                                    >
-                                {:else}
-                                    <option value={font}>{font}</option>
-                                {/if}
-                            {/each}
-                        </select>
-                    </div>
-                    Font Family
-                </div>
-                <button
-                    class="text-align"
-                    on:click={(e) => {
-                        return selectedObject.changeTextAlign("start");
-                    }}>{@html icon(faAlignLeft).html}</button
-                >
+    <EditBar ctx={ctx} selectedObject={selectedObject} draw={draw}/>
 
-                <button
-                    class="text-align"
-                    on:click={(e) => {
-                        return selectedObject.changeTextAlign("middle");
-                    }}>{@html icon(faAlignCenter).html}</button
-                >
-                <button
-                    class="text-align"
-                    on:click={(e) => {
-                        return selectedObject.changeTextAlign("end");
-                    }}>{@html icon(faAlignRight).html}</button
-                >
-            {/if}
-            <div>
-                <input
-                    type="color"
-                    on:input={(e) => {
-                        return selectedObject.changeFill(e.target.value);
-                    }}
-                    value={selectedObject.object.fill()}
-                />
-                Fill
-            </div>
-            <div>
-                <select
-                    on:input={(e) => {
-                        return selectedObject.changeStrokeWidth(e.target.value);
-                    }}
-                >
-                    {#each strokelevels as level, i}
-                        {#if selectedObject.object.attr("stroke-width") === parseInt(level)}
-                            <option value={level} selected>Level {i}</option>
-                        {:else}
-                            <option value={level}>Level {i}</option>
-                        {/if}
-                    {/each}
-                </select>
-            </div>
-            <div>
-                <input
-                    type="color"
-                    on:input={(e) => {
-                        return selectedObject.changeStrokeColor(e.target.value);
-                    }}
-                    value={selectedObject.object.attr("stroke")}
-                />
-            </div>
-            <button on:click={moveFront}>{@html icon(faArrowUp).html}</button>
-            <button on:click={moveBack}>{@html icon(faArrowDown).html}</button>
-            <button on:click={deleteObject}>Delete</button>
-        {/if}
-    </div>
     <a bind:this={link} style="display: none"></a>
 </div>
 
@@ -378,21 +231,28 @@
     .menubar {
         position: relative;
     }
-    .editbar {
-        min-height: 6vh;
+    .presbar {
         display: flex;
-        align-items: center;
         justify-content: center;
+    }
+    .presbar__title {
+        font-size: 8pt;
+    }
+    .presbar span {
+        padding: 0em .1em;
+    }
+    .presbar__spacer {
+        margin-left:3em;
     }
     .shapes {
         color: black;
         display: none;
         position: absolute;
         background: white;
-        left: calc(50% - 140px);
+        left: calc(45% - 140px);
         top: calc(45px);
         width: 250px;
-        padding:1em;
+        padding: 1em;
         height: 40px;
         border: 1px solid black;
         z-index: 1;

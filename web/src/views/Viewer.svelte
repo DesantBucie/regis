@@ -45,7 +45,22 @@
         draw()
 
     }
-    onMount(() => {
+    const openPresentation = async () => {
+        try {
+            const root = await navigator.storage.getDirectory();
+            const fileHandle = await root.getFileHandle('regis.json');
+            const file = await fileHandle.getFile();
+            const jsonString = await file.text();
+
+            presentation = Presentation.fromJSON(JSON.parse(jsonString));
+            _presentation.set(presentation);
+        }
+        catch(err) {
+            if(err.name === "NotFoundError")
+                console.log("No save");
+        } 
+    }
+    onMount(async () => {
         w = viewer.clientWidth
         ctx = SVG()
             .addTo(viewer)
@@ -63,11 +78,7 @@
                 changeActiveSlide('left')
             }
         })*/
-        if(localStorage.getItem("presentation")){
-            presentation = Presentation.fromJSON(JSON.parse(localStorage.getItem("presentation")));
-            console.log(presentation);
-            _presentation.set(presentation);
-        }
+        await openPresentation()
         addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') {
                 changeActiveSlide('right')

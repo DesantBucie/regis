@@ -5,7 +5,6 @@
 
     import MenuBar from "../components/MenuBar.svelte";
     import SlideBar from "../components/SlideBar.svelte";
-    import ObjectBar from "../components/ObjectBar.svelte";
 
     import {Presentation} from "../lib/models/Presentation.js";
     import {_presentation, _activeSlide} from "../store/data.js";
@@ -38,24 +37,43 @@
             if(o[i].selected){
                 o[i].onClick(ctx);
             }
-            //o[i].eventclean()
+            o[i].eventclean()
             o[i].object.remove();
         }
     }
-    onMount(() => {
+    const savePresentation = async () => {
 
+        const root = await navigator.storage.getDirectory();
+        
+        const fileHandle = await root.getFileHandle("regis.json", {create:true});
+        const writable = await fileHandle.createWritable();
+        const save = JSON.stringify(Object.create(presentation));
 
-        const savePresentation = async () => {
-            const save = JSON.stringify(Object.create(presentation));
-            const saved = localStorage.getItem('presentation');
-            console.log(saved == save);
-            localStorage.setItem("presentation", save);
+        await writable.write(save);
+        await writable.close();   
+        console.log("Saved");
+        
+    };
 
-    
-        };
+    const openPresentation = async () => {
+        try {
+            const root = await navigator.storage.getDirectory();
+            const fileHandle = await root.getFileHandle('regis.json');
+            const file = await fileHandle.getFile();
+            const jsonString = await file.text();
 
-        //setInterval(savePresentation, 1000);
-        //setInterval(localStorageSize, 1000);
+            presentation = Presentation.fromJSON(JSON.parse(jsonString));
+            _presentation.set(presentation);
+        }
+        catch(err) {
+            if(err.name === "NotFoundError")
+                console.log("No save");
+        } 
+    }
+    onMount(async () => {
+        
+        setInterval(savePresentation, 10000);
+
         w = container.clientWidth
         ctx = SVG()
             .addTo(container)
@@ -63,34 +81,22 @@
             .viewbox(0, 0, 1920, 1080)
             .attr('tabindex', '0')
             .attr('class', 'svg')
-        ctx.on('mousedown', (e) => {
+        /*ctx.on('mousedown', (e) => {
             timing.start = performance.now();
         })
         ctx.on('mouseup', () => {
             timing.stop = performance.now() - timing.start;
 
-            /*if(timing.stop < 200){
-                for(let i = 0; i < presentation.slides[activeSlide-1].objects.length; i++) {
-                    if(presentation.slides[activeSlide-1].objects[i].selected) {
-                        presentation.slides[activeSlide-1].objects[i].onClick();
-                    }
-                }
-            }*/
-        })
+            if(timing.stop < 200){
+                
+            }
+        })*/
         addEventListener('resize', () => {
             w = container.clientWidth;
             h = w * 9 / 16
             ctx.size(w, h)
         });
-        if(localStorage.getItem('filePresentation')){
-            presentation = Presentation.fromJSON(JSON.parse(localStorage.getItem('filePresentation')))
-            _presentation.set(presentation);
-        }
-        else if(localStorage.getItem("presentation")){
-            presentation = Presentation.fromJSON(JSON.parse(localStorage.getItem("presentation")));
-            console.log(presentation);
-            _presentation.set(presentation);
-        }
+        await openPresentation();
         
         draw();
     })

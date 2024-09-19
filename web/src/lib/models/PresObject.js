@@ -137,10 +137,10 @@ export class PresObj {
             .addTo(ctx);
     }
     eventclean() {
-        this.object.on('click', null)
-            .on('mousemove', null)
-            .on('mouseup', null)
-            .on('mousedown', null)
+        this.object.off('click')
+            .off('mousemove')
+            .off('mouseup')
+            .off('mousedown')
     }
     /**
      *
