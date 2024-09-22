@@ -74,6 +74,14 @@
         } 
         draw();
     }
+    const disableSelected = () => {
+        for(let i = 0; i < presentation.slides[activeSlide].objects.length; i++) {
+            if(presentation.slides[activeSlide].objects[i].selected 
+            && presentation.slides[activeSlide].objects[i] == selectedObject) {
+                presentation.slides[activeSlide].objects[i].onClick(ctx);
+            }
+        }
+    }
     onMount(async () => {
         
         setInterval(savePresentation, 10000);
@@ -93,12 +101,7 @@
             timing.stop = performance.now() - timing.start;
 
             if(timing.stop < 200){
-                for(let i = 0; i < presentation.slides[activeSlide].objects.length; i++) {
-                    if(presentation.slides[activeSlide].objects[i].selected 
-                    && presentation.slides[activeSlide].objects[i] == selectedObject) {
-                        presentation.slides[activeSlide].objects[i].onClick(ctx);
-                    }
-                }
+                disableSelected();
             }
         })
         addEventListener('resize', () => {
@@ -113,7 +116,7 @@
 </script>
 
 {#if window.outerWidth > 1024}
-    <MenuBar  ctx={ctx} clear={clear} draw={draw}/>
+    <MenuBar  ctx={ctx} clear={clear} draw={draw} disableSelected={disableSelected}/>
 
 <div class="editor">
     <SlideBar clear={clear} draw={draw}/>
@@ -129,7 +132,6 @@
 <style>
     .editor {
         display: flex;
-        width: 100%;
     }
     .container{
         width: 100%;
@@ -137,16 +139,5 @@
         border: 1px solid black;
         overflow: hidden;
         aspect-ratio: 16/9;
-    }
-    .editor__imgbutton {
-        font-size:11pt;
-        display: inline;
-        padding:1em;
-        margin:1em;
-        //border:1px solid #333;
-        border-radius: 20px;
-        background: #222;
-        transition: 500ms;
-        cursor:pointer;
     }
 </style>

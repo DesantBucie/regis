@@ -97,6 +97,12 @@
 
 </script>
 
-<div bind:this={viewer}>
+<div class="viewer" bind:this={viewer}>
 
 </div>
+
+<style>
+    .viewer {
+        border: 1px solid black;
+    }
+</style>

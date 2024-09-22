@@ -36,7 +36,10 @@ export class Slide {
     }
 
     static fromJSON(json) {
-        const slide = Object.create(Slide.prototype);
+        const slide = new Slide(json.internalName, json.name);
+        /** 
+        * @type {Map<string, any>}
+        */
         const LUT = new Map([
             ['PresRect', PresRect],
             ['PresCircle', PresCircle],
@@ -46,24 +49,21 @@ export class Slide {
             ['PresImage', PresImage]
         ]);
 
-        return Object.assign(slide, {
-            internalName: json.internalName,
-            name: json.name,
-            background: json.background,
-            objects: json.objects.map(o => {
-                const ObjectClass = LUT.get(o.object); // Check if this returns the class
+       
+        slide.background = json.background,
+        slide.objects = json.objects.map(o => {
+            const ObjectClass = LUT.get(o.object); // Check if this returns the class
 
-                // Debugging
-                console.log(`Object type: ${o.object}`);
-                console.log(`Matched Class:`, ObjectClass);
+            // Debugging
+            console.log(`Object type: ${o.object}`);
+            console.log(`Matched Class:`, ObjectClass);
 
-                if (ObjectClass && typeof ObjectClass.fromJSON === 'function') {
-                    return ObjectClass.fromJSON(o);  // Call fromJSON
-                } else {
-                    throw new Error(`Unknown object type or missing fromJSON method for: ${o.object}`);
-                }
-
-            })
+            if (ObjectClass && typeof ObjectClass.fromJSON === 'function') {
+                return ObjectClass.fromJSON(o);  // Call fromJSON
+            } else {
+                throw new Error(`Unknown object type or missing fromJSON method for: ${o.object}`);
+            }
         })
+        return slide;
     }
 }

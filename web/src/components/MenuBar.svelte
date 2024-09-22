@@ -26,7 +26,7 @@
     import EditBar from "./EditBar.svelte";
     import { Presentation } from "../lib/models/Presentation.js";
 
-    export let ctx, draw, clear;
+    export let ctx, draw, clear, disableSelected;
 
     let presentation, activeSlide, selectedObject, link;
     _presentation.subscribe((p) => {
@@ -74,13 +74,17 @@
     };
 
     const addTextBox = () => {
+        let s = new PresText(currentPos.get("x"), currentPos.get("y"), "Text")
         presentation.slides[activeSlide].objects.push(
-            new PresText(currentPos.get("x"), currentPos.get("y"), "Text"),
+            s
         );
         presentation.slides[activeSlide].objects[
             presentation.slides[activeSlide].objects.length - 1
         ].draw(ctx);
         changePosition();
+        selectedObject = s;
+        disableSelected()
+        s.onClick(ctx)
     };
 
     const addImage = () => {
@@ -102,6 +106,9 @@
             ].draw(ctx);
             _presentation.set(presentation);
             changePosition();
+            selectedObject = img;
+            disableSelected()
+            img.onClick(ctx)
         };
     };
     const addShape = (shape) => {
@@ -135,6 +142,10 @@
             presentation.slides[activeSlide].objects.length - 1
         ].draw(ctx);
         _presentation.set(presentation);
+        selectedObject = s;
+        disableSelected()
+        s.onClick(ctx)
+
         changePosition();
     };
     const downloadPresentation = () => {
@@ -206,7 +217,7 @@
             <button
                 ><label class="startScreen_button">
                     {@html icon(faImage).html}
-                    <input type="file" on:change={addImage} bind:this={input} />
+                    <input type="file" accept="image/*" on:change={addImage} bind:this={input} />
                 </label></button
             >
             <div class="presbar__title">Image</div>

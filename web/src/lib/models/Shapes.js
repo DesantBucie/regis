@@ -47,7 +47,10 @@ export class PresTriangle extends PresPolygon {
     draw(ctx){
 
         super.draw(ctx);
-        console.log()
+        this.object.plot([[this.x, this.y], [this.x+this.w/2, this.y+this.h],[this.x+this.w, this.y]]);
+    }
+    drawNoEvent(ctx){
+        super.drawNoEvent(ctx);
         this.object.plot([[this.x, this.y], [this.x+this.w/2, this.y+this.h],[this.x+this.w, this.y]]);
     }
     static fromJSON(json) {
@@ -106,7 +109,11 @@ export class PresCircle extends PresShape {
             .move(this.x, this.y)
             .addTo(ctx)
     }
-
+    drawNoEvent(ctx) {
+        super.drawNoEvent(ctx)
+        this.object
+        .move(this.x, this.y)
+    }
     /**
      * @param {PointerEvent} e
      * @param {SVG} ctx
@@ -188,7 +195,12 @@ export class PresEllipse extends PresShape {
         super.draw(ctx)
         this.object
             .move(this.x, this.y)
-            .addTo(ctx)
+            //.addTo(ctx)
+    }
+    drawNoEvent(ctx) {
+        super.drawNoEvent(ctx)
+        this.object
+        .move(this.x, this.y)
     }
     static fromJSON(json) {
         const t = new PresEllipse(json.x, json.y, json.w, json.h);

@@ -65,8 +65,11 @@ export class PresText extends PresObj {
         this.outline.h = bbox.height;
         //i know it's stupid, but it fixes text not wrapping.
         this.object.text(this.object.text())
+    }
 
-
+    drawNoEvent(ctx) {
+        super.drawNoEvent(ctx)
+        this.object.text(this.object.text())
     }
     onClick(ctx) {
         super.onClick(ctx);

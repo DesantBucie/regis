@@ -6,5 +6,6 @@ export default defineConfig({
     plugins: [svelte()],
     build: {
         manifest: 'manifest.json',
+        minify: false,
     },
 })

@@ -60,9 +60,12 @@
 
     }
     const removeSlide = (e) => {
-        presentation.slides.splice(parseInt(e.currentTarget.value), 1);
-        presentation.no_Slides--;
-        _presentation.set(presentation);
+        const a = confirm("Are you sure ?");
+        if(a){
+            presentation.slides.splice(parseInt(e.currentTarget.value), 1);
+            presentation.no_Slides--;
+            _presentation.set(presentation);
+        }
     }
 
     const moveUp = () => {
@@ -141,6 +144,7 @@
         color:black;
         margin-top:1em;
         font-weight: 400;
+        font-size:11pt;
     }
     .slidebar__up {
         position: relative;

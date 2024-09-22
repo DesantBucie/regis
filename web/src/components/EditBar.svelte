@@ -15,7 +15,8 @@
 
     export let selectedObject, ctx, draw;
 
-    let presentation, activeSlide, editbar, currentHeight;
+    let presentation, activeSlide, editbar, currentHeight,
+    measurementButton;
 
     _presentation.subscribe((p) => {
         presentation = p;
@@ -107,7 +108,6 @@
                 <div>Font size</div>
             </div>
             <div>
-                <div>
                     <select
                         on:input={(e) => {
                             return selectedObject.changeFont(e.target.value);
@@ -121,8 +121,8 @@
                             {/if}
                         {/each}
                     </select>
-                </div>
-                Font Family
+                
+                <div>Font Family</div>
             </div>
             <span>
                 <button
@@ -192,7 +192,7 @@
         </div>
         {/if}
         <span>
-            <button on:click={moveFront}>{@html icon(faArrowUp).html}</button>
+            <button bind:this={measurementButton} on:click={moveFront}>{@html icon(faArrowUp).html}</button>
             <div>Move Front</div>
         </span>
         <span>
