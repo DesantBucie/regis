@@ -61,6 +61,7 @@
         } 
     }
     onMount(async () => {
+        alert("Press Space to exit, use Arrows to move");
         w = viewer.clientWidth
         ctx = SVG()
             .addTo(viewer)
@@ -68,24 +69,21 @@
             .viewbox(0, 0, 1920, 1080)
             .attr('tabindex', '0')
             .attr('class', 'svg');
+        
 
-        /*ctx.on('keydown', (e) => {
-            console.log('keydown');
-            if (e.key === 'ArrowRight') {
-                changeActiveSlide('right')
-            }
-            if(e.key === 'ArrowLeft') {
-                changeActiveSlide('left')
-            }
-        })*/
         await openPresentation()
         addEventListener('keydown', (e) => {
+            console.log(e);
             if (e.key === 'ArrowRight') {
                 changeActiveSlide('right')
             }
             if(e.key === 'ArrowLeft') {
                 changeActiveSlide('left')
             }
+            if(e.key === " ") {
+                window.location.replace('/editor')
+            }
+            
         })
         addEventListener('resize', () => {
             w = viewer.clientWidth;

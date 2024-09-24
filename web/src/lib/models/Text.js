@@ -158,6 +158,7 @@ export class PresText extends PresObj {
     }
     static fromJSON(json) {
         //const text = Object.create(PresText.prototype);
+        console.log(json)
         const text = new PresText(json.x, json.y, json.text)
         text.object
             .text(json.text)
@@ -167,7 +168,7 @@ export class PresText extends PresObj {
             })
             .fill(json.attributes.fill)
             .font({
-                size:json.attributes.size,
+                size:json.attributes.fontSize,
                 anchor:json.attributes.anchor,
                 family:json.attributes.fontFamily,
             });

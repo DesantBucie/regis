@@ -2,7 +2,6 @@
     import {faFolderOpen, faFile, faCloud} from "@fortawesome/free-solid-svg-icons"
     import {icon} from "@fortawesome/fontawesome-svg-core"
 
-    import { Presentation } from "../lib/models/Presentation";
     import {_presentation} from '../store/data';
 
     let accepted = '.regis'
@@ -25,12 +24,9 @@
         window.location.replace("/editor")
     }
     const newPresentation = () => {
-        localStorage.clear()
         window.location.replace('/editor')
     }
-    const resume = () =>{
-        window.location.replace('/editor')
-    }
+   
     $: if (files) {
         readFile(files[0])
     }
