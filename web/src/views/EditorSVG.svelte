@@ -30,6 +30,7 @@
 
     const draw = () => {
         let o = presentation.slides[activeSlide].objects;
+        ctx.css('background', presentation.slides[activeSlide].background)
         for(let i = 0; i < o.length; i++){
             o[i].draw(ctx)
         }

@@ -10,6 +10,8 @@
         faDownload,
     } from "@fortawesome/free-solid-svg-icons";
     import { icon } from "@fortawesome/fontawesome-svg-core";
+    import  ellipse from '../assets/ellipse.svg?raw';
+    import triangle from '../assets/triangle.svg?raw';
     import {
         _activeSlide,
         _presentation,
@@ -205,12 +207,12 @@
             <button
                 on:click={() => {
                     return addShape("ellipse");
-                }}>Eli</button
+                }}>{@html ellipse}</button
             >
             <button
                 on:click={() => {
                     return addShape("triangle");
-                }}>{@html icon(faTriangleExclamation).html}</button
+                }}>{@html triangle}</button
             >
         </div>
         <span>
@@ -221,6 +223,14 @@
                 </label></button
             >
             <div class="presbar__title">Image</div>
+        </span>
+        <span class="presbar__spacer">
+            <input 
+                type="color" 
+                value={presentation.slides[activeSlide].background}
+                on:input={(e) => {clear(); presentation.slides[activeSlide].changeBackground(e.target.value); draw(ctx);}}
+            >
+            <div class="presbar__title">Background</div>
         </span>
         <span class="presbar__spacer">
             <button title="Download file" on:click={downloadPresentation}

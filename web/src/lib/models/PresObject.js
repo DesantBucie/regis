@@ -43,6 +43,9 @@ export class PresObj {
         this.object
             .fill(color)
     }
+    changeOpacity(opacity) {
+        this.object.opacity(opacity)
+    }
     /**
      * Change stroke color of the object
      * @param {string} color - Either in hex or rgba

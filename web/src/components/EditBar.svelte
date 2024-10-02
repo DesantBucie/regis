@@ -6,6 +6,8 @@
         faAlignCenter,
         faAlignRight,
         faTrash,
+        faSquare,
+        faXmark
     } from "@fortawesome/free-solid-svg-icons";
     import { icon } from "@fortawesome/fontawesome-svg-core";
     import { PresText } from "../lib/models/Text";
@@ -16,7 +18,8 @@
     export let selectedObject, ctx, draw;
 
     let presentation, activeSlide, editbar, currentHeight,
-    measurementButton;
+    measurementButton,
+    animateToggle = false;
 
     _presentation.subscribe((p) => {
         presentation = p;
@@ -76,6 +79,10 @@
         }
         draw(ctx);
     };
+
+    const animateToggleMenu = () => {
+        animateToggle = !animateToggle;
+    }
     const fonts = [
         "Arial",
         "Arial Black",
@@ -95,7 +102,8 @@
 </script>
 
 <div class="editbar" bind:this={editbar}>
-    {#if selectedObject !== null}
+    {#if selectedObject !== null 
+    && animateToggle === false}
         {#if selectedObject instanceof PresText}
             <div>
                 <input
@@ -164,6 +172,13 @@
             <div>Fill</div>
         </span>
 
+        <span>
+            <input type="range" min="0" max="1" step="0.01"
+                on:input={(e) => {
+                    return selectedObject.changeOpacity(e.target.value)
+                }}>
+            <div>Opacity</div>
+        </span>
         <div>
             <select
                 on:input={(e) => {
@@ -200,8 +215,26 @@
             <div>Move back</div>
         </span>
         <span>
+            <button on:click={animateToggleMenu}>{@html icon(faSquare, {classes: 'fa-fade', styles:{'--fa-animation-duration': '2s'}}).html}</button>
+            <div>Animate</div>
+        </span>
+        <span>
             <button on:click={deleteObject}>{@html icon(faTrash).html}</button>
             <div>Delete</div>
+        </span>
+    {/if}
+    {#if animateToggle && selectedObject !== null}
+        <span>
+            <button>{@html icon(faSquare, {classes: 'fa-beat' , styles: {'--fa-beat-scale': '0.75', '--fa-animation-duration': '2s'}, }).html}</button>
+            <div>Scale</div>
+        </span>
+        <span>
+            <button>{@html icon(faSquare, {classes: 'fa-fade', styles:{'--fa-animation-duration': '2s'}}).html}</button>
+            <div>Opacity</div>
+        </span>
+        <span>
+            <button class="--red" on:click={animateToggleMenu}>{@html icon(faXmark).html}</button>
+            <div>Exit</div>
         </span>
     {/if}
 </div>
