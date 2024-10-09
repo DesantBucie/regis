@@ -8,7 +8,6 @@
 
     import {Presentation} from "../lib/models/Presentation.js";
     import {_presentation, _activeSlide} from "../store/data.js";
-    import { localStorageSize } from "../lib/localStorageSize.js";
 
 
     let presentation, activeSlide, selectedObject;
@@ -25,7 +24,7 @@
         selectedObject = s;
     })
 
-    let files, container, accepted, ctx;
+    let container, ctx, editor;
     let w, h;
 
     const draw = () => {
@@ -86,14 +85,13 @@
     onMount(async () => {
         
         setInterval(savePresentation, 10000);
-
-        w = container.clientWidth
+    
         ctx = SVG()
             .addTo(container)
-            .size(w, w * 9 / 16)
+            //.size(w, w * 9 / 16)
             .viewbox(0, 0, 1920, 1080)
             .attr('tabindex', '0')
-            .attr('class', 'svg');
+            .css('border', '1px solid black');
 
         ctx.on('mousedown', (e) => {
             timing.start = performance.now();
@@ -105,25 +103,19 @@
                 disableSelected();
             }
         })
-        addEventListener('resize', () => {
-            w = container.clientWidth;
-            h = w * 9 / 16
-            ctx.size(w, h)
-        });
         await openPresentation();
     
     })
 
 </script>
 
-{#if window.outerWidth > 1024}
-    <MenuBar  ctx={ctx} clear={clear} draw={draw} disableSelected={disableSelected}/>
+{#if window.outerWidth > 1365}
+    <MenuBar ctx={ctx} clear={clear} draw={draw} disableSelected={disableSelected}/>
 
-<div class="editor">
+<div class="editor" bind:this={editor}>
     <SlideBar clear={clear} draw={draw}/>
     <div id="container" class="container" bind:this={container}>
     </div>
-    <!--ObjectBar objects={presentation.slides[activeSlide].objects} /-->
 </div>
 {:else}
     <div>
@@ -135,10 +127,8 @@
         display: flex;
     }
     .container{
-        width: 100%;
+        width: 85%;
         background: white;
-        border: 1px solid black;
-        overflow: hidden;
         aspect-ratio: 16/9;
     }
 </style>

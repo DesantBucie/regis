@@ -60,6 +60,7 @@ export class PresTriangle extends PresPolygon {
             width: json.attributes.strokeWidth
         })
             .fill(json.attributes.fill)
+            .opacity(json.attributes.opacity)
         return t;
     }
 }
@@ -84,6 +85,7 @@ export class PresRect extends PresShape {
             color: json.attributes.stroke,
         })
             .fill(json.attributes.fill)
+            .opacity(json.attributes.opacity)
 
         return t;
     }
@@ -171,6 +173,7 @@ export class PresCircle extends PresShape {
             width: json.attributes.strokeWidth
         })
             .fill(json.attributes.fill)
+            .opacity(json.attributes.opacity)
         return t;
     }
 }
@@ -209,6 +212,7 @@ export class PresEllipse extends PresShape {
             width: json.attributes.strokeWidth
         })
             .fill(json.attributes.fill)
+            .opacity(json.attributes.opacity)
         return t;
     }
 }

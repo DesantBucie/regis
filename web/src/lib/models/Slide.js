@@ -37,9 +37,8 @@ export class Slide {
 
     static fromJSON(json) {
         const slide = new Slide(json.internalName, json.name);
-        /** 
-        * @type {Map<string, any>}
-        */
+        
+        
         const LUT = new Map([
             ['PresRect', PresRect],
             ['PresCircle', PresCircle],

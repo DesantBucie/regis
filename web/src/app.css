@@ -94,6 +94,27 @@ input:hover, select:hover {
   border-color: #646cff;
   transition: border-color 0.25s;
 }
+
+@keyframes left-sliding {
+  0% { left: -20px;}
+  100% { left: 0px;}
+}
+@keyframes top-sliding {
+  0% {top: -10px;}
+  100% {top: 0px;}
+}
+.fa-leftsliding {
+  position:relative;
+  animation-name: left-sliding;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+.fa-topsliding {
+  position: relative;
+  animation-name: top-sliding;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
 /*@media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -106,3 +127,5 @@ input:hover, select:hover {
     background-color: #f9f9f9;
   }
 }*/
+
+

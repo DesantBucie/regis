@@ -83,6 +83,13 @@
     const animateToggleMenu = () => {
         animateToggle = !animateToggle;
     }
+    const addOpacityAnimation = () => {
+        selectedObject.animation.opacity = 1;
+
+    }
+    const addScaleAnimation = () => {
+        selectedObject.animation.scale = 1;
+    }
     const fonts = [
         "Arial",
         "Arial Black",
@@ -174,6 +181,7 @@
 
         <span>
             <input type="range" min="0" max="1" step="0.01"
+                value={selectedObject.object.attr('opacity')}
                 on:input={(e) => {
                     return selectedObject.changeOpacity(e.target.value)
                 }}>
@@ -225,11 +233,19 @@
     {/if}
     {#if animateToggle && selectedObject !== null}
         <span>
-            <button>{@html icon(faSquare, {classes: 'fa-beat' , styles: {'--fa-beat-scale': '0.75', '--fa-animation-duration': '2s'}, }).html}</button>
+            <button on:click={addOpacityAnimation}>{@html icon(faSquare, {classes: 'fa-topsliding', }).html}</button>
+            <div>Slide Top</div>
+        </span>
+        <span>
+            <button on:click={addOpacityAnimation}>{@html icon(faSquare, {classes: 'fa-leftsliding'}).html}</button>
+            <div>Slide Left</div>
+        </span>
+        <span>
+            <button on:click={addScaleAnimation}>{@html icon(faSquare, {classes: 'fa-beat' , styles: {'--fa-beat-scale': '0.75', '--fa-animation-duration': '2s'}, }).html}</button>
             <div>Scale</div>
         </span>
         <span>
-            <button>{@html icon(faSquare, {classes: 'fa-fade', styles:{'--fa-animation-duration': '2s'}}).html}</button>
+            <button on:click={addOpacityAnimation}>{@html icon(faSquare, {classes: 'fa-fade', styles:{'--fa-animation-duration': '2s'}}).html}</button>
             <div>Opacity</div>
         </span>
         <span>
@@ -241,7 +257,7 @@
 
 <style>
     .editbar {
-        min-height: 6vh;
+        min-height: 5vh;
         display: flex;
         align-items: stretch;
         justify-content: center;
@@ -249,5 +265,8 @@
     .editbar div {
         font-size: 8pt;
         padding: 0em .1em;
+    }
+    .selected {
+        background-color: #C7C7CA;
     }
 </style>

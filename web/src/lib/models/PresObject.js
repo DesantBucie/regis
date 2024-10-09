@@ -32,6 +32,7 @@ export class PresObj {
         this.mouseDown = false
 
         this.timing = {};
+        this.animation = {};
         this.id = PresObj.counter++;
     }
 
@@ -307,8 +308,10 @@ export class PresObj {
             attributes: {
                 fill: this.object.attr('fill'),
                 strokeWidth: this.object.attr('stroke-width'),
-                stroke: this.object.attr('stroke')
-            }
+                stroke: this.object.attr('stroke'),
+                opacity: this.object.attr('opacity')
+            },
+            animation: this.animation
         }
     }
     static fromJSON(json){

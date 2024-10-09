@@ -5,6 +5,10 @@
     import {_presentation} from "../store/data.js";
     import {Presentation} from "../lib/models/Presentation.js";
 
+    import { jsPDF } from 'jspdf';
+    import 'svg2pdf.js'
+    import { faWindowRestore } from "@fortawesome/free-solid-svg-icons";
+
     let w, h, ctx, viewer, presentation;
 
     let activeSlide = 0;
@@ -30,23 +34,10 @@
             o[i].object.remove();
         }
     }
-    /**
-     *
-     * @param arrow {string}
-     */
-    const changeActiveSlide = (arrow) => {
+    const changeActiveSlide = () => {
         clear()
-        if (arrow === 'left' && activeSlide > 0) {
-            activeSlide--;
-        }
-        if(arrow === 'right' 
-        && activeSlide < presentation.slides.length - 1) 
-        {
-            activeSlide++;
-        }
-        console.log(activeSlide)
+        activeSlide++;
         draw()
-
     }
     const openPresentation = async () => {
         try {
@@ -64,7 +55,6 @@
         } 
     }
     onMount(async () => {
-        alert("Press Space to exit, use Arrows to move");
         w = viewer.clientWidth
         ctx = SVG()
             .addTo(viewer)
@@ -75,27 +65,34 @@
         
 
         await openPresentation()
-        addEventListener('keydown', (e) => {
-            console.log(e);
-            if (e.key === 'ArrowRight') {
-                changeActiveSlide('right')
-            }
-            if(e.key === 'ArrowLeft') {
-                changeActiveSlide('left')
-            }
-            if(e.key === " ") {
-                window.location.replace('/editor')
-            }
-            
-        })
         addEventListener('resize', () => {
             w = viewer.clientWidth;
             h = w * 9 / 16
             ctx.size(w, h)
         });
         draw();
+        exportPDF();
     })
 
+
+    const exportPDF = async () => {
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'px',
+            format: [ctx.node.clientWidth, ctx.node.clientHeight]
+        });
+
+        for(let i = 0; i < presentation.slides.length - 1; i++){
+            await doc.svg(ctx.node)
+            await doc.addPage()
+            changeActiveSlide()
+        }
+        await doc.svg(ctx.node)
+        await doc.save('myPdf.pdf')
+        
+        window.location.replace('/editor')
+        
+    }
 </script>
 
 <div class="viewer" bind:this={viewer}>

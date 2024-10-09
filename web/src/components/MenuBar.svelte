@@ -6,7 +6,7 @@
         faShapes,
         faSquare,
         faT,
-        faTriangleExclamation,
+        faFilePdf,
         faDownload,
     } from "@fortawesome/free-solid-svg-icons";
     import { icon } from "@fortawesome/fontawesome-svg-core";
@@ -26,7 +26,7 @@
     } from "../lib/models/Shapes.js";
     import { PresImage } from "../lib/models/Image.js";
     import EditBar from "./EditBar.svelte";
-    import { Presentation } from "../lib/models/Presentation.js";
+
 
     export let ctx, draw, clear, disableSelected;
 
@@ -174,7 +174,9 @@
             link.remove();
         }
     };
-
+    const exportPDF = () => {
+        window.location.replace('/exportpdf')
+    }
 </script>
 
 <div class="menubar">
@@ -232,6 +234,10 @@
             >
             <div class="presbar__title">Background</div>
         </span>
+        <!--span>
+            <button>{@html icon(faFilm).html}</button>
+            <div class="presbar__title">Transitions</div>
+        </span-->
         <span class="presbar__spacer">
             <button title="Download file" on:click={downloadPresentation}
                 >{@html icon(faDownload).html}</button
@@ -241,6 +247,10 @@
         <span>
             <a href="/viewer"><button>{@html icon(faEye).html}</button></a>
             <div class="presbar__title">Viewer</div>
+        </span>
+        <span>
+            <button on:click={exportPDF}>{@html icon(faFilePdf).html}</button>
+            <div class="presbar__title">Export PDF</div>
         </span>
     </div>
     <EditBar ctx={ctx} selectedObject={selectedObject} draw={draw}/>

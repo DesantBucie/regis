@@ -171,7 +171,8 @@ export class PresText extends PresObj {
                 size:json.attributes.fontSize,
                 anchor:json.attributes.anchor,
                 family:json.attributes.fontFamily,
-            });
+            })
+            .opacity(json.attributes.opacity);
         return text;
     }
 }
