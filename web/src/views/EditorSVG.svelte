@@ -110,7 +110,7 @@
 </script>
 
 {#if window.outerWidth > 1365}
-    <MenuBar ctx={ctx} clear={clear} draw={draw} disableSelected={disableSelected}/>
+    <MenuBar ctx={ctx} clear={clear} draw={draw} disableSelected={disableSelected} savePresentation={savePresentation}/>
 
 <div class="editor" bind:this={editor}>
     <SlideBar clear={clear} draw={draw}/>

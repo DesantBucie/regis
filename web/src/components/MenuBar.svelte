@@ -28,7 +28,7 @@
     import EditBar from "./EditBar.svelte";
 
 
-    export let ctx, draw, clear, disableSelected;
+    export let ctx, draw, clear, disableSelected, savePresentation;
 
     let presentation, activeSlide, selectedObject, link;
     _presentation.subscribe((p) => {
@@ -174,8 +174,15 @@
             link.remove();
         }
     };
-    const exportPDF = () => {
-        window.location.replace('/exportpdf')
+    const goToViewer = async () => {
+        await savePresentation();
+        window.location.replace('/viewer');
+    }
+    const exportPDF = async () => {
+        await savePresentation();
+        const res = confirm("PDF doesn't support animations.")
+        if(res)
+            window.location.replace('/exportpdf')
     }
 </script>
 
@@ -245,7 +252,7 @@
             <div class="presbar__title">Download</div>
         </span>
         <span>
-            <a href="/viewer"><button>{@html icon(faEye).html}</button></a>
+            <button on:click={goToViewer}>{@html icon(faEye).html}</button>
             <div class="presbar__title">Viewer</div>
         </span>
         <span>

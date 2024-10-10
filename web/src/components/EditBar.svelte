@@ -268,5 +268,6 @@
     }
     .selected {
         background-color: #C7C7CA;
+        border: 1px solid #646cff;
     }
 </style>
