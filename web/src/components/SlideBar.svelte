@@ -27,23 +27,6 @@
     })
 
     onMount(() => {
-        /*let slideList = Sortable.create(slideBar, {
-            animation: 150,
-            ghostClass: 'blue-background-class',
-            dataIdAttr: 'data-id',
-            onUpdate: ((e) => {
-                let sorted = slideList.toArray()
-                console.log(sorted)
-                presentation.slides.sort((a,b) =>  {
-                    const result =  sorted.indexOf(a.internalName)
-                    console.log(result)
-                    return sorted.indexOf(a.internalName) - sorted.indexOf(b.internalName);
-                })
-                console.log(presentation)
-                presentation.slides.forEach((e, index) =>{ e.internalName = "slide" + (index+1)})
-                _presentation.set(presentation)
-            })
-        });*/
 
     });
 
@@ -87,7 +70,7 @@
             _presentation.set(presentation);
             _activeSlide.set(activeSlide);
         }
-    } 
+    }
 </script>
 <div class="slidebar">
     <div bind:this={slideBar}>

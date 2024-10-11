@@ -84,7 +84,6 @@ export class PresText extends PresObj {
             ctx.off('keydown', null)
         }
     }
-
     changeTextSize(size) {
         this.object.font({size: size});
     }
@@ -95,8 +94,21 @@ export class PresText extends PresObj {
      */
     changeTextAlign(align) {
         this.object.font({anchor: align});
+        this.setTextPosition(align);
     }
-
+    /**
+     * Set text middle or right
+     * @param align {string}
+     */
+    setTextPosition(align) {
+        if(align === 'start')
+            this.object.x(this.x)
+        if(align === 'middle')
+            this.object.x(this.x + (this.w / 2) - this.object.node.getBBox().width / 2);
+        if(align === 'end'){
+            this.object.x(this.x + this.w - this.object.node.getBBox().width)
+        }
+    }
     /**
      * Change text font
      * @param font {string}
@@ -104,7 +116,33 @@ export class PresText extends PresObj {
     changeFont(font){
         this.object.font({family:font});
     }
-
+    /**
+     * @param {PointerEvent} e - event
+     * @param {SVG} ctx - SVG context
+     * @param {number} index
+     */
+    resize(e, ctx, index) {
+        super.resize(e, ctx, index)
+        this.wrapText()
+        this.setTextPosition(this.object.attr('text-anchor').toString());
+    }
+    /**
+    *
+    * @param {PointerEvent} e
+    * @param {SVG} ctx
+    * @param {number} offsetX
+    * @param {number} offsetY
+    */
+    onMousemove(e, ctx, offsetX, offsetY) {
+        const align = this.object.attr('text-anchor').toString();
+        if(align === 'middle')
+            super.onMousemove(e, ctx, offsetX - (this.w / 2) + (this.object.node.getBBox().width / 2), offsetY);
+        if(align === 'end')
+            super.onMousemove(e, ctx, offsetX - this.w + this.object.node.getBBox().width, offsetY);
+        if(align === 'start') 
+            super.onMousemove(e, ctx, offsetX, offsetY);
+        this.setTextPosition(this.object.attr('text-anchor').toString());
+    }
     onKeyDown(e){
         let ignoreKeys = [
             'Enter',
@@ -133,10 +171,7 @@ export class PresText extends PresObj {
             this.object.text(this.object.text().slice(0, -1) + e.key + '|');
         }
         this.wrapText()
-        /*this.w = this.object.node.getBBox().width;
-        this.h = this.object.node.getBBox().height;
-        this.object
-            .size(this.w, this.h)*/
+        this.setTextPosition(this.object.attr('text-anchor').toString())
     }
     toJSON() {
         return {
@@ -157,8 +192,6 @@ export class PresText extends PresObj {
         }
     }
     static fromJSON(json) {
-        //const text = Object.create(PresText.prototype);
-        console.log(json)
         const text = new PresText(json.x, json.y, json.text)
         text.object
             .text(json.text)

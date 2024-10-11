@@ -19,7 +19,8 @@
 
     let presentation, activeSlide, editbar, currentHeight,
     measurementButton,
-    animateToggle = false;
+    animateToggle = false,
+    left, center, right;
 
     _presentation.subscribe((p) => {
         presentation = p;
@@ -141,6 +142,7 @@
             </div>
             <span>
                 <button
+                    bind:this={left}
                     class="text-align"
                     on:click={(e) => {
                         return selectedObject.changeTextAlign("start");
