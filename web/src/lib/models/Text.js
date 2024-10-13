@@ -8,11 +8,13 @@ export class PresText extends PresObj {
      *
      * @param {number} x - x position on canvas
      * @param {number} y - y position on canvas
+     * @param {number} w - width
+     * @param {number} h - height
      * @param {String} text - text
      */
-    constructor(x, y, text) {
+    constructor(x, y, w, h, text) {
 
-        super(x, y, 100, 50);
+        super(x, y, w, h);
         //this.guid = guidGenerator();
         //const string = `<body xmlns="http://www.w3.org/1999/xhtml" ><div contenteditable="true" style="color:black;">Text</div></body>`;
 
@@ -22,9 +24,8 @@ export class PresText extends PresObj {
         //    .add(SVG(string, true))
         //.add(`<div xmlns="http://www.w3.org/1999/xhtml" contenteditable="true" style="color:black;">Text</div>`)
         this.object = new Text()
-            .text("Text")
-            .font({size:20, anchor:'start'})
-        this.lines = 1;
+            .text(text)
+            .font({size:20})
     }
 
     getTextWidth(text, font) {
@@ -58,18 +59,21 @@ export class PresText extends PresObj {
         this.outline.h = this.h*/
         super.draw(ctx);
         const bbox = this.object.node.getBBox();
-        //console.log(bbox)
-        this.w = bbox.width;
-        this.outline.w = bbox.width;
-        this.h = bbox.height;
-        this.outline.h = bbox.height;
+        if(this.w === 0){ 
+            this.w = bbox.width;
+            this.outline.w = bbox.width;
+            this.h = bbox.height;
+            this.outline.h = bbox.height;
+        }
+        this.setTextPosition(this.object.attr('text-anchor').toString());
         //i know it's stupid, but it fixes text not wrapping.
-        this.object.text(this.object.text())
+        //this.object.text(this.object.text())
     }
 
     drawNoEvent(ctx) {
         super.drawNoEvent(ctx)
         this.object.text(this.object.text())
+        this.setTextPosition(this.object.attr('text-anchor').toString());
     }
     onClick(ctx) {
         super.onClick(ctx);
@@ -86,6 +90,10 @@ export class PresText extends PresObj {
     }
     changeTextSize(size) {
         this.object.font({size: size});
+        const bbox = this.object.node.getBBox();
+        this.h = bbox.height;
+        this.outline.h = bbox.height;
+        this.updateObject()
     }
 
     /**
@@ -164,6 +172,7 @@ export class PresText extends PresObj {
         }
         if(e.keyCode === 13){
             this.object.text(this.object.text().slice(0,-1) + '\n' + '|')
+            console.log('\n');
         }
         if(!ignoreKeys.includes(e.key)) {
             e.preventDefault()
@@ -182,7 +191,7 @@ export class PresText extends PresObj {
             object: this.constructor.name,
             text: this.object.text(),
             attributes: {
-                anchor: this.object.attr('anchor'),
+                anchor: this.object.attr('text-anchor'),
                 fill: this.object.attr('fill'),
                 strokeWidth: this.object.attr('stroke-width'),
                 stroke: this.object.attr('stroke'),
@@ -192,7 +201,7 @@ export class PresText extends PresObj {
         }
     }
     static fromJSON(json) {
-        const text = new PresText(json.x, json.y, json.text)
+        const text = new PresText(json.x, json.y, json.w, json.h, json.text)
         text.object
             .text(json.text)
             .stroke({

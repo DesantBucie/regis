@@ -76,7 +76,7 @@
     };
 
     const addTextBox = () => {
-        let s = new PresText(currentPos.get("x"), currentPos.get("y"), "Text")
+        let s = new PresText(currentPos.get("x"), currentPos.get("y"), 0, 0,"Text")
         presentation.slides[activeSlide].objects.push(
             s
         );

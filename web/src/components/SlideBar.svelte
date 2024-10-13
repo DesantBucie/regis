@@ -98,12 +98,19 @@
     <button class="slidebar__slide--addNew" on:click={addNewSlide}>
         {@html icon(faPlus).html}
     </button>
+    <div class="slidebar__template">
+        <button>Title</button>
+        <button>Empty</button>
+        <button>Content</button>
+        <button>Section</button>
+        <button>Image</button>
+    </div>
 </div>
 
 <style>
     .slidebar{
         
-        background: #eee;
+        background: #d7d6d6;
         padding:1em;
         border-radius: 10px;
         margin:1em;
@@ -176,5 +183,12 @@
         height:25px;
         background:red;
         border-radius: 180px;
+    }
+    .slidebar__template {
+        position: absolute;
+        width: 150px;
+        border: black 1px solid;
+        border-radius: 10px;
+        background-color: #fff;
     }
 </style>
