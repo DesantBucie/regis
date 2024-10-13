@@ -1,9 +1,11 @@
-const titleTemplate = [
+export const titleTemplate = [
+
     {
-        x: 960,
+        x: 360,
         y: 150,
         w: 1200,
         h: 100,
+        object: 'PresText',
         text: "Sample Title",
         attributes: {
             anchor: 'middle',
@@ -11,10 +13,11 @@ const titleTemplate = [
         }
     },
     {
-        x: 960,
+        x: 560,
         y: 350,
         w: 800,
         h: 50,
+        object: 'PresText',
         text: "Subtitle",
         attributes: {
             anchor: 'middle',
@@ -23,9 +26,10 @@ const titleTemplate = [
     },
     {
         x: 75,
-        y: 1050,
+        y: 1000,
         w: 200,
         h: 30,
+        object: 'PresText',
         text: "Author and date",
         attributes: {
             fontSize: 25
@@ -33,12 +37,13 @@ const titleTemplate = [
     }
 ];
 
-const bulletTemplate = [
+export const contentTemplate = [
     {
         x: 75,
         y: 90,
         w: 200,
         h: 50,
+        object: 'PresText',
         text: "Slide title",
         attributes: {
             fontSize: 40
@@ -46,9 +51,10 @@ const bulletTemplate = [
     },
     {
         x: 75,
-        y: 130,
+        y: 150,
         w: 200,
         h: 40,
+        object: 'PresText',
         text: "Slide subtitle",
         attributes: {
             fontSize: 30
@@ -59,19 +65,21 @@ const bulletTemplate = [
         y: 200,
         w: 300,
         h: 30,
+        object: 'PresText',
         text: "- Dash text",
         attributes: {
-            fontSize: 20
+            fontSize: 25
         }
     },
 ];
 
-const sectionTemplate = [
+export const sectionTemplate = [
     {
         x: 75,
         y: 500,
         w: 500,
         h: 85,
+        object: 'PresText',
         text: "Section name",
         attributes: {
             fontSize: 70
@@ -79,12 +87,13 @@ const sectionTemplate = [
     }
 ];
 
-const imageTemplate = [
+export const imageTemplate = [
     {
         x: 75,
-        y: 150,
+        y: 100,
         w: 350,
         h: 85,
+        object: 'PresText',
         text: "Slide title",
         attributes: {
             fontSize: 70
@@ -95,25 +104,28 @@ const imageTemplate = [
         y: 200,
         w: 750,
         h: 30,
+        object: 'PresText',
         text: "Content",
         attributes: {
             fontSize: 25
         }
     },
     {
-        shape: 'rect',
+        object: 'PresRect',
         x: 960,
         y: 50,
         w: 920,
         h: 980
     },
     {
-        x: 1430,
-        y: 520,
+        x: 1270,
+        y: 470,
         w: 350,
         h: 50,
+        object: 'PresText',
         text: "Image placeholder",
         attributes: {
+            fontSize: 30,
             fill: "#ffffff",
             anchor: "middle"
         }

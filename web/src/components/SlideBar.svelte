@@ -13,6 +13,11 @@
 
     import {_activeSlide, _presentation} from "../store/data.js";
 
+    import  {titleTemplate, contentTemplate, sectionTemplate, imageTemplate} from '../lib/templates.js';
+    import { PresCircle, PresEllipse, PresRect, PresTriangle } from "../lib/models/Shapes.js";
+    import { PresText } from "../lib/models/Text.js";
+    import { PresImage } from "../lib/models/Image.js";
+
     export let clear, draw;
     let presentation;
     let slideBar;
@@ -32,8 +37,50 @@
 
     const addNewSlide = () => {
         presentation.no_Slides++
-        presentation.slides.push(new Slide("slide"+presentation.no_Slides, "slide"+presentation.no_Slides))
+        presentation.slides.push(new Slide("slide"+presentation.no_Slides, "Empty Slide"))
         _presentation.set(presentation)
+    }
+
+    /**
+     * 
+     * @param template
+     */
+    const addTemplatedSlide = (template) => {
+        let slide, temp;
+        //presentation.no_Slides++
+        if(template === 'title'){
+            slide = new Slide( "slide"+presentation.no_Slides, "Title Slide")
+            temp = titleTemplate; 
+        }
+        if(template === 'content'){
+            slide = new Slide( "slide"+presentation.no_Slides, "Content Slide")
+            temp = contentTemplate;
+        }
+        if(template === 'section'){
+            slide = new Slide( "slide"+presentation.no_Slides, "Section Slide")
+            temp = sectionTemplate;
+        }
+        if(template === 'image'){
+            slide = new Slide("slide"+presentation.no_Slides, "Image Slide")
+            temp = imageTemplate;
+        }
+
+
+        for(let i = 0; i < temp.length; i++){
+            if(temp[i].object == 'PresText'){
+                const txt = new PresText(temp[i].x, temp[i].y, temp[i].w, temp[i].h, temp[i].text)
+                txt.changeTextSize(temp[i].attributes.fontSize);
+                txt.changeTextAlign(temp[i].attributes.anchor);
+                txt.changeFill(temp[i].attributes.fill);
+                slide.objects.push(txt);
+            }
+            else {
+                const rect = new PresRect(temp[i].x, temp[i].y, temp[i].w, temp[i].h);
+                slide.objects.push(rect);
+            }
+        }
+        presentation.slides.push(slide);
+        _presentation.set(presentation);
     }
 
     const changeActiveSlide = (e) => {
@@ -99,11 +146,10 @@
         {@html icon(faPlus).html}
     </button>
     <div class="slidebar__template">
-        <button>Title</button>
-        <button>Empty</button>
-        <button>Content</button>
-        <button>Section</button>
-        <button>Image</button>
+        <button on:click={() => {return addTemplatedSlide('title')}}>Title</button>
+        <button on:click={() => {return addTemplatedSlide('content')}}>Content</button>
+        <button on:click={() => {return addTemplatedSlide('section')}}>Section</button>
+        <button on:click={() => {return addTemplatedSlide('image')}}>Image</button>
     </div>
 </div>
 
@@ -185,10 +231,14 @@
         border-radius: 180px;
     }
     .slidebar__template {
+        display:grid;
         position: absolute;
         width: 150px;
         border: black 1px solid;
         border-radius: 10px;
         background-color: #fff;
+    }
+    .slidebar__template button {
+        background-color: #aaa;
     }
 </style>
