@@ -34,6 +34,7 @@ export class PresObj {
         this.timing = {};
         this.animation = {};
         this.id = PresObj.counter++;
+        this.opacity = 1;
     }
 
     /**

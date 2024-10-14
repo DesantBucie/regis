@@ -25,7 +25,7 @@ export class PresText extends PresObj {
         //.add(`<div xmlns="http://www.w3.org/1999/xhtml" contenteditable="true" style="color:black;">Text</div>`)
         this.object = new Text()
             .text(text)
-            .font({size:20})
+            .font({size:20, family: "Arial"})
     }
 
     getTextWidth(text, font) {
@@ -103,6 +103,15 @@ export class PresText extends PresObj {
     changeTextAlign(align) {
         this.object.font({anchor: align});
         this.setTextPosition(align);
+    }
+    getTextPosition(align){
+        if(align === 'start')
+            return this.x
+        if(align === 'middle')
+            return this.x + (this.w / 2) - this.object.node.getBBox().width / 2;
+        if(align === 'end'){
+            return this.x + this.w - this.object.node.getBBox().width;
+        }
     }
     /**
      * Set text middle or right
@@ -197,7 +206,8 @@ export class PresText extends PresObj {
                 stroke: this.object.attr('stroke'),
                 fontSize: this.object.attr('font-size'),
                 fontFamily: this.object.attr('font-family'),
-            }
+            },
+            animation: this.animation
         }
     }
     static fromJSON(json) {
@@ -215,6 +225,7 @@ export class PresText extends PresObj {
                 family:json.attributes.fontFamily,
             })
             .opacity(json.attributes.opacity);
+        text.animation = json.animation;
         return text;
     }
 }

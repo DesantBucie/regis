@@ -21,7 +21,7 @@
     export let clear, draw;
     let presentation;
     let slideBar;
-    let activeSlide;
+    let activeSlide, templates;
 
     _presentation.subscribe((p) => {
         presentation = p;
@@ -118,6 +118,14 @@
             _activeSlide.set(activeSlide);
         }
     }
+    const toggleSlides = () => {
+        if(templates.style.display === 'none'){
+            templates.style.display = 'grid';
+        }
+        else {
+            templates.style.display = 'none';
+        }
+    }
 </script>
 <div class="slidebar">
     <div bind:this={slideBar}>
@@ -142,10 +150,11 @@
         {/each}
 
     </div>
-    <button class="slidebar__slide--addNew" on:click={addNewSlide}>
+    <button class="slidebar__slide--addNew" on:click={toggleSlides}>
         {@html icon(faPlus).html}
     </button>
-    <div class="slidebar__template">
+    <div bind:this={templates} class="slidebar__template">
+        <button on:click={addNewSlide}>Empty</button>
         <button on:click={() => {return addTemplatedSlide('title')}}>Title</button>
         <button on:click={() => {return addTemplatedSlide('content')}}>Content</button>
         <button on:click={() => {return addTemplatedSlide('section')}}>Section</button>
@@ -231,12 +240,11 @@
         border-radius: 180px;
     }
     .slidebar__template {
-        display:grid;
-        position: absolute;
+        display:none;
         width: 150px;
         border: black 1px solid;
         border-radius: 10px;
-        background-color: #fff;
+        background-color: #aaa;
     }
     .slidebar__template button {
         background-color: #aaa;

@@ -61,6 +61,7 @@ export class PresTriangle extends PresPolygon {
         })
             .fill(json.attributes.fill)
             .opacity(json.attributes.opacity)
+        t.animation = json.animation;
         return t;
     }
 }
@@ -86,7 +87,7 @@ export class PresRect extends PresShape {
         })
             .fill(json.attributes.fill)
             .opacity(json.attributes.opacity)
-
+        t.animation = json.animation;
         return t;
     }
 }
@@ -174,6 +175,7 @@ export class PresCircle extends PresShape {
         })
             .fill(json.attributes.fill)
             .opacity(json.attributes.opacity)
+        t.animation = json.animation;
         return t;
     }
 }
@@ -213,6 +215,7 @@ export class PresEllipse extends PresShape {
         })
             .fill(json.attributes.fill)
             .opacity(json.attributes.opacity)
+        t.animation = json.animation;
         return t;
     }
 }

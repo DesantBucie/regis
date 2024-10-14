@@ -29,10 +29,13 @@ export class PresImage extends PresObj {
             w: this.w,
             h: this.h,
             object: this.constructor.name,
-            imageBase64: this.object.node.href.baseVal
+            imageBase64: this.object.node.href.baseVal,
+            animation: this.animation
         }
     }
     static fromJSON(json) {
-        return new PresImage(json.x, json.y, json.w, json.h, json.imageBase64);
+        let t =  new PresImage(json.x, json.y, json.w, json.h, json.imageBase64);
+        t.animation = json.animation;
+        return t;
     }
 }

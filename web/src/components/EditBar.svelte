@@ -84,12 +84,19 @@
     const animateToggleMenu = () => {
         animateToggle = !animateToggle;
     }
-    const addOpacityAnimation = () => {
-        selectedObject.animation.opacity = 1;
+    const addAnimation = (animationName) => {
+        selectedObject.animation = {};
 
-    }
-    const addScaleAnimation = () => {
-        selectedObject.animation.scale = 1;
+        if(animationName === 'opacity')
+            selectedObject.animation.opacity = 1;
+        if(animationName === 'scale')
+            selectedObject.animation.scale = 1;
+        if(animationName === 'slideLeft')
+            selectedObject.animation.slideLeft = 1;
+        if(animationName === 'slideTop')
+            selectedObject.animation.slideTop = 1;
+
+        animateToggleMenu();
     }
     const fonts = [
         "Arial",
@@ -235,19 +242,35 @@
     {/if}
     {#if animateToggle && selectedObject !== null}
         <span>
-            <button on:click={addOpacityAnimation}>{@html icon(faSquare, {classes: 'fa-topsliding', }).html}</button>
+            <button 
+            class={selectedObject.animation.slideTop === 1 ? "selected" : ""}
+            on:click={() => {addAnimation('slideTop')}}>
+                {@html icon(faSquare, {classes: 'fa-topsliding', }).html}
+            </button>
             <div>Slide Top</div>
         </span>
         <span>
-            <button on:click={addOpacityAnimation}>{@html icon(faSquare, {classes: 'fa-leftsliding'}).html}</button>
+            <button
+            class={selectedObject.animation.slideLeft === 1 ? "selected" : ""} 
+            on:click={() => {addAnimation('slideLeft')}}>
+                {@html icon(faSquare, {classes: 'fa-leftsliding'}).html}
+            </button>
             <div>Slide Left</div>
         </span>
         <span>
-            <button on:click={addScaleAnimation}>{@html icon(faSquare, {classes: 'fa-beat' , styles: {'--fa-beat-scale': '0.75', '--fa-animation-duration': '2s'}, }).html}</button>
+            <button 
+            class={selectedObject.animation.scale === 1 ? "selected" : ""}
+            on:click={() => {addAnimation('scale')}}>
+                {@html icon(faSquare, {classes: 'fa-beat' , styles: {'--fa-beat-scale': '0.75', '--fa-animation-duration': '2s'}, }).html}
+            </button>
             <div>Scale</div>
         </span>
         <span>
-            <button on:click={addOpacityAnimation}>{@html icon(faSquare, {classes: 'fa-fade', styles:{'--fa-animation-duration': '2s'}}).html}</button>
+            <button
+            class={selectedObject.animation.opacity === 1 ? "selected" : ""}
+            on:click={() => {addAnimation('opacity')}}>
+                {@html icon(faSquare, {classes: 'fa-fade', styles:{'--fa-animation-duration': '2s'}}).html}
+            </button>
             <div>Opacity</div>
         </span>
         <span>
