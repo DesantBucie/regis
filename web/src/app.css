@@ -104,6 +104,11 @@ input:hover, select:hover {
   0% {top: -10px;}
   100% {top: 0px;}
 }
+@keyframes in-rotate {
+  0% { transform: rotate(0deg);}
+  50%{ transform: rotate(180deg);}
+  100%{transform: rotate(360deg);}
+}
 .fa-leftsliding {
   position:relative;
   animation-name: left-sliding;
@@ -113,6 +118,12 @@ input:hover, select:hover {
 .fa-topsliding {
   position: relative;
   animation-name: top-sliding;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+.fa-rotate {
+  position:relative;
+  animation-name: in-rotate;
   animation-duration: 3s;
   animation-iteration-count: infinite;
 }

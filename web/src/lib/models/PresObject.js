@@ -133,7 +133,7 @@ export class PresObj {
 
     /**
      * Used for drawing on viewer
-     * @param ctx
+     * @param {SVG} ctx
      */
     drawNoEvent(ctx) {
         this.object
@@ -165,7 +165,7 @@ export class PresObj {
             this.x = this.object.x()
             this.y = this.object.y()
 
-            this.object.rotate(-this.rotation);
+            //this.object.rotate(-this.rotation);
 
             //de-rotate to move
             //this.object.node.setAttribute('transform', 'rotate(0)');
@@ -174,9 +174,9 @@ export class PresObj {
             // rotate after move
             //this.object.node.setAttribute('transform',
             //    `rotate(${this.rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
-            this.object.rotate(this.rotation);
+            //this.object.rotate(this.rotation);
             this.outline.updateRects(this.object.x(), this.object.y())
-            this.outline.group.addTo(ctx)
+            this.outline.group.addTo(ctx);
             e.preventDefault();
         }
     }
@@ -232,6 +232,7 @@ export class PresObj {
             let oldY = this.y;
             let oldW = this.w;
             let oldH = this.h;
+
             //left up
             if(index === 0){
                 [this.x, this.y] = this.getCTMPosition(e, ctx)
@@ -266,8 +267,8 @@ export class PresObj {
                 this.y = oldY;
             }
 
-            this.outline.x = this.x
-            this.outline.y = this.y;
+            //this.outline.x = this.x
+            //this.outline.y = this.y;
             this.outline.h = this.h;
             this.outline.w = this.w;
             this.updateObject()
@@ -277,7 +278,7 @@ export class PresObj {
      * @param {PointerEvent} e - event
      * @param {SVG} ctx - SVG context
      */
-    /*rotate(e, ctx){
+    rotate(e, ctx){
         if(this.outline.isMouseDown) {
 
             const [mouseX, mouseY] = this.getCTMPosition(e, ctx)
@@ -297,7 +298,7 @@ export class PresObj {
             this.rotation = angle * (180/Math.PI)
             this.outline.rotate(this.rotation)
         }
-    }*/
+    }
 
     toJSON() {
         return {

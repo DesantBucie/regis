@@ -14,6 +14,7 @@
     import { _presentation, _activeSlide } from "../store/data";
     import { onMount } from "svelte";
     import { PresImage } from "../lib/models/Image";
+    import AnimationBar from "./AnimationBar.svelte";
 
     export let selectedObject, ctx, draw;
 
@@ -81,23 +82,6 @@
         draw(ctx);
     };
 
-    const animateToggleMenu = () => {
-        animateToggle = !animateToggle;
-    }
-    const addAnimation = (animationName) => {
-        selectedObject.animation = {};
-
-        if(animationName === 'opacity')
-            selectedObject.animation.opacity = 1;
-        if(animationName === 'scale')
-            selectedObject.animation.scale = 1;
-        if(animationName === 'slideLeft')
-            selectedObject.animation.slideLeft = 1;
-        if(animationName === 'slideTop')
-            selectedObject.animation.slideTop = 1;
-
-        animateToggleMenu();
-    }
     const fonts = [
         "Arial",
         "Arial Black",
@@ -114,6 +98,10 @@
         "Verdana",
     ];
     const strokelevels = ["0", "5", "10", "15", "20"];
+
+    const animateToggleMenu = () => {
+        animateToggle = !animateToggle;
+    }
 </script>
 
 <div class="editbar" bind:this={editbar}>
@@ -240,44 +228,7 @@
             <div>Delete</div>
         </span>
     {/if}
-    {#if animateToggle && selectedObject !== null}
-        <span>
-            <button 
-            class={selectedObject.animation.slideTop === 1 ? "selected" : ""}
-            on:click={() => {addAnimation('slideTop')}}>
-                {@html icon(faSquare, {classes: 'fa-topsliding', }).html}
-            </button>
-            <div>Slide Top</div>
-        </span>
-        <span>
-            <button
-            class={selectedObject.animation.slideLeft === 1 ? "selected" : ""} 
-            on:click={() => {addAnimation('slideLeft')}}>
-                {@html icon(faSquare, {classes: 'fa-leftsliding'}).html}
-            </button>
-            <div>Slide Left</div>
-        </span>
-        <span>
-            <button 
-            class={selectedObject.animation.scale === 1 ? "selected" : ""}
-            on:click={() => {addAnimation('scale')}}>
-                {@html icon(faSquare, {classes: 'fa-beat' , styles: {'--fa-beat-scale': '0.75', '--fa-animation-duration': '2s'}, }).html}
-            </button>
-            <div>Scale</div>
-        </span>
-        <span>
-            <button
-            class={selectedObject.animation.opacity === 1 ? "selected" : ""}
-            on:click={() => {addAnimation('opacity')}}>
-                {@html icon(faSquare, {classes: 'fa-fade', styles:{'--fa-animation-duration': '2s'}}).html}
-            </button>
-            <div>Opacity</div>
-        </span>
-        <span>
-            <button class="--red" on:click={animateToggleMenu}>{@html icon(faXmark).html}</button>
-            <div>Exit</div>
-        </span>
-    {/if}
+    <AnimationBar selectedObject={selectedObject} animateToggle={animateToggle} animateToggleMenu={animateToggleMenu}/>
 </div>
 
 <style>

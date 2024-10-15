@@ -41,6 +41,10 @@
                     o[i].object.y(-1200);
                     counter++;
                 }
+                if(o[i].animation.rotate === 1){
+                    //o[i].object.y(-1200);
+                    counter++;
+                }
             }
             
         }
@@ -55,6 +59,10 @@
             //o[i].eventclean()
             o[i].object.remove();
         }
+    }
+    const drawExitScreen = () => {
+        clear()
+        ctx.text("Press Space to exit!").font({size: 40}).move(50, 50);
     }
     const slideLeft = (o) => {
         if(o instanceof PresText){
@@ -78,6 +86,9 @@
     const scaleAnimation = (o) => {
         o.object.animate(1000).scale(1000, o.x, o.y);
     }
+    const rotateAnimation = (o) => {
+        o.object.animate(1000).rotate(360, o.x + o.w / 2, o.y + o.h / 2);
+    }
     /**
      *
      * @param arrow {string}
@@ -96,6 +107,9 @@
                 activeSlide++;
                 i = 0;
                 draw()
+            }
+            else if(activeSlide == presentation.slides.length - 1 && counter === 0){
+                drawExitScreen()
             }
             else {
                 let o = presentation.slides[activeSlide].objects;
@@ -116,6 +130,8 @@
                             opacityAnimation(o[i]);
                         if(o[i].animation.scale === 1)
                             scaleAnimation(o[i]);
+                        if(o[i].animation.rotate === 1)
+                            rotateAnimation(o[i]);
 
                         counter--;
                         i++;

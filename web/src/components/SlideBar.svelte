@@ -21,7 +21,7 @@
     export let clear, draw;
     let presentation;
     let slideBar;
-    let activeSlide, templates;
+    let activeSlide, templatesVisible = false;
 
     _presentation.subscribe((p) => {
         presentation = p;
@@ -119,12 +119,7 @@
         }
     }
     const toggleSlides = () => {
-        if(templates.style.display === 'none'){
-            templates.style.display = 'grid';
-        }
-        else {
-            templates.style.display = 'none';
-        }
+        templatesVisible = !templatesVisible;
     }
 </script>
 <div class="slidebar">
@@ -151,15 +146,21 @@
 
     </div>
     <button class="slidebar__slide--addNew" on:click={toggleSlides}>
-        {@html icon(faPlus).html}
+        {#if !templatesVisible}
+            {@html icon(faPlus).html}
+        {:else}
+            {@html icon(faXmark).html}
+        {/if}
     </button>
-    <div bind:this={templates} class="slidebar__template">
-        <button on:click={addNewSlide}>Empty</button>
-        <button on:click={() => {return addTemplatedSlide('title')}}>Title</button>
-        <button on:click={() => {return addTemplatedSlide('content')}}>Content</button>
-        <button on:click={() => {return addTemplatedSlide('section')}}>Section</button>
-        <button on:click={() => {return addTemplatedSlide('image')}}>Image</button>
-    </div>
+    {#if templatesVisible}
+        <div class="slidebar__template">
+            <button on:click={addNewSlide}>Empty</button>
+            <button on:click={() => {return addTemplatedSlide('title')}}>Title</button>
+            <button on:click={() => {return addTemplatedSlide('content')}}>Content</button>
+            <button on:click={() => {return addTemplatedSlide('section')}}>Section</button>
+            <button on:click={() => {return addTemplatedSlide('image')}}>Image</button>
+        </div>
+    {/if}
 </div>
 
 <style>
@@ -240,8 +241,10 @@
         border-radius: 180px;
     }
     .slidebar__template {
-        display:none;
-        width: 150px;
+        display:grid;
+        grid-template-columns: 1fr;
+        width: 145px;
+        margin-top:10px;
         border: black 1px solid;
         border-radius: 10px;
         background-color: #aaa;
