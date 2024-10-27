@@ -145,13 +145,16 @@
         {/each}
 
     </div>
-    <button class="slidebar__slide--addNew" on:click={toggleSlides}>
-        {#if !templatesVisible}
-            {@html icon(faPlus).html}
-        {:else}
-            {@html icon(faXmark).html}
-        {/if}
-    </button>
+    <div>
+        <button class="slidebar__slide--addNew" on:click={toggleSlides}>
+            {#if !templatesVisible}
+                {@html icon(faPlus).html}
+            {:else}
+                {@html icon(faXmark).html}
+            {/if}
+        </button>
+        <div style="font-size:8pt">Add slide</div>
+    </div>
     {#if templatesVisible}
         <div class="slidebar__template">
             <button on:click={addNewSlide}>Empty</button>
@@ -166,7 +169,7 @@
 <style>
     .slidebar{
         
-        background: #d7d6d6;
+        background: #efefef;
         padding:1em;
         border-radius: 10px;
         margin:1em;
@@ -247,9 +250,9 @@
         margin-top:10px;
         border: black 1px solid;
         border-radius: 10px;
-        background-color: #aaa;
+        background-color: #ccc;
     }
     .slidebar__template button {
-        background-color: #aaa;
+        background-color: #ccc;
     }
 </style>

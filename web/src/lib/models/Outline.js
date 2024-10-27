@@ -52,10 +52,10 @@ export class Outline {
         else {
             rotation = 0
         }
-        //for(let i = 0; i < 5; i++) {
-            //this.objects[4].node.setAttribute('transform',
-            //    `rotate(${rotation}, ${(this.objects[0].x() + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
-        //}
+        for(let i = 0; i < 5; i++) {
+            this.objects[i].node.setAttribute('transform',
+                `rotate(${rotation}, ${(this.objects[0].x() + this.rectShift + (this.w / 2))}, ${(this.objects[0].y() + this.rectShift + (this.h / 2))})`);
+        }
     }
     /**
      * Update squares to follow object
@@ -90,9 +90,9 @@ export class Outline {
                 .size(15 , 15)
                 .fill({color: "#0085dedd"})
         }
-        /*this.objects[4]
+        this.objects[4]
             .size(15, 15)
-            .fill({color: "#EEEE00dd"});*/
+            .fill({color: "#EEEE00dd"});
         this.group.addTo(ctx)
     }
 

@@ -156,16 +156,18 @@ export class PresObj {
      */
     onMousemove(e, ctx, offsetX, offsetY) {
         if(this.mouseDown && this.selected) {
-            let CTM = ctx.node.getScreenCTM()
+            let CTM = ctx.node.getScreenCTM();
+
+            this.object.rotate(-this.rotation);
             // Offset is calculated on mousedown effect. If it was
             // calculated here it would zero out.
             this.object.x(((e.clientX - CTM.e) / CTM.a) + offsetX);
             this.object.y(((e.clientY - CTM.f) / CTM.d) + offsetY);
 
+
             this.x = this.object.x()
             this.y = this.object.y()
 
-            //this.object.rotate(-this.rotation);
 
             //de-rotate to move
             //this.object.node.setAttribute('transform', 'rotate(0)');
@@ -174,14 +176,13 @@ export class PresObj {
             // rotate after move
             //this.object.node.setAttribute('transform',
             //    `rotate(${this.rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
-            //this.object.rotate(this.rotation);
+            this.object.rotate(this.rotation);
             this.outline.updateRects(this.object.x(), this.object.y())
             this.outline.group.addTo(ctx);
             e.preventDefault();
         }
     }
     /**
-     *
      * @param {SVG} ctx - context of svg canvas
      */
     onClick (ctx){
@@ -206,11 +207,13 @@ export class PresObj {
         this.mouseDown = false;
     }
     getCTMPosition(e, ctx){
-        let CTM = ctx.node.getScreenCTM()
-        return [
-            ((e.clientX - CTM.e) / CTM.a),
-            ((e.clientY - CTM.f) / CTM.d)
-        ]
+        const CTM = ctx.node.getScreenCTM();
+
+        const inverseX = (e.clientX - CTM.e) / CTM.a;
+        const inverseY = (e.clientY - CTM.f) / CTM.d;
+
+        return [inverseX, inverseY];
+
     }
     updateObject(){
         this.object
@@ -232,7 +235,8 @@ export class PresObj {
             let oldY = this.y;
             let oldW = this.w;
             let oldH = this.h;
-
+            
+            
             //left up
             if(index === 0){
                 [this.x, this.y] = this.getCTMPosition(e, ctx)
@@ -250,7 +254,6 @@ export class PresObj {
                 [this.w, this.h] = this.getCTMPosition(e, ctx);
                 this.w -= this.x
                 this.h -= this.y
-
             }
             if(index === 1) {
                 [this.x, this.h] = this.getCTMPosition(e, ctx);
@@ -267,8 +270,6 @@ export class PresObj {
                 this.y = oldY;
             }
 
-            //this.outline.x = this.x
-            //this.outline.y = this.y;
             this.outline.h = this.h;
             this.outline.w = this.w;
             this.updateObject()
@@ -284,9 +285,7 @@ export class PresObj {
             const [mouseX, mouseY] = this.getCTMPosition(e, ctx)
 
             const angle = Math.atan2(mouseY - this.y, mouseX - this.x) //* (180 / Math.PI);
-            console.log(angle);
-            this.outline.x = this.x
-            this.outline.y = this.y;
+            //console.log(angle);
             this.outline.h = this.h;
             this.outline.w = this.w;
             //this.object.node.setAttribute('transform',

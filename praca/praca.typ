@@ -1,16 +1,18 @@
 #set page(
   paper: "a4",
-  numbering: "1"
+  numbering: "1",
+  margin: (inside: 3.5cm, outside: 2cm, top: 2cm, bottom: 2cm)
 )
 #set text(
   font: "Times New Roman",
   size: 12pt,
   lang:"pl"
 )
-#figure(
-  image("pictures/logo.png", width: 100%)
+#set par(
+  justify: true,
+  spacing: 1.5em
 )
-
+#set block(spacing: 1.5em)
 
 #set heading(numbering: (..nums) => {
   let sequence = nums.pos()
@@ -20,8 +22,17 @@
     numbering("1.", ..sequence)
   }
 })
+#show outline.entry.where(
+  level: 1
+): it => {
+  v(12pt, weak: true)
+  strong(it)
+}
+#show link: underline
 
-
+#figure(
+  image("pictures/logo.png", width: 100%)
+)
 #align(center + horizon, text(16pt)[
   #strong[Politechnika Częstochowska \
 Wydział Informatyki i Sztucznej Inteligencji \ ]
@@ -42,68 +53,60 @@ Zakres (specjalność): Inżynieria oprogramowania \
 ])
 
 #pagebreak()
+#outline(title:"Spis Treści", indent:auto, fill:none)
 #pagebreak()
 
-= Wstęp
-
-Lorem ipsum - tu historia o prezentacjach etc.
-
-== Cel pracy
-
-Celem pracy jest stworzenie prostego w obsłudze edytora do tworzenia prezentacji z możliwością użycia animacji, razem z przeglądarką prezentacji, oraz jej eksportem do PDF.
-
-== Zakres pracy
-
-W rozdziale pierwszym pracy opisano porównanie istniejących już rozwiązań.
-
+#include "0_wstep.typ"
 
 #pagebreak()
 
-#set heading(numbering: "1.")
+#counter(heading).update(0)
+#set heading(numbering: "1.1")
 #show heading.where(level: 1): it => if it.numbering == none { it } else [
-  Rozdział #(counter(heading).get().first() - 1) \ #it.body
+  Rozdział #(counter(heading).get().first()) \ #it.body
 ]
-= Przegląd dostępnych rozwiązań
 
-Na rynku znajduje się obecnie wiele darmowych jak i płatnych rozwiązań dotyczących prezentacji multimedialnych. Najpopularniejszym z nich jest Microsoft PowerPoint, popularne są również Open/Libre Office Impress, Google Slides, Canva oraz Keynote, ale w tym przypadku tylko na komputery firmy Apple. 
+#include "1_przeglad.typ"
 
-== Microsoft PowerPoint
-
-Dzieło Microsoftu jest liderem, jeżeli chodzi o światowe użycie. 
-Microsoft szacuje, że na świecie jest 1 200 000 000 kopii tego programu. //@citationNeeded
-
-Ponieważ jest to najpopularniejszy program tego typu, inne programy jak Open/Libre Office Impress kopiują go w wyglądzie interfejsu użytkownika, jak i działaniu.
-
-Program posiada zaawansowany, jednak często trudny do zrozumienia interfejs użytkownika.
-Można dowolnie edytować tekst, ustawiać wielkość nawet pojedynczych liter, kolory tła czy liter.
-Jest też ogromna ilość przejść pomiędzy slajdami i animacji obiektów. 
-W nowszych wersjach programu można wykonać bardzo zaawansowane prezentacje, które nieraz mogły by przypominać 
-render ręcznie wymodelowanych i zanimowanych obiektów 3d.
-
-== Open/Libre Office
-
-== Google Slides
-
+#pagebreak()
 = Omówienie zagadnienia...
 
-= Opis wykorzystanych technologii oraz narzędzi
+#pagebreak()
 
-== Svelte
+#include "3_opis.typ"
 
-== svg.js
+#pagebreak()
+= Założenia projektu
 
-== svg2pdf.js 
+#pagebreak()
+= Prezentacja projektu
 
+== Edytor
 
-= Podsumowanie
+== Przeglądarka slajdów
+
+== Eksport do formatu PDF
+
+#pagebreak()
+= Opis wybranych rozwiązań programistycznych
+
+#pagebreak()
+
+#include("7_podsumowanie.typ")
 
 #show heading.where(level: 1): it => if it.numbering == none { it } else [
   #it.body
 ]
+#show heading.where(level: 2): it => if it.numbering == none { it } else [
+  #it.body
+]
+#pagebreak()
 = Streszczenie
 
 Po polsku
-
+#pagebreak()
 = Summary
 
 In english
+
+#bibliography("bib.yaml")
