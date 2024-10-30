@@ -1,3 +1,11 @@
+tertiary:
+  type: Article
+  title: The Projection of Chemical Lecture Experiments onto the Screen
+  author: Oscar W. Richards  
+  serial-number:
+    doi: "10.1021/ed017p210"
+  date: 1940-05
+
 text-autowrap:
   type: Web
   title: Auto-wrapped text
@@ -14,6 +22,11 @@ svelte-info:
   type: Web
   title: Svelte
   url: https://en.wikipedia.org/wiki/Svelte
+
+svelte-license:
+  type: Web
+  title: Svelte MIT License
+  url: https://github.com/sveltejs/svelte/blob/main/LICENSE.md
 
 svgjs-info:
   type: Web

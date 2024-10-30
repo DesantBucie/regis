@@ -1,6 +1,6 @@
 #set page(
   paper: "a4",
-  numbering: "1",
+  numbering:none,
   margin: (inside: 3.5cm, outside: 2cm, top: 2cm, bottom: 2cm)
 )
 #set text(
@@ -14,25 +14,21 @@
 )
 #set block(spacing: 1.5em)
 
-#set heading(numbering: (..nums) => {
-  let sequence = nums.pos()
-  // discard first entry (chapter number)
-  let _ = sequence.remove(0)
-  if sequence.len() > 0 {
-    numbering("1.", ..sequence)
-  }
-})
-#show outline.entry.where(
-  level: 1
-): it => {
-  v(12pt, weak: true)
-  strong(it)
-}
+// Disable numbering in outline and section
+//#set heading(numbering: (..nums) => {
+//  let sequence = nums.pos()
+//  // discard first entry (chapter number)
+//  let _ = sequence.remove(0)
+//  if sequence.len() > 0 {
+//    numbering("1.", ..sequence)
+//  }
+//})
 #show link: underline
 
 #figure(
   image("pictures/logo.png", width: 100%)
 )
+
 #align(center + horizon, text(16pt)[
   #strong[Politechnika Częstochowska \
 Wydział Informatyki i Sztucznej Inteligencji \ ]
@@ -51,13 +47,36 @@ Kierunek: Informatyka \
 Zakres (specjalność): Inżynieria oprogramowania \
   #align(center, [Częstochowa 2024])
 ])
-
 #pagebreak()
-#outline(title:"Spis Treści", indent:auto, fill:none)
+#pagebreak()
+#set page(numbering: "1")
+#counter(page).update(1)
+#[
+  #show outline.entry.where(
+    level: 1
+  ): it => {
+    v(12pt, weak: true)
+    strong(it)
+  }
+  
+  #outline(
+    title:"Spis Treści",
+    indent:1em, 
+    depth: 2,
+  )
+]
+
+#show outline: set heading(outlined:true)
 #pagebreak()
 
-#include "0_wstep.typ"
+#[
+  #show heading.where(level: 2): it => if it.numbering == none { it } else [
+    #it.body
+  ]
 
+  #include "0_wstep.typ"
+
+]
 #pagebreak()
 
 #counter(heading).update(0)
@@ -66,6 +85,9 @@ Zakres (specjalność): Inżynieria oprogramowania \
   Rozdział #(counter(heading).get().first()) \ #it.body
 ]
 
+#show heading.where(level: 3): it => if it.numbering == none { it } else [
+  #it.body
+]
 #include "1_przeglad.typ"
 
 #pagebreak()
@@ -101,6 +123,36 @@ Zakres (specjalność): Inżynieria oprogramowania \
   #it.body
 ]
 #pagebreak()
+
+#bibliography("bib.yaml")
+
+#pagebreak()
+
+// Kind of weird but works
+//#{
+//  show heading: none
+//  heading(numbering: none)[Spis rysunków]
+//}
+#show outline.entry.where(
+  level: 1
+): it => { 
+  v(12pt, weak: true)
+  it 
+}
+#outline(
+  title: [Spis rysunków],
+  target: figure.where(kind: image),
+)
+
+#set heading(numbering: (..nums) => {
+  let sequence = nums.pos()
+  // discard first entry (chapter number)
+  let _ = sequence.remove(0)
+  if sequence.len() > 0 {
+    numbering("1.", ..sequence)
+  }
+})
+#pagebreak()
 = Streszczenie
 
 Po polsku
@@ -108,5 +160,5 @@ Po polsku
 = Summary
 
 In english
-
-#bibliography("bib.yaml")
+#pagebreak()
+= Słowa kluczowe

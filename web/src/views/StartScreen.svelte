@@ -9,19 +9,22 @@
 
 
     const readFile = async (file) => {
-        const text = await file.text();
+        
+        if(confirm("This will override any existing work in your cache")){
+            const text = await file.text();
 
-        const root = await navigator.storage.getDirectory();
-        
-        const fileHandle = await root.getFileHandle("regis.json", {create:true});
-        const writable = await fileHandle.createWritable();
-        
+            const root = await navigator.storage.getDirectory();
+            
+            const fileHandle = await root.getFileHandle("regis.json", {create:true});
+            const writable = await fileHandle.createWritable();
+            
 
-        await writable.write(text);
-        await writable.close();   
-        console.log("Saved");
-        
-        window.location.replace("/editor")
+            await writable.write(text);
+            await writable.close();   
+            console.log("Saved");
+            
+            window.location.replace("/editor")
+        }
     }
     const newPresentation = () => {
         window.location.replace('/editor')

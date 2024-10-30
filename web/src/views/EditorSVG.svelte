@@ -8,9 +8,10 @@
 
     import {Presentation} from "../lib/models/Presentation.js";
     import {_presentation, _activeSlide} from "../store/data.js";
+    import { isCreateWritableSupported } from "../lib/runOnStart.js";
 
 
-    let presentation, activeSlide, selectedObject;
+    let presentation, activeSlide, selectedObject, fail = false;
 
     let timing = {};
 
@@ -50,7 +51,7 @@
         const root = await navigator.storage.getDirectory();
         
         const fileHandle = await root.getFileHandle("regis.json", {create:true});
-        const writable = await fileHandle.createWritable();
+        const writable = await fileHandle.createWritable()
         const save = JSON.stringify(Object.create(presentation));
 
         await writable.write(save);
@@ -103,12 +104,15 @@
                 disableSelected();
             }
         })
-        await openPresentation();
+        if(await isCreateWritableSupported())
+            await openPresentation();
+        else
+            fail = true;
     })
 
 </script>
 
-{#if window.outerWidth > 1365}
+{#if window.outerWidth > 1365 && !fail}
     <MenuBar ctx={ctx} clear={clear} draw={draw} disableSelected={disableSelected} savePresentation={savePresentation}/>
 
 <div class="editor" bind:this={editor}>
@@ -116,9 +120,14 @@
     <div id="container" class="container" bind:this={container}>
     </div>
 </div>
-{:else}
+{/if}
+{#if window.outerWidth <= 1365}
+    <h2>The screen is too small to work properly. Open this website on laptop or tablet</h2>
+{/if}
+{#if fail}
     <div>
-        <h1>Przepraszamy ale twój ekran jest zbyt wąski, aby aplikacja poprawnie działała</h1>
+        <h2>This browser doesn't fully support OPFS. Use Firefox based or Chrome based browsers.</h2>
+        <h2>Things like viewer, PDF export, autosave, won't work.</h2>
     </div>
 {/if}
 <style>

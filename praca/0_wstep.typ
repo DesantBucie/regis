@@ -1,14 +1,18 @@
-//= Wstęp
-//
-//W latach 40. Armia USA zaadaptowała grafoskopy - projektory działające na
-//zasadzie poświetlania folii diapozytowej - obrazu naniesionego na przeźroczysty
-//materiał, i przenoszącego go przez soczewki i lustra na powierzchnię na
-//przykład ściany. Wszytko to po to, by lepiej przygotowywać swoich żółnierzy do
-//wojny. W ciągu dekady, projektory zaczęto wykorzystywać w amerykańskich firmach.
-//
-//W tamtych czasach z nie było komputerów z interfejsem użytkownika, nie mówiąc już o oprogramowaniu do tworzenia prezentacji. Firmy zatrudniały więc czasem całe działy graficzne do tworzenia slajdów. Były tworzone ręcznie.
-//
-//*fragment prezentacji General Electric z 1958*
+= Wstęp
+
+Już w  latach 40. Armia USA zaadaptowała grafoskopy - projektory działające na
+zasadzie poświetlania folii diapozytowej - obrazu naniesionego na przeźroczysty
+materiał, i przenoszącego go przez soczewki i lustra na powierzchnię na
+przykład ściany. Wszytko to po to, by lepiej przygotowywać swoich żółnierzy do
+wojny. Zaczęto je wykorzystywać także wsród nauczycieli akademickich@tertiary, a w ciągu
+dekady, projektory zaczęto używać w amerykańskich korporacjach.
+
+W tamtych czasach, oczywiście nie było komputerów osobistych, nie mówiąc już o
+oprogramowaniu do tworzenia prezentacji. Firmy zatrudniały więc czasem całe
+działy graficzne do tworzenia slajdów. Były tworzone ręcznie, za pomocą różnych
+metod.
+
+*fragment prezentacji General Electric z 1958*
 
 == Cel pracy
 

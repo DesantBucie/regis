@@ -81,6 +81,7 @@ export class PresObj {
             })
             .on('mousedown',this.onMouseDown)
             .on('mouseup', this.onMouseUp)
+            .attr('transform', 'matrix(1,0,0,1,0,0)')
             //.on('mousemove', (e) => { return this.onMousemove(e, ctx)})
             .addTo(ctx);
         //this.object.node.setAttribute('transform',
@@ -177,8 +178,8 @@ export class PresObj {
             //this.object.node.setAttribute('transform',
             //    `rotate(${this.rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
             this.object.rotate(this.rotation);
-            this.outline.updateRects(this.object.x(), this.object.y())
-            this.outline.group.addTo(ctx);
+            this.outline.updateRects(this.object.x(), this.object.y(), this.object.attr('transform'))
+            //this.outline.group.addTo(ctx);
             e.preventDefault();
         }
     }
@@ -208,19 +209,24 @@ export class PresObj {
     }
     getCTMPosition(e, ctx){
         const CTM = ctx.node.getScreenCTM();
+        const objectCTM = this.object.node.getScreenCTM();
 
         const inverseX = (e.clientX - CTM.e) / CTM.a;
         const inverseY = (e.clientY - CTM.f) / CTM.d;
 
-        return [inverseX, inverseY];
+        /*const matrixString = this.object.attr('transform');
+        const matrixValues = matrixString.match(/matrix\(([^)]+)\)/)[1].split(',').map(Number);
 
+        const [a, b, c, d, ex, f] = matrixValues;*/
+        
+        return [inverseX, inverseY];
     }
     updateObject(){
         this.object
             .move(this.x, this.y)
             .size(this.w, this.h)
             //.addTo(ctx)
-        this.outline.updateRects(this.x, this.y)
+        this.outline.updateRects(this.x, this.y, this.object.attr('transform'))
         //this.outline.group.addTo(ctx)
     }
     /**
@@ -286,16 +292,17 @@ export class PresObj {
 
             const angle = Math.atan2(mouseY - this.y, mouseX - this.x) //* (180 / Math.PI);
             //console.log(angle);
-            this.outline.h = this.h;
-            this.outline.w = this.w;
+            //this.outline.h = this.h;
+            //this.outline.w = this.w;
             //this.object.node.setAttribute('transform',
             //    `rotate(${this.rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
             //this.object.node.setAttribute('transform',
             //    `matrix(${Math.cos(angle)}, ${Math.sin(angle)}, ${- Math.sin(angle)}, ${Math.cos(angle)}, ${this.x + (this.w / 2)}, ${this.y + (this.h / 2)})`);
             //this.object.rotate(this.rotation)
             this.object.rotate(angle * (180/Math.PI) - this.rotation, this.x + (this.w / 2), this.y + (this.h / 2))
+            this.outline.rotate(this.object.attr('transform'))
             this.rotation = angle * (180/Math.PI)
-            this.outline.rotate(this.rotation)
+            
         }
     }
 
@@ -310,7 +317,8 @@ export class PresObj {
                 fill: this.object.attr('fill'),
                 strokeWidth: this.object.attr('stroke-width'),
                 stroke: this.object.attr('stroke'),
-                opacity: this.object.attr('opacity')
+                opacity: this.object.attr('opacity'),
+                rotate: this.rotation
             },
             animation: this.animation
         }

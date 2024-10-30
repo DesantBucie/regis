@@ -3,7 +3,7 @@
 == Svelte
 
 Svelte to otwartoźródłowy frontendowy framework języka JavaScript stworzony
-przez Richa Harrisa w 2016 roku@svelte-info.
+przez Richa Harrisa w 2016 roku@svelte-info@svelte-license.
 Cechuje się małym rozmiarem i prostotą. W porównaniu do popularnych 
 frameworków tego języka - Reacta i Vue - nie jest on importowaną do projektu
 biblioteką, ale kompiluje on projektowe pliki, do plików wynikowych.
