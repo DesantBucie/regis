@@ -25,9 +25,9 @@
 //})
 #show link: underline
 
-#figure(
-  image("pictures/logo.png", width: 100%)
-)
+//#figure(
+#image("pictures/logo.png", width: 100%)
+//)
 
 #align(center + horizon, text(16pt)[
   #strong[Politechnika Częstochowska \
@@ -124,7 +124,11 @@ Zakres (specjalność): Inżynieria oprogramowania \
 ]
 #pagebreak()
 
-#bibliography("bib.yaml")
+#bibliography(
+  ("bib.yaml",
+  "images.bib"),
+  style: "ieee",
+)
 
 #pagebreak()
 

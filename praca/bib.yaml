@@ -6,39 +6,82 @@ tertiary:
     doi: "10.1021/ed017p210"
   date: 1940-05
 
+overhead-usage:
+  type: Article
+  title: Overhead projector use in televising geography
+  author: David E. Christensen
+  serial-number:
+    doi: "10.1080/00221346408985098"
+  date: 1964-10
+
+handmade-ohp:
+  type: Web 
+  title: Handmade materials for projection
+  author: Harvey R. Frye
+  date: 1956
+  url:
+    value: https://www.youtube.com/watch?v=tUXIYXnNMFs 
+    date: 2024-11-05
+
+slp-made:
+  type: Web
+  title: Photographic Slides for Instruction
+  author: 
+    - Clarence M. Flaten
+    - William C. Prigge
+    - Dennis W. Pett
+  url:
+    value: https://www.youtube.com/watch?v=6kgeDd2BDKs
+    date: 2024-11-05
+  date: 1957
+
 text-autowrap:
   type: Web
   title: Auto-wrapped text
-  url: https://svgwg.org/svg2-draft/text.html#TextLayoutAuto
+  url: 
+    value: https://svgwg.org/svg2-draft/text.html#TextLayoutAuto
+    date: 2024-10-31
   date: 2023-03-08
 
 svg2:
   type: Web
   title: Scalable Vector Graphics (SVG) 2, W3C Candidate Recommendation
-  url: https://www.w3.org/TR/2016/CR-SVG2-20160915/
+  url: 
+    value: https://www.w3.org/TR/2016/CR-SVG2-20160915/
+    date: 2024-10-31
   date: 2016-09-15
 
 svelte-info:
   type: Web
   title: Svelte
-  url: https://en.wikipedia.org/wiki/Svelte
+  url: 
+    value: https://en.wikipedia.org/wiki/Svelte
+    date: 2024-10-31
 
 svelte-license:
   type: Web
   title: Svelte MIT License
-  url: https://github.com/sveltejs/svelte/blob/main/LICENSE.md
+  url: 
+    value: https://github.com/sveltejs/svelte/blob/main/LICENSE.md
+    date: 2024-10-31
 
 svgjs-info:
   type: Web
   title: SVG.js License
-  url: https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt 
+  url: 
+    value: https://github.com/svgdotjs/svg.js/blob/master/LICENSE.txt 
+    date: 2024-10-31
 
 svgjs-chart:
   type: Web
   title: It's speedy - SVG.js
-  url: https://svgjs.dev/docs/3.2/#it-s-speedy
+  url: 
+    value: https://svgjs.dev/docs/3.2/#it-s-speedy
+    date: 2024-10-31
 
 svg2pdf-info:
   type: Web
   title: svg2pdf.js MIT License
-  url: https://github.com/yWorks/svg2pdf.js/blob/master/LICENSE
+  url: 
+    value: https://github.com/yWorks/svg2pdf.js/blob/master/LICENSE
+    date: 2024-10-31 

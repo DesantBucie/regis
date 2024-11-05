@@ -1,11 +1,12 @@
 = Przegląd dostępnych rozwiązań
 
-Na rynku znajduje się obecnie wiele darmowych jak i płatnych rozwiązań
-dotyczących prezentacji multimedialnych. Najpopularniejszym z nich jest
-Microsoft PowerPoint, który jest rozwiązaniem płatnym, popularne są również
-Open/Libre Office Impress i Google Slides. Wszystkie pozwalają na stworzenie
-zaawansowanych prezentacji multimedialnych, posiadają kreatory animacji dla
-obiektów, wsparcie dla szablonów styli.
+Na rynku znajduje się obecnie wiele darmowych jak i płatnych programów do
+tworzenia prezentacji multimedialnych. Najpopularniejszym z nich jest Microsoft
+PowerPoint, który jest rozwiązaniem płatnym, popularne są również Open/Libre
+Office Impress i Google Slides, a także Apple Keynote jeżeli chodzi o komputery
+typu Mac. Programy te pozwalają na stworzenie zaawansowanych prezentacji
+multimedialnych, posiadają kreatory animacji dla obiektów, wsparcie dla
+szablonów styli.
 
 == Microsoft PowerPoint
 
@@ -35,6 +36,9 @@ obsługę animacji i przejść pomiędzy slajdami. Animacje są tworzone przez
 użytkownika dzięki interfejsowi graficznego, w widoku slajdów, można aktywować
 na różne sposoby: automatycznie, czy przez kliknięcie.
 
+Od 2017 roku PowerPoint jest też dostępny jako aplikacja internetowa w
+przegladądarce w pakiecie Office365, chociaż posiada pewne ograniczenia
+względem wersji desktopowej.
 
 == Open/Libre Office
 
@@ -48,9 +52,18 @@ odniósł sukcesu wśród użytkowników systemu macOS, pomimo bycia dostępnym 
 na ten system. Obecnie za darmo dla każdego użytkownika systemu Apple, oferuje
 także eksport pliku do formatu PowerPoint (pptx).
 
-Interfejs Apple Keynote jest na pewno prostszy, niż ten, który możemy znaleźć w Microsoft PowerPoint, lecz nie zawsze jest lepszy. Przykładem jest proste wstawienie zdjęcia do slajdu. Po kliknięciu przycisku Media, to opcja "Photos or Videos" wydaje się być tą prawidłową, ale po jej kliknięciu wyskoczą nam zdjęcia i wideo z aplikacji Photos. Aby wybrać zdjęcie, czy wideo z pliku, musimy wybrać opcję "Choose...".
+Interfejs Apple Keynote jest na pewno prostszy, niż ten, który możemy znaleźć w
+Microsoft PowerPoint, lecz nie zawsze jest lepszy. Przykładem jest proste
+wstawienie zdjęcia do slajdu. Po kliknięciu przycisku Media, to opcja "Photos
+or Videos" wydaje się być tą prawidłową, ale po jej kliknięciu wyskoczą nam
+zdjęcia i wideo z aplikacji Photos. Aby wybrać zdjęcie, czy wideo z pliku,
+musimy wybrać opcję "Choose...". Jest to bardzo nieintuicyjne, przeciętny
+użytkownik, najprawdopodobniej zmarnuje sporo czasu, zanim domyśli się jak ma
+wstawić zdjęcie do tego programu.
 
 #figure(
   image("pictures/keynote1.png", width: 80%),
   caption: [ Menu wstawiania mediów w Apple Keynote ]
 )
+
+
