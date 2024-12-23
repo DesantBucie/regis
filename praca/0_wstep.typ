@@ -1,16 +1,17 @@
 = Wstęp
 
-Prezentacje multimedialne są dzisiaj nieodłączną częścią korporacyjnego świata.
-Zobaczymy je podczas spotkań biznesowych i spotkań zarządu, konferencjach i
+Prezentacje multimedialne są dzisiaj nieodłączną częścią dzisiejszego świata.
+Zobaczymy je podczas spotkań biznesowych i spotkań zarządu firm, konferencjach,
 szkoleniach dla pracowników, a wszystko po to by w bardziej przystępny sposób
 przedstawić słuchającym zagadnienie.
 
-Już w  latach 40. Armia USA zaadaptowała
-grafoskopy - projektory działające na zasadzie poświetlania diapozytu obrazu naniesionego na przeźroczysty materiał, i przenoszącego go przez
-soczewki i lustra na powierzchnię ściany czy ekranu projekcyjnego. Wszytko to po to, by
-lepiej przygotowywać swoich żółnierzy do wojny. Zaczęli je używać także
-nauczyciele akademiccy@tertiary, a kilka lat później,
-rzutniki pisma zaczęto używać w amerykańskich firmach@overhead-usage. 
+Już w latach 40. Armia USA zaadaptowała grafoskopy - projektory działające na
+zasadzie poświetlania diapozytu, obrazu naniesionego na przeźroczysty materiał,
+i przenoszącego go przez soczewki i lustra na powierzchnię ściany czy ekranu
+projekcyjnego. Wszytko to po to, by lepiej przygotowywać swoich żółnierzy do
+walki w bardziej przystępny i łatwiejszy do zrozumienia sposób. W późniejszym
+czasie zaczęli je używać także nauczyciele akademiccy,@tertiary a kilka lat
+później, rzutniki pisma zaczęto używać w amerykańskich firmach.@overhead-usage 
 
 Początkowo slajdy do tego typu projektorów tworzono najczęściej ręcznie, pisząc
 na specjalnej folii (ang. carbon film) metalowym rysikiem, czasami z pomocą
@@ -25,22 +26,39 @@ Było więc to zadanie bardzo żmudne i wymagające sporej precyzji przy tworzen
 )
 
 W tym samym okresie popularne były też rzutniki przeźrocze - diaskopy,
-najczęściej na 16mm i 35mm taśmy filmowe Najbardziej znane są rzutniki Kodaka,
+najczęściej na film typu 135. Najbardziej znane na świecie są rzutniki Kodaka,
 z tzw. obrotową karuzelą, w której znajdują się pojedyncze kawałki taśmy
 filmowej. Projektor tak jak i grafoskop działa na zasadzie podświetlenia
 półprzeźroczystego materiału oraz wyświetlenie powstałego obrazu na ścianie
 przez system soczewek, jednak jest zazwyczaj od niego mniejszy.
 
-Tworzenie slajdów do rzutników przeźroczych różniło się od tworzenia slajdów do
-grafoskopów, ponieważ opierało się na robieniu zdjęć.@slp-made Takie materiały
-były więc zazwyczaj tekstem napisanym na jakieś powierzchni, której po prostu
-zrobiono zdjęcie, to samo tyczy się kopiowania obrazków z książek czy gazet.
-Następnie wywoływano film diapozytowy, lub robiono dupnegatyw, cięto film na
-pojedyncze slajdy i tak gotowy mógł być wyświetlany przez rzutnik.
+Tworzenie slajdów do rzutników przeźroczych różni się od tworzenia slajdów do
+grafoskopów, ponieważ opierało się po prostu zazwyczaj na robieniu
+zdjęć.@slp-made Takie materiały były więc zazwyczaj tekstem napisanym na jakieś
+powierzchni, której po prostu zrobiono zdjęcie, to samo tyczy się kopiowania
+obrazków z książek czy gazet. Następnie wywoływano film diapozytywowy taki jak
+Kodak Ektachrome czy polski Foton, lub używano filmu natychmiastowego cięto
+film na pojedyncze slajdy, po czym film mógł być wyświetlany przez rzutnik. 
 
+W latach 80. szybki rozwój komputerów pozwolił na zdigitalizowanie procesu
+tworzenia prezentacji. Programy takie jak BRUNO i Slidemaster mogły znacząco
+ułatwić tworzenie slajdów, jednak przeniesienie ich na film wymagało
+specjalnych drukarek i wyszkolonych operatorów do obsługi programów. W 1987
+PowerPoint zostaje wypuszczony na komputery Macintosh i jeszcze w tym samym
+roku zostaje zakupiony przez Microsoft, jednak prezentacje są dalej
+prezentowane głównie na dwóch wyżej wymienionych rzutnikach. Dopiero w latach 90. 
+i na początku XXI wieku, projektory cyfrowe zaczynają zastępować grafoskopy
+i diaskopy. 
 
+Cyfrowa rewolucja pozwoliła na jeszcze większe rozprzestrzenienie się
+prezentacji multimedialnych. Znajdziemy je na każdym etapie życia: w szkołach, w pracy,
+oglądając przeróżne analizy, na przykład rynku mieszkaniowego, czy przy wypuszczeniu
+nowych produktów przez firmy.
 
-
+#figure(
+  image("pictures/powerpoint1987.png", width: 80%),
+  caption: [ Interfejs użytkownika w pierwszym wydaniu programu PowerPoint @powerpoint-1987] 
+)
 == Cel pracy
 
 Celem pracy jest stworzenie aplikacji internetowej do tworzenia prezentacji

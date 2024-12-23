@@ -1,6 +1,6 @@
 import {PresText} from "./Text.js";
 import {PresObj} from "./PresObject.js";
-import {PresCircle, PresEllipse, PresRect, PresTriangle} from "./Shapes.js";
+import {CustomPath, PresCircle, PresEllipse, PresRect, PresTriangle, PresTriangle2} from "./Shapes.js";
 import {PresImage} from "./Image.js";
 
 export class Slide {
@@ -44,6 +44,8 @@ export class Slide {
             ['PresCircle', PresCircle],
             ['PresEllipse', PresEllipse],
             ['PresTriangle', PresTriangle],
+            ['PresTriangle2', PresTriangle2],
+            ['CustomPath', CustomPath],
             ['PresText', PresText],
             ['PresImage', PresImage]
         ]);

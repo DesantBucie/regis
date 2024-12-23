@@ -23,9 +23,11 @@ nie doczekał się jednak wsparcia w jakiejkolwiek przeglądarce.
 === Wsparcie dla przeglądarek Safari
 
 Obecnie cała aplikacja nie działa na przeglądarkach Safari. Powodem jest brak
-wsparcia przez nie API OPFS,a konkretnie metody umożliwiającej stworzenie pliku w
+wsparcia przez nie API OPFS, a konkretnie metody umożliwiającej stworzenie pliku w
 OPFS. Rozwiązaniem mogłoby być przejście na API IndexedDB, lub stworzenie tzw.
-service workera, które safari już wspiera. 
+service workera, które jest już wspierane przez Safari, jednak wymagałoby to bardzo
+dużych zmian w systemie zapisu plików. Prawdopodobne jest też, że wkrótce safari zacznie
+wspierać w całości OPFS, jako że jest to dosyć nowe API.
 
 === Nowe funkcje dla tekstu
 
@@ -45,4 +47,8 @@ Aby jeszcze bardziej rozwinąć aplikację, należałoby dodać edytor animacji,
 której użytkownik, mógłby dokładnie zdefiniować jaką animację chce uzyskać na
 danym obiekcie. Umożliwiłoby to tworzenie lepszych i ciekawszych prezentacji
 multimedialnych, co zachęciło by potencjalnych użytkowników do jego użycia.
+
+=== Wprowadzenie systemu pozycjonowania zawartości
+
+Na obecną chwilę obiekty w edytorze ustawiamy ręcznie, więc trudno jest na przykład ułożyć obok siebie zdjęcia, tak aby były równe. Tutaj pomógłby system pozycjonowania zawartości, który pomagałby rozszerzyć zdjęcie do tego samego punktu w którym jest zdjęcie obok. 
 

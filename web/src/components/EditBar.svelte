@@ -162,6 +162,18 @@
                     }}>{@html icon(faAlignRight).html}</button
                 >
                 <div>Right</div>
+            </span> 
+            <span>
+                <button on:click={() => {return selectedObject.toggleFontWeight()}}>B</button>
+                <div>Bold</div>
+            </span>
+            <span>
+                <button on:click={() => {return selectedObject.toggleFontItalics()}}>I</button>
+                <div>Italics</div>
+            </span>
+            <span>
+                <button on:click={() => {return selectedObject.toggleFontUnderline()}}>U</button>
+                <div>Underline</div>
             </span>
         {/if}
         {#if !(selectedObject instanceof PresImage)}
@@ -177,7 +189,7 @@
         </span>
 
         <span>
-            <input type="range" min="0" max="1" step="0.01"
+            <input type="number" min="0" max="1" step="0.01"
                 value={selectedObject.object.attr('opacity')}
                 on:input={(e) => {
                     return selectedObject.changeOpacity(e.target.value)

@@ -10,17 +10,17 @@ szablonów styli.
 
 == Microsoft PowerPoint
 
-PowerPoint został wypuszczony na rynek przez firmę Forethought Inc. w 1987 na
-komputery Apple Macintosh po niemal dwóch latach pracy nad oprogramowaniem.
-Planowano wypuścić oprogramowanie także na komputery z systemem Windows w
-niedalekiej przyszłości.
+PowerPoint został wypuszczony na rynek przez firmę Forethought Inc. w
+1987 na komputery Apple Macintosh po niemal dwóch latach
+pracy nad oprogramowaniem.@powerpoint-release  Planowano wypuścić oprogramowanie także na
+komputery z systemem Windows w niedalekiej przyszłości.
 
-Program ten jest liderem, jeżeli chodzi o światowe użycie i to pomimo istnienia
-darmowych alternatyw. Powodem tego jest implementacja wielu przydatnych
+Program ten jest liderem (dane z 2009 r.), jeżeli chodzi o światowe użycie i to pomimo istnienia
+darmowych alternatyw.@powerpoint-dominance Powodem tego jest implementacja wielu przydatnych
 funkcji, oraz niejako stanie się standardem w tego typu zastosowaniach. Przy
 konwersji z formatu Open/Libre Office lub Google Slides na .pptx często
 występują poważne błędy, co zniechęca do użycia darmowych alternatyw, pomimo
-tego, że programy te są wzorowane na własności Microsoftu.
+tego, że programy te są wzorowane na programie Microsoftu.
 
 Od wersji 2007 interfejs użytkownika w całym pakiecie Office zmienił się dość
 mocno w porównaniu do poprzedników, co wywołało mieszane uczucia wśród
@@ -40,8 +40,11 @@ Od 2017 roku PowerPoint jest też dostępny jako aplikacja internetowa w
 przegladądarce w pakiecie Office365, chociaż posiada pewne ograniczenia
 względem wersji desktopowej.
 
-== Open/Libre Office
+== Open/Libre Office Impress
 
+Program ten narodził się w 1999 kiedy to firma Sun wykupiła firmę Star Division, która stworzyła pakiet oprogramowania biurowego konkurencyjny dla Microsoft Office. Podobno wykupienie firmy miało być tańsze roczne koszty wykupienia Microsoft Office w całym Sun.
+
+W 2002 wypuszczono pakiet w wersji 1.0 a z nim Open Office Impress. Program już na starcie miał wsparcie dla szablonów slajdów, oraz animacji.
 
 
 == Apple Keynote
@@ -65,5 +68,12 @@ wstawić zdjęcie do tego programu.
   image("pictures/keynote1.png", width: 80%),
   caption: [ Menu wstawiania mediów w Apple Keynote ]
 )
+
+
+== Podsumowanie przeglądu
+
+Projekt aplikacji internetowej powinien przede wszystkim skupiać się na
+prostocie użytkowania, ponieważ nie ma szans na konkurowanie z powyższymi
+programami pod względem funkcjonalności, które budowały przez długie lata.
 
 

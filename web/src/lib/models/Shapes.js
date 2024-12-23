@@ -1,4 +1,4 @@
-import {Rect, Circle, Ellipse, SVG, Polygon} from "@svgdotjs/svg.js";
+import {Rect, Circle, Ellipse, SVG, Polygon, Path} from "@svgdotjs/svg.js";
 import {PresObj} from "./PresObject.js";
 import {PresText} from "./Text.js";
 import {PresImage} from "./Image.js";
@@ -55,6 +55,91 @@ export class PresTriangle extends PresPolygon {
     }
     static fromJSON(json) {
         const t = new PresTriangle(json.x, json.y, json.w, json.h);
+        t.object.stroke({
+            color: json.attributes.stroke,
+            width: json.attributes.strokeWidth
+        })
+            .fill(json.attributes.fill)
+            .opacity(json.attributes.opacity)
+        t.animation = json.animation;
+        t.rotation = json.rotation
+        return t;
+    }
+}
+export class CustomPath extends PresObj{
+    /**
+     * @param {number} x - x position on canvas
+     * @param {number} y - y position on canvas
+     * @param {number} w - width of the object
+     * @param {number} h - height of the object
+     * @param {string} path - svg path
+     */
+    constructor(x, y, w, h, path) {
+        super(x,y,w,h)
+        this.object = new Path();
+        this.path = path;
+    }
+    draw(ctx){
+        super.draw(ctx)
+        this.object.plot(this.path)
+    }
+    drawNoEvent(ctx){
+        super.drawNoEvent(ctx);
+        this.object.plot(this.path);
+    }
+    toJSON() {
+        return {
+            x: this.x,
+            y: this.y,
+            w: this.w,
+            h: this.h,
+            object: this.constructor.name,
+            path: this.object.attr('d'),
+            attributes: {
+                fill: this.object.attr('fill'),
+                strokeWidth: this.object.attr('stroke-width'),
+                stroke: this.object.attr('stroke'),
+                opacity: this.object.attr('opacity'),
+                rotate: this.rotation
+            },
+            animation: this.animation
+        }
+    }
+    static fromJSON(json){
+        const t = new CustomPath(json.x, json.y, json.w, json.h, json.path);
+        t.object.stroke({
+            color: json.attributes.stroke,
+            width: json.attributes.strokeWidth
+        })
+            .fill(json.attributes.fill)
+            .opacity(json.attributes.opacity)
+        t.animation = json.animation;
+        t.rotation = json.rotation;
+        return t;
+    }
+}
+export class PresTriangle2 extends PresPolygon {
+    /**
+     * @param {number} x - x position on canvas
+     * @param {number} y - y position on canvas
+     * @param {number} w - width of the object
+     * @param {number} h - height of the object
+     */
+    constructor(x, y, w, h) {
+        super(x,y,w,h);
+        this.object = new Polygon();
+    }
+    draw(ctx){
+
+        super.draw(ctx);
+        this.object.plot([[this.x, this.y], [this.x, this.y+this.h],[this.x+this.w, this.y+this.h]]);
+    }
+    drawNoEvent(ctx){
+        super.drawNoEvent(ctx);
+        this.object.plot([[this.x, this.y], [this.x, this.y+this.h],[this.x+this.w, this.y]]);
+    }
+    static fromJSON(json) {
+        const t = new PresTriangle2(json.x, json.y, json.w, json.h);
         t.object.stroke({
             color: json.attributes.stroke,
             width: json.attributes.strokeWidth

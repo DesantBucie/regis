@@ -95,7 +95,30 @@ export class PresText extends PresObj {
         this.outline.h = bbox.height;
         this.updateObject()
     }
-
+    toggleFontWeight(){
+        if(this.object.attr('font-weight') == 'bold'){
+            this.object.font({weight: ''});
+        }
+        else {
+            this.object.font({weight: 'bold'});
+        }
+    }
+    toggleFontItalics(){
+        if(this.object.attr('font-style') == 'italic'){
+            this.object.font({style: ''});
+        }
+        else {
+            this.object.font({style: 'italic'});
+        }
+    }
+    toggleFontUnderline() {
+        if(this.object.attr('text-decoration') == 'underline'){
+            this.object.attr('text-decoration', '');
+        }
+        else {
+            this.object.attr('text-decoration', 'underline');
+        }
+    }
     /**
      * Change text alignment
      * @param align {string}
@@ -181,11 +204,12 @@ export class PresText extends PresObj {
         }
         if(e.keyCode === 13){
             this.object.text(this.object.text().slice(0,-1) + '\n' + '|')
-            console.log('\n');
+        }
+        if(e.metaKey === true && e.key === 'v'){
+            
         }
         if(!ignoreKeys.includes(e.key)) {
             e.preventDefault()
-            console.log(e)
             this.object.text(this.object.text().slice(0, -1) + e.key + '|');
         }
         this.wrapText()
@@ -206,6 +230,9 @@ export class PresText extends PresObj {
                 stroke: this.object.attr('stroke'),
                 fontSize: this.object.attr('font-size'),
                 fontFamily: this.object.attr('font-family'),
+                fontWeight: this.object.attr('font-weight'),
+                fontStyle: this.object.attr('font-style'),
+                textDecoration: this.object.attr('text-decoration'),
             },
             animation: this.animation
         }
@@ -223,9 +250,12 @@ export class PresText extends PresObj {
                 size:json.attributes.fontSize,
                 anchor:json.attributes.anchor,
                 family:json.attributes.fontFamily,
+                weight:json.attributes.fontWeight,
+                style: json.attributes.fontStyle
             })
             .opacity(json.attributes.opacity);
         text.animation = json.animation;
+        text.object.attr('text-decoration', json.attributes.textDecoration)
         return text;
     }
 }

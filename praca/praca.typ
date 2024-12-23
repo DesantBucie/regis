@@ -29,24 +29,29 @@
 #image("pictures/logo.png", width: 100%)
 //)
 
-#align(center + horizon, text(16pt)[
-  #strong[Politechnika Częstochowska \
-Wydział Informatyki i Sztucznej Inteligencji \ ]
-\ \ \ 
-Praca dyplomowa inżynierska
-\ \ \
-*Projekt i implementacja aplikacji internetowej do tworzenia prezentacji multimedialnych wykorzystując grafikę SVG *
-
-Design and implementation of a web application for creating SVG graphic presentations
+#align(center, [
+#v(48pt)
+#text(17pt)[#upper[PRACA DYPLOMOWA INŻYNIERSKA]]
+#v(32pt)
+#text(14pt)[*Projekt i implementacja aplikacji internetowej do tworzenia prezentacji multimedialnych wykorzystując grafikę SVG*]
+#v(16pt)
+#text(14pt)[Design and implementation of a web application for creating SVG graphic presentations]
+#v(32pt)
 ])
-#align(left + bottom, [
+
+#block(inset: (left: 7cm))[
 Imię i nazwisko: Jakub Truszkowski \
 Numer albumu: 135206 \
 Promotor: dr hab. inż. Krystian Łapa prof. PCz \
 Kierunek: Informatyka \
 Zakres (specjalność): Inżynieria oprogramowania \
-  #align(center, [Częstochowa 2024])
-])
+]
+#v(128pt)
+Praca przyjęta dnia:
+
+Podpis promotora:
+
+#align(center + bottom, [Częstochowa 2024])
 #pagebreak()
 #pagebreak()
 #set page(numbering: "1")
@@ -82,7 +87,7 @@ Zakres (specjalność): Inżynieria oprogramowania \
 #counter(heading).update(0)
 #set heading(numbering: "1.1")
 #show heading.where(level: 1): it => if it.numbering == none { it } else [
-  Rozdział #(counter(heading).get().first()) \ #it.body
+   #text(24.88pt)[#v(80pt) Rozdział #(counter(heading).get().first()) \ \ #it.body]
 ]
 
 #show heading.where(level: 3): it => if it.numbering == none { it } else [
@@ -98,19 +103,16 @@ Zakres (specjalność): Inżynieria oprogramowania \
 #include "3_opis.typ"
 
 #pagebreak()
-= Założenia projektu
+
+#include "4_zalozenia.typ"
 
 #pagebreak()
-= Prezentacja projektu
 
-== Edytor
-
-== Przeglądarka slajdów
-
-== Eksport do formatu PDF
+#include "5_prezentacja.typ"
 
 #pagebreak()
-= Opis wybranych rozwiązań programistycznych
+
+#include "6_rozwiazania.typ"
 
 #pagebreak()
 

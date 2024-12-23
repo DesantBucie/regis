@@ -7,7 +7,10 @@
 
     import { jsPDF } from 'jspdf';
     import 'svg2pdf.js'
-    import { faWindowRestore } from "@fortawesome/free-solid-svg-icons";
+    import { arial } from './fonts/Arial.js';
+    import { arialBold } from './fonts/Arial_Bold.js';
+    import { arialItalic } from './fonts/Arial_Italic.js';
+    import { arialBoldItalic } from './fonts/Arial_BoldItalic.js';
 
     let w, h, ctx, viewer, presentation;
 
@@ -80,8 +83,25 @@
         const doc = new jsPDF({
             orientation: 'landscape',
             unit: 'px',
-            format: [ctx.node.clientWidth, ctx.node.clientHeight]
+            format: [ctx.node.clientWidth, ctx.node.clientHeight],
         });
+        
+        
+        doc.addFileToVFS("Arial.ttf", arial);
+        doc.addFont("Arial.ttf", "Arial", "normal");
+        doc.setFont("Arial");
+
+        doc.addFileToVFS("ArialBold.ttf", arialBold);
+        doc.addFont("ArialBold.ttf", "Arial", "bold");
+        doc.setFont("Arial")
+
+        doc.addFileToVFS("ArialItalic.ttf", arialItalic);
+        doc.addFont("ArialItalic.ttf", "Arial", "italic");
+        doc.setFont("Arial")
+
+        doc.addFileToVFS("ArialBoldItalic.ttf", arialBoldItalic);
+        doc.addFont("ArialBoldItalic.ttf", "Arial", "bolditalic");
+        doc.setFont("Arial")
 
         for(let i = 0; i < presentation.slides.length - 1; i++){
             await doc.svg(ctx.node)
