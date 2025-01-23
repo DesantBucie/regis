@@ -8,6 +8,7 @@
         faT,
         faFilePdf,
         faDownload,
+        faBackward
     } from "@fortawesome/free-solid-svg-icons";
     import { icon } from "@fortawesome/fontawesome-svg-core";
     import  ellipse from '../assets/ellipse.svg?raw';
@@ -119,22 +120,22 @@
             img.onClick(ctx)
         };
     };
-    const customShape = (path = undefined) => {
-        if(path === undefined){
-            path = prompt("Paste object's path (i.e. M10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80)")
-        }
-        let s = new CustomPath(currentPos.get('x'), currentPos.get('y'), 100, 100, path)
-        presentation.slides[activeSlide].objects.push(s);
-        presentation.slides[activeSlide].objects[
-            presentation.slides[activeSlide].objects.length - 1
-        ].draw(ctx);
-        _presentation.set(presentation);
-        selectedObject = s;
-        disableSelected()
-        s.onClick(ctx)
-
-        changePosition();
+const customShape = (path = undefined) => {
+    if(path === undefined){
+        path = prompt("Paste object's path (i.e. M10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80)")
     }
+    let s = new CustomPath(currentPos.get('x'), currentPos.get('y'), 100, 100, path)
+    presentation.slides[activeSlide].objects.push(s);
+    presentation.slides[activeSlide].objects[
+        presentation.slides[activeSlide].objects.length - 1
+    ].draw(ctx);
+    _presentation.set(presentation);
+    selectedObject = s;
+    disableSelected()
+    s.onClick(ctx)
+
+    changePosition();
+}
     const addShape = (shape) => {
         let s;
         if (shape === "circle") {
@@ -217,8 +218,10 @@
 
 <div class="menubar">
     <div class="presbar">
-        <!--span>Auto Saved</span-->
-        <!--button on:click={savePresentation}>Save online</button-->
+        <span class="back">
+            <button on:click={() => {window.location.replace('/')}}>{@html icon(faBackward).html}</button>
+            <div class="presbar__title">Go back to Menu</div>
+        </span>
         <span>
             <button title="Textbox" on:click={addTextBox}
                 >{@html icon(faT).html}</button
@@ -324,6 +327,10 @@
     .menubar {
         position: relative;
     }
+    .back {
+        position: absolute;
+        left: 0;
+    }
     .presbar {
         display: flex;
         justify-content: center;
@@ -342,7 +349,7 @@
         display: none;
         position: absolute;
         background: white;
-        left: calc(45% - 250px);
+        left: calc(47.5% - 250px);
         top: calc(45px);
         width: 250px;
         border: 1px solid black;
@@ -356,4 +363,10 @@
     .shapes svg {
         font-size: 22pt;
     }
+
+    /*@media (max-width: 1023px) {
+       .presbar { display: block;}
+       .presbar__spacer { margin-left:0em}
+       .back { display: none;}
+    }*/
 </style>

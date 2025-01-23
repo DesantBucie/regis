@@ -61,6 +61,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   font-size: 10pt;
+  color:black;
 }
 button:hover {
   border-color: #646cff;

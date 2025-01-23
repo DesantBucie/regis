@@ -7,7 +7,8 @@
         faAlignRight,
         faTrash,
         faSquare,
-        faXmark
+        faCopy
+
     } from "@fortawesome/free-solid-svg-icons";
     import { icon } from "@fortawesome/fontawesome-svg-core";
     import { PresText } from "../lib/models/Text";
@@ -20,8 +21,7 @@
 
     let presentation, activeSlide, editbar, currentHeight,
     measurementButton,
-    animateToggle = false,
-    left, center, right;
+    animateToggle = false;
 
     _presentation.subscribe((p) => {
         presentation = p;
@@ -82,6 +82,22 @@
         draw(ctx);
     };
 
+    const duplicateObject = () => {
+        
+        const cI =
+            presentation.slides[activeSlide].objects.indexOf(selectedObject);
+
+        const dup = Object.assign(Object.create(Object.getPrototypeOf(selectedObject)), selectedObject)
+        dup.x += 50;
+        dup.y += 50;
+        dup.updateObject();
+
+        presentation.slides[activeSlide].objects.splice(cI, 0, dup);
+        _presentation.set(presentation);
+        presentation.slides[activeSlide].objects[cI].draw(ctx)
+        
+    }
+
     const fonts = [
         "Arial",
         "Arial Black",
@@ -107,6 +123,10 @@
 <div class="editbar" bind:this={editbar}>
     {#if selectedObject !== null 
     && animateToggle === false}
+        <span>
+            <button on:click={duplicateObject}>{@html icon(faCopy).html}</button>
+            <div>Duplicate</div>
+        </span>
         {#if selectedObject instanceof PresText}
             <div>
                 <input
@@ -137,7 +157,6 @@
             </div>
             <span>
                 <button
-                    bind:this={left}
                     class="text-align"
                     on:click={(e) => {
                         return selectedObject.changeTextAlign("start");

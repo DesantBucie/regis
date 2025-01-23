@@ -4,7 +4,6 @@
 
     import {_presentation} from "../store/data.js";
     import {Presentation} from "../lib/models/Presentation.js";
-    import { faBreadSlice } from "@fortawesome/free-solid-svg-icons";
     import { PresText } from "../lib/models/Text.js";
 
     let w, h, ctx, viewer, presentation;
@@ -98,7 +97,7 @@
         if (arrow === 'left' && activeSlide > 0) {
             clear()
             activeSlide--;
-            draw(1)
+            draw()
         }
         if(arrow === 'right') { 
             if (activeSlide < presentation.slides.length - 1 && counter === 0) 
@@ -159,7 +158,7 @@
     }
     onMount(async () => {
         alert("Press Space to exit, use Arrows to move");
-        w = viewer.clientWidth
+        w = viewer.clientWidth - 1
         ctx = SVG()
             .addTo(viewer)
             .size(w, w * 9 / 16)
@@ -195,9 +194,30 @@
 <div class="viewer" bind:this={viewer}>
 
 </div>
-
+<div class="viewerPanel">
+    <button class="red" on:click={() => {window.location.replace('/editor')}}>Exit</button>
+    <button class="dark" on:click={() => {changeActiveSlide('left')}} >Prev</button>
+    <button class="dark" on:click={() => {changeActiveSlide('right')}} >Next</button>
+</div>
 <style>
     .viewer {
-        border: 1px solid black;
+        border: 3px solid black;
+        width:95%;
+        margin:auto;
+    }
+    .viewerPanel {
+        background-color: #9c9c9c;
+        padding:1em;
+        border-radius: 1em;
+        margin:1em auto;
+        width:95%;
+    }
+    .red {
+        float:left;
+        background-color: red;
+    }
+    .dark {
+        background-color: #2c2c2c;
+        color:white;
     }
 </style>

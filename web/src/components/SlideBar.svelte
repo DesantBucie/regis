@@ -3,15 +3,15 @@
         faArrowUp,
         faArrowDown,
         faXmark,
-        faPlus
+        faPlus,
+        faCopy
     } from "@fortawesome/free-solid-svg-icons";
     import { icon } from "@fortawesome/fontawesome-svg-core";
 
-    import Sortable from 'sortablejs';
     import {onMount} from "svelte";
     import {Slide} from "../lib/models/Slide.js";
 
-    import {_activeSlide, _presentation} from "../store/data.js";
+    import {_activeSlide, _presentation, _selectedObject} from "../store/data.js";
 
     import  {titleTemplate, contentTemplate, sectionTemplate, imageTemplate} from '../lib/templates.js';
     import { PresCircle, PresEllipse, PresRect, PresTriangle } from "../lib/models/Shapes.js";
@@ -97,7 +97,11 @@
             _presentation.set(presentation);
         }
     }
-
+    const duplicateSlide = (e) => {
+        presentation.slides.splice(activeSlide, 0, presentation.slides[activeSlide]);
+        presentation.no_Slides++;
+        _presentation.set(presentation);
+    }
     const moveUp = () => {
         if (activeSlide > 0) {
             const temp = presentation.slides[activeSlide - 1];
@@ -133,11 +137,12 @@
                         {slide.name}
                     </button>
                 {:else}
-                    <button class="slidebar__remove-button--corected" value={i} on:click={(e) => { return removeSlide(e)}}>{@html icon(faXmark).html}</button>
-                    <button on:click={moveUp} class="slidebar__up">{@html icon(faArrowUp).html}</button>
-                    <button on:click={moveDown} class="slidebar__down">{@html icon(faArrowDown).html}</button>
+                    <button class="slidebar__copy-button" title="Duplicate" on:click={duplicateSlide}>{@html icon(faCopy).html}</button>
+                    <button class="slidebar__remove-button--corected" title="Remove" value={i} on:click={(e) => { return removeSlide(e)}}>{@html icon(faXmark).html}</button>
+                    <button on:click={moveUp} class="slidebar__up" title="Move up">{@html icon(faArrowUp).html}</button>
+                    <button on:click={moveDown} class="slidebar__down" title="Move down">{@html icon(faArrowDown).html}</button>
                     <button class="slidebar__slide slidebar__slide--active" value={i} >
-                        {slide.name}
+                        <input class="slidebar__input" type="text" value={slide.name} on:change={(e) => {slide.name = e.target.value}}/>
                     </button>
                 {/if}
             </div>
@@ -195,24 +200,32 @@
         font-weight: 400;
         font-size:11pt;
     }
+    .slidebar__input {
+        width:100%;
+        text-align: center;
+        background-color: rgb(193, 38, 193);
+        border: 0;
+        font-size:11pt;
+    }
     .slidebar__up {
         position: relative;
         padding:0;
         top:30px;
-        left:0px;
+        left:-15px;
         width:25px;
         height:25px;
-        background:red;
+        background:#7c7c7c;
         border-radius: 180px;
     }
     .slidebar__down {
         position: relative;
         padding:0;
         top:80px;
-        left:-30px;
+        left:-45px;
         width:25px;
         height:25px;
-        background:red;
+        background:#7c7c7c;
+       
         border-radius: 180px; 
     }
     .slidebar__slide--active {
@@ -222,6 +235,17 @@
         background: #ccc;
         cursor: pointer;
         margin-top:1em;
+    }
+    .slidebar__copy-button {
+        position: relative;
+        padding:0;
+        top:50px;
+        left:-30px;
+        width:25px;
+        height:25px;
+        background:#2c2c2c;
+        color:white;
+        border-radius: 180px;
     }
     .slidebar__remove-button {
         position: relative;
@@ -237,7 +261,7 @@
         position: relative;
         padding:0;
         top:30px;
-        left:100px;
+        left:85px;
         width:25px;
         height:25px;
         background:red;

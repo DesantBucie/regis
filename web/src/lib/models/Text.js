@@ -15,48 +15,28 @@ export class PresText extends PresObj {
     constructor(x, y, w, h, text) {
 
         super(x, y, w, h);
-        //this.guid = guidGenerator();
-        //const string = `<body xmlns="http://www.w3.org/1999/xhtml" ><div contenteditable="true" style="color:black;">Text</div></body>`;
-
-        //this.object = new ForeignObject()
-        //    .move(this.x, this.y)
-        //    .size(100 , 100)
-        //    .add(SVG(string, true))
-        //.add(`<div xmlns="http://www.w3.org/1999/xhtml" contenteditable="true" style="color:black;">Text</div>`)
         this.object = new Text()
             .text(text)
             .font({size:20, family: "Arial"})
     }
 
-    getTextWidth(text, font) {
-        // re-use canvas object for better performance
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        context.font = font;
-        const metrics = context.measureText(text);
-        return metrics.width;
-      }
+wrapText(){
+    let text = this.object.text();
+    const textArray = textWrap(text, this.w - 10, {'font-size': this.object.attr('font-size')});
+    text = textArray.join('\n')
 
-    wrapText(){
-        let text = this.object.text();
-        const textArray = textWrap(text, this.w - 10, {'font-size': this.object.attr('font-size')});
-        text = textArray.join('\n')
-
-        this.object.text(text);
-        const bbox = this.object.node.getBBox();
-        this.h = bbox.height;
-        this.outline.h = bbox.height;
-        this.updateObject()
-    }
+    this.object.text(text);
+    const bbox = this.object.node.getBBox();
+    this.h = bbox.height;
+    this.outline.h = bbox.height;
+    this.updateObject()
+}
     /**
      *
      * @param {SVG} ctx - context of svg canvas
      */
     draw(ctx) {
-        /*this.w = this.getTextWidth(this.object.text(), 'normal 20pt Arial')
-        this.outline.w = this.w
-        this.h = Number(this.object.attr('font-size')) * 1.33;
-        this.outline.h = this.h*/
+        
         super.draw(ctx);
         const bbox = this.object.node.getBBox();
         if(this.w === 0){ 
@@ -75,19 +55,19 @@ export class PresText extends PresObj {
         this.object.text(this.object.text())
         this.setTextPosition(this.object.attr('text-anchor').toString());
     }
-    onClick(ctx) {
-        super.onClick(ctx);
-        if(this.selected) {
-            this.object.text(this.object.text() + '|')
-            ctx.on('keydown', (e) => {
-                this.onKeyDown(e)
-            })
-        }
-        else {
-            this.object.text(this.object.text().slice(0, -1))
-            ctx.off('keydown', null)
-        }
+onClick(ctx) {
+    super.onClick(ctx);
+    if(this.selected) {
+        this.object.text(this.object.text() + '|')
+        ctx.on('keydown', (e) => {
+            this.onKeyDown(e)
+        })
     }
+    else {
+        this.object.text(this.object.text().slice(0, -1))
+        ctx.off('keydown', null)
+    }
+}
     changeTextSize(size) {
         this.object.font({size: size});
         const bbox = this.object.node.getBBox();
@@ -183,38 +163,38 @@ export class PresText extends PresObj {
             super.onMousemove(e, ctx, offsetX, offsetY);
         this.setTextPosition(this.object.attr('text-anchor').toString());
     }
-    onKeyDown(e){
-        let ignoreKeys = [
-            'Enter',
-            'Return',
-            'Alt',
-            'Meta',
-            'Control',
-            'Ctrl',
-            'Shift',
-            'Escape',
-            'Backspace',
-            'ArrowLeft',
-            'ArrowRight',
-            'ArrowDown',
-            'ArrowUp',
-        ]
-        if(e.keyCode === 8){
-            this.object.text(this.object.text().slice(0, -2) + '|')
-        }
-        if(e.keyCode === 13){
-            this.object.text(this.object.text().slice(0,-1) + '\n' + '|')
-        }
-        if(e.metaKey === true && e.key === 'v'){
-            
-        }
-        if(!ignoreKeys.includes(e.key)) {
-            e.preventDefault()
-            this.object.text(this.object.text().slice(0, -1) + e.key + '|');
-        }
-        this.wrapText()
-        this.setTextPosition(this.object.attr('text-anchor').toString())
+onKeyDown(e){
+    const ignoreKeys = [
+        'Enter',
+        'Return',
+        'Alt',
+        'Meta',
+        'Control',
+        'Ctrl',
+        'Shift',
+        'Escape',
+        'Backspace',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowDown',
+        'ArrowUp',
+    ]
+    if(e.keyCode === 8){
+        this.object.text(this.object.text().slice(0, -2) + '|')
     }
+    if(e.keyCode === 13){
+        this.object.text(this.object.text().slice(0,-1) + '\n' + '|')
+    }
+    if(e.metaKey === true && e.key === 'v'){
+        
+    }
+    if(!ignoreKeys.includes(e.key)) {
+        e.preventDefault()
+        this.object.text(this.object.text().slice(0, -1) + e.key + '|');
+    }
+    this.wrapText()
+    this.setTextPosition(this.object.attr('text-anchor').toString())
+}
     toJSON() {
         return {
             x: this.x,

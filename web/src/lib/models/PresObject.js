@@ -19,23 +19,22 @@ export class PresObj {
      * @param {number} w - width of the object
      * @param {number} h - height of the object
      */
-    constructor(x, y, w = 0, h = 0) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.rotation = 0;
+constructor(x, y, w = 0, h = 0) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.rotation = 0;
 
-        this.outline = new Outline(this.x, this.y, this.w, this.h)
-        this.object = null
-        this.selected = false
-        this.mouseDown = false
+    this.outline = new Outline(this.x, this.y, this.w, this.h)
+    this.object = null
+    this.selected = false
+    this.mouseDown = false
 
-        this.timing = {};
-        this.animation = {};
-        this.id = PresObj.counter++;
-        this.opacity = 1;
-    }
+    this.timing = {};
+    this.animation = {};
+    this.id = PresObj.counter++;
+}
 
     /**
      * Change fill color of the object
@@ -64,73 +63,68 @@ export class PresObj {
     }
 
     /**
-     * Function to draw an object
+     * Function to draw an object on canvas
      * @param {SVG} ctx
      */
-    draw(ctx) {
-        //this.object.node.setAttribute('transform', '');
-        this.object
-            .move(this.x, this.y)
-            .css('cursor', 'pointer')
-            .size(this.w, this.h)
-            .on('click', (e) => {
-                e.preventDefault();
-                if(this.timing.end < 200) {
-                    this.onClick(ctx)
-                }
-            })
-            .on('mousedown',this.onMouseDown)
-            .on('mouseup', this.onMouseUp)
-            .attr('transform', 'matrix(1,0,0,1,0,0)')
-            //.on('mousemove', (e) => { return this.onMousemove(e, ctx)})
-            .addTo(ctx);
-        //this.object.node.setAttribute('transform',
-        //    `rotate(${this.rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
-        //this.object.node.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+draw(ctx) {
+    this.object
+        .move(this.x, this.y)
+        .css('cursor', 'pointer')
+        .size(this.w, this.h)
+        .on('click', (e) => {
+            if(this.timing.end < 200) {
+                this.onClick(ctx)
+            }
+        })
+        .on('mousedown',this.onMouseDown)
+        .on('mouseup', this.onMouseUp)
+        .attr('transform', 'matrix(1,0,0,1,0,0)')
+        .addTo(ctx);
 
-        let handler
+    let handler
 
-        this.object
-            .on('mousedown', (r) => {
-                let CTM = ctx.node.getScreenCTM();
-                const offsetX = this.object.x() - ((r.clientX - CTM.e) / CTM.a);
-                const offsetY = this.object.y() - ((r.clientY - CTM.f) / CTM.d);
-                ctx.on('mousemove', handler = (e) => { return this.onMousemove(e, ctx, offsetX, offsetY )})
-            })
-            .on('mouseup', () => {
-                ctx.off('mousemove', handler);
-            })
+    this.object
+        .on('mousedown', (r) => {
+            let CTM = ctx.node.getScreenCTM();
+            console.log(CTM);
+            const offsetX = this.object.x() - ((r.clientX - CTM.e) / CTM.a);
+            const offsetY = this.object.y() - ((r.clientY - CTM.f) / CTM.d);
+            ctx.on('mousemove', handler = (e) => { return this.onMousemove(e, ctx, offsetX, offsetY )})
+        })
+        .on('mouseup', () => {
+            ctx.off('mousemove', handler);
+        })
 
-        for(let i = 0; i < 4; i++){
-            this.outline.objects[i]
-                .on('mousedown', () => {
-                    ctx
-                        .on('mousemove' , handler = (e) => { return this.resize(e, ctx, i)})
-                        .on('mouseup', () => {
-                            ctx.off('mousemove', handler);
-                        })
-                        .on('mouseleave', () => {
-                            ctx
-                                .off('mousemove', handler);
-                        })
-                })
-                //very interesting results if we remove that 4 lines.
-                .on('mouseup', () => {
-                    ctx
-                        .off('mousemove', handler);
-                })
-
-        }
-        this.outline.objects[4]
+    for(let i = 0; i < 4; i++){
+        this.outline.objects[i]
             .on('mousedown', () => {
                 ctx
-                    .on('mousemove' , handler = (e) => { return this.rotate(e, ctx)})
+                    .on('mousemove' , handler = (e) => { return this.resize(e, ctx, i)})
                     .on('mouseup', () => {
-                        ctx.off('mousemove', handler)
+                        ctx.off('mousemove', handler);
                     })
+                    .on('mouseleave', () => {
+                        ctx
+                            .off('mousemove', handler);
+                    })
+            })
+            //very interesting results if we remove that 4 lines.
+            .on('mouseup', () => {
+                ctx
+                    .off('mousemove', handler);
             })
 
     }
+    this.outline.objects[4]
+        .on('mousedown', () => {
+            ctx
+                .on('mousemove' , handler = (e) => { return this.rotate(e, ctx)})
+                .on('mouseup', () => {
+                    ctx.off('mousemove', handler)
+                })
+        })
+
+}
 
     /**
      * Used for drawing on viewer
@@ -155,50 +149,56 @@ export class PresObj {
      * @param {number} offsetX
      * @param {number} offsetY
      */
-    onMousemove(e, ctx, offsetX, offsetY) {
-        if(this.mouseDown && this.selected) {
-            let CTM = ctx.node.getScreenCTM();
+onMousemove(e, ctx, offsetX, offsetY) {
+    if(this.mouseDown && this.selected) {
 
-            this.object.rotate(-this.rotation);
-            // Offset is calculated on mousedown effect. If it was
-            // calculated here it would zero out.
-            this.object.x(((e.clientX - CTM.e) / CTM.a) + offsetX);
-            this.object.y(((e.clientY - CTM.f) / CTM.d) + offsetY);
+        let CTM = ctx.node.getScreenCTM();
 
+        this.object.rotate(-this.rotation);
 
-            this.x = this.object.x()
-            this.y = this.object.y()
-
-
-            //de-rotate to move
-            //this.object.node.setAttribute('transform', 'rotate(0)');
-            //this.object.move(this.object.x(), this.)
-                //.addTo(ctx)
-            // rotate after move
-            //this.object.node.setAttribute('transform',
-            //    `rotate(${this.rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
-            this.object.rotate(this.rotation);
-            this.outline.updateRects(this.object.x(), this.object.y(), this.object.attr('transform'))
-            //this.outline.group.addTo(ctx);
-            e.preventDefault();
+        let x = ((e.clientX - CTM.e) / CTM.a) + offsetX
+        let y = ((e.clientY - CTM.f) / CTM.d) + offsetY
+        
+        if(x % 100 < 15 || x % 100 > 85){
+            this.object.x(Math.round(x/100)*100);
         }
+        else if(x + (this.w / 2) > 950 && x + (this.w / 2) < 970 ){
+            this.object.x(960 - (this.w/2));
+        }
+        else {
+            this.object.x(x);
+        }
+
+        if(y % 100 < 15 || y % 100 > 85){
+            this.object.y(Math.round(y/100)*100);
+        }
+        else {
+            this.object.y(y);
+        }
+        
+        this.x = this.object.x()
+        this.y = this.object.y()
+
+        this.object.rotate(this.rotation);
+        this.outline.updateRects(this.object.x(), this.object.y(), this.object.attr('transform'))
     }
+}
     /**
      * @param {SVG} ctx - context of svg canvas
      */
-    onClick (ctx){
-        if(!this.selected){
-            this.outline.draw(ctx, this.x, this.y)
-            this.object.css('cursor', 'move')
-            _selectedObject.set(this);
-        }
-        else {
-            this.outline.remove()
-            this.object.css('cursor', 'pointer')
-            _selectedObject.set(null);
-        }
-        this.selected = !this.selected;
+onClick (ctx){
+    if(!this.selected){
+        this.outline.draw(ctx, this.x, this.y)
+        this.object.css('cursor', 'move')
+        _selectedObject.set(this);
     }
+    else {
+        this.outline.remove()
+        this.object.css('cursor', 'pointer')
+        _selectedObject.set(null);
+    }
+    this.selected = !this.selected;
+}
     onMouseDown = () => {
         this.timing.start = performance.now()
         this.mouseDown = true;
@@ -209,15 +209,9 @@ export class PresObj {
     }
     getCTMPosition(e, ctx){
         const CTM = ctx.node.getScreenCTM();
-        const objectCTM = this.object.node.getScreenCTM();
 
-        const inverseX = (e.clientX - CTM.e) / CTM.a;
-        const inverseY = (e.clientY - CTM.f) / CTM.d;
-
-        /*const matrixString = this.object.attr('transform');
-        const matrixValues = matrixString.match(/matrix\(([^)]+)\)/)[1].split(',').map(Number);
-
-        const [a, b, c, d, ex, f] = matrixValues;*/
+        let inverseX = (e.clientX - CTM.e) / CTM.a;
+        let inverseY = (e.clientY - CTM.f) / CTM.d;
         
         return [inverseX, inverseY];
     }
@@ -234,53 +228,53 @@ export class PresObj {
      * @param {SVG} ctx - SVG context
      * @param {number} index
      */
-    resize(e, ctx, index) {
-        if(this.outline.isMouseDown) {
+resize(e, ctx, index) {
+    if(this.outline.isMouseDown) {
 
-            let oldX = this.x;
-            let oldY = this.y;
-            let oldW = this.w;
-            let oldH = this.h;
-            
-            
-            //left up
-            if(index === 0){
-                [this.x, this.y] = this.getCTMPosition(e, ctx)
-                this.w += oldX - this.x;
-                this.h += oldY - this.y;
-            }
-            // right up
-            if(index === 3) {
-                [this.w, this.y] = this.getCTMPosition(e, ctx)
-                this.w -= this.x
-                this.h += oldY - this.y;
-            }
-
-            if(index === 2){
-                [this.w, this.h] = this.getCTMPosition(e, ctx);
-                this.w -= this.x
-                this.h -= this.y
-            }
-            if(index === 1) {
-                [this.x, this.h] = this.getCTMPosition(e, ctx);
-                this.w += oldX - this.x;
-                this.h -= this.y
-            }
-
-            if(this.w < 15) {
-                this.w = oldW;
-                this.x = oldX;
-            }
-            if(this.h < 15) {
-                this.h = oldH;
-                this.y = oldY;
-            }
-
-            this.outline.h = this.h;
-            this.outline.w = this.w;
-            this.updateObject()
+        let oldX = this.x;
+        let oldY = this.y;
+        let oldW = this.w;
+        let oldH = this.h;
+        
+        
+        //left up
+        if(index === 0){
+            [this.x, this.y] = this.getCTMPosition(e, ctx)
+            this.w += oldX - this.x;
+            this.h += oldY - this.y;
         }
+        // right up
+        if(index === 3) {
+            [this.w, this.y] = this.getCTMPosition(e, ctx)
+            this.w -= this.x
+            this.h += oldY - this.y;
+        }
+        
+        if(index === 2){
+            [this.w, this.h] = this.getCTMPosition(e, ctx);
+            this.w -= this.x
+            this.h -= this.y
+        }
+        if(index === 1) {
+            [this.x, this.h] = this.getCTMPosition(e, ctx);
+            this.w += oldX - this.x;
+            this.h -= this.y
+        }
+
+        if(this.w < 15) {
+            this.w = oldW;
+            this.x = oldX;
+        }
+        if(this.h < 15) {
+            this.h = oldH;
+            this.y = oldY;
+        }
+
+        this.outline.h = this.h;
+        this.outline.w = this.w;
+        this.updateObject()
     }
+}
     /**
      * @param {PointerEvent} e - event
      * @param {SVG} ctx - SVG context
@@ -290,15 +284,7 @@ export class PresObj {
 
             const [mouseX, mouseY] = this.getCTMPosition(e, ctx)
 
-            const angle = Math.atan2(mouseY - this.y, mouseX - this.x) //* (180 / Math.PI);
-            //console.log(angle);
-            //this.outline.h = this.h;
-            //this.outline.w = this.w;
-            //this.object.node.setAttribute('transform',
-            //    `rotate(${this.rotation}, ${(this.x + (this.w / 2))}, ${(this.y + (this.h / 2))})`);
-            //this.object.node.setAttribute('transform',
-            //    `matrix(${Math.cos(angle)}, ${Math.sin(angle)}, ${- Math.sin(angle)}, ${Math.cos(angle)}, ${this.x + (this.w / 2)}, ${this.y + (this.h / 2)})`);
-            //this.object.rotate(this.rotation)
+            const angle = Math.atan2(mouseY - this.y, mouseX - this.x);
             this.object.rotate(angle * (180/Math.PI) - this.rotation, this.x + (this.w / 2), this.y + (this.h / 2))
             this.outline.rotate(this.object.attr('transform'))
             this.rotation = angle * (180/Math.PI)

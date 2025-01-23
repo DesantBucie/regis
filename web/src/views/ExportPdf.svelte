@@ -15,7 +15,6 @@
     let w, h, ctx, viewer, presentation;
 
     let activeSlide = 0;
-    let currentObject = 0;
 
     _presentation.subscribe(p => {
         presentation = p;
@@ -62,7 +61,7 @@
         w = viewer.clientWidth
         ctx = SVG()
             .addTo(viewer)
-            .size(w, w * 9 / 16)
+            .size(w, (w * 9 / 16))
             .viewbox(0, 0, 1920, 1080)
             .attr('tabindex', '0')
             .attr('class', 'svg');
@@ -78,8 +77,9 @@
         exportPDF();
     })
 
-
-    const exportPDF = async () => {
+const exportPDF = async () => {
+    const fileName = prompt("Enter a file name for presentation");
+    if(fileName != null){
         const doc = new jsPDF({
             orientation: 'landscape',
             unit: 'px',
@@ -109,11 +109,11 @@
             changeActiveSlide()
         }
         await doc.svg(ctx.node)
-        await doc.save('myPdf.pdf')
-        
-        window.location.replace('/editor')
+        await doc.save(fileName+'.pdf')
         
     }
+    window.location.replace('/editor')
+}
 </script>
 
 <div class="viewer" bind:this={viewer}>
