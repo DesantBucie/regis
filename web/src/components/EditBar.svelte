@@ -123,10 +123,6 @@
 <div class="editbar" bind:this={editbar}>
     {#if selectedObject !== null 
     && animateToggle === false}
-        <span>
-            <button on:click={duplicateObject}>{@html icon(faCopy).html}</button>
-            <div>Duplicate</div>
-        </span>
         {#if selectedObject instanceof PresText}
             <div>
                 <input

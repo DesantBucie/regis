@@ -84,6 +84,7 @@ const exportPDF = async () => {
             orientation: 'landscape',
             unit: 'px',
             format: [ctx.node.clientWidth, ctx.node.clientHeight],
+            compress: true
         });
         
         
